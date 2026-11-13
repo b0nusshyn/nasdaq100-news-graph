@@ -1,0 +1,30 @@
+# Data lives on the shared Google Drive (see data/README.md)
+data/*
+!data/README.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Model checkpoints
+checkpoints/
+*.pt
+*.ckpt
+
+# Local env / OS
+.env
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated report
+report/report.md

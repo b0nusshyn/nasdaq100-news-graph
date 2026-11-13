@@ -1,0 +1,10 @@
+# Shared by the proposed model and every baseline: all models are scored on the same folds.
+# Draft values; Evaluation owns this file (#12).
+period:
+  start: 2019-01-01
+  end: 2023-12-31
+train_days: 504      # ~2 trading years
+test_days: 126       # ~6 months -> 6 test windows, 2021H1 .. 2023H2
+step_days: 126
+expanding: false     # rolling window
+# embargo between train and test = prediction horizon (applied by src.eval.splitter)
