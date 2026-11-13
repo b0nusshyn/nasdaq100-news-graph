@@ -1,7 +1,7 @@
 # Data contract
 
-> **Status: DRAFT** — to be frozen by the whole team in issue #2. Open decisions are listed at
-> the bottom. Once frozen, change it only with everyone's agreement.
+> **Status: FROZEN** on Fri 13 Nov 2026 (issue #2). Change it only with the whole team's
+> agreement, and record the change under [Decisions](#decisions).
 
 Every artifact is a Parquet file in the data directory (the shared Google Drive folder; see
 [`data/README.md`](data/README.md)). The machine-readable copy of this file is
@@ -16,7 +16,10 @@ are in `tests/fixtures/` (regenerate with `python -m src.core.fixtures`).
 
 - **`date`** is the trading day the row belongs to: tz-naive, midnight, `datetime64[ns]`.
   Market data uses the US/Eastern calendar.
-- **`ticker`** is the Yahoo Finance symbol, upper case (`GOOGL`, `GOOG` are separate tickers).
+- **`ticker`** is the company's **current** Yahoo Finance symbol, upper case. A renamed company
+  keeps one ticker for its whole history (`FB` → `META`): map old symbols with
+  `src.core.tickers.canonical_ticker` everywhere a ticker enters the pipeline (membership, prices,
+  news matching). `GOOGL` and `GOOG` are separate share classes, so separate tickers.
 - **News timing**: an article published after 16:00 ET, or on a non-trading day, belongs to the
   next trading day.
 - **Folds**: `fold` is the walk-forward fold index from `src.eval.splitter` (0-based). `-1`
@@ -62,7 +65,7 @@ One row per trading day per ticker that was ever a member, including days outsid
 File: `labels.parquet` · Owner: Data · Issue #15
 
 Same rows as `prices`. `ret_hd = close[t+h] / close[t] - 1` over trading days; `y_hd = 1` if
-`ret_hd > 0`, else `0`. The last `h` days of each ticker are null.
+`ret_hd > 0`, else `0` — a flat return (`ret_hd = 0`) is "not up", so `y_hd = 0`. The last `h` days of each ticker are null.
 
 | Column | dtype | nullable | Description |
 |---|---|---|---|
@@ -94,7 +97,8 @@ naming two firms has two rows; this is what co-mention edges are built from.
 
 File: `news_features.parquet` · Owner: NLP · Issues #23, #24
 
-One row for **every** in-index (`date`, `ticker`), whether or not it had news. Rows without
+One row for **every** in-index (`date`, `ticker`), whether or not it had news. Several articles
+on one ticker-day are combined with a plain (unweighted) mean. Rows without
 news have `has_news = false`, `n_articles = 0`, and zeros everywhere else; models must use
 `has_news` to tell "no coverage" from "neutral coverage".
 
@@ -115,6 +119,8 @@ news have `has_news = false`, `n_articles = 0`, and zeros everywhere else; model
 File: `edges.parquet` · Owner: Modelling · Issues #8, #21, #22, #28
 
 Directed edges; an undirected relation is stored in both directions. No self-loops.
+`corr` edges: for each ticker, its 10 peers with the highest training-window return correlation
+(`CORR_TOP_K` in `src/core/schema.py`); a pair selected from either side is stored both ways.
 
 | Column | dtype | nullable | Description |
 |---|---|---|---|
@@ -145,9 +151,12 @@ same rows so they can be compared pairwise.
 
 **Key:** `model`, `horizon`, `date`, `ticker`
 
-## Open decisions (resolve in #2)
+## Decisions
 
-1. **Renamed tickers** (`FB` → `META`): one ticker across the rename, or two?
-2. **Ties**: `ret = 0` currently counts as down (`y = 0`). Keep, or drop those rows?
-3. **News aggregation**: plain mean across a ticker-day's articles, or confidence-weighted?
-4. **Edge sparsity**: `corr` edges keep the top-k per ticker (k = 10 in the stub). Agree k, or use a threshold.
+Frozen Fri 13 Nov 2026 in issue #2.
+
+1. **Renamed tickers** — one ticker per company, using the current symbol (`FB` → `META`).
+   Rename map: `src/core/tickers.py`; Data extends it while building membership (task 1.1).
+2. **Ties** — a flat forward return counts as not up: `y = 0`. Every row with a full horizon keeps a label.
+3. **News aggregation** — plain mean of sentiment, confidence and embedding across a ticker-day's articles.
+4. **`corr` sparsity** — top-k with k = 10 per ticker, by training-window correlation.
