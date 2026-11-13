@@ -1,0 +1,15 @@
+# Full environment. PyTorch Geometric must match your torch/CUDA build (see README Setup).
+-r requirements-dev.txt
+yfinance>=0.2.40
+lxml>=5.0
+requests>=2.31
+datasets>=2.19
+transformers>=4.40
+torch>=2.3
+torch-geometric>=2.5
+scikit-learn>=1.4
+statsmodels>=0.14
+xgboost>=2.0
+matplotlib>=3.8
+tqdm>=4.66
+jupyter>=1.0

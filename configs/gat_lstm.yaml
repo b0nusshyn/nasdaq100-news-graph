@@ -1,0 +1,21 @@
+# Proposed model. Owner: Modelling (#29). Draft values.
+seed: 42
+horizons: [1, 5]
+window_days: 20            # LSTM look-back
+features:
+  price: [ret_1d, volatility_20d, rsi_14, macd, macd_signal, volume_z_20d]
+  news: [has_news, sentiment, confidence, embeddings]
+  embedding_dim: 64        # 768-d FinBERT embedding projected down before the LSTM
+encoder:
+  hidden: 64
+  layers: 1
+  dropout: 0.1
+gat:
+  heads: 4
+  edge_types: [sector, comention, corr]
+train:
+  epochs: 30
+  batch_days: 32
+  lr: 0.001
+  weight_decay: 0.0001
+  early_stopping_patience: 5   # on the last 10% of each training fold
