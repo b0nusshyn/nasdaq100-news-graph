@@ -1,9 +1,10 @@
 """Company graph edges. Owner: Modelling. Issues #8, #21, #22, #28.
 
 Output: `edges.parquet` (SCHEMA.md). `sector` edges are static (fold = -1); `comention` and
-`corr` weights are computed per walk-forward fold from that fold's training window only.
+`corr` weights are computed per walk-forward fold from that fold's training window only, so
+this runs once per fold and each run replaces that fold's rows.
 
-    python -m src.graph.build_edges --types sector comention corr
+    python -m src.graph.build_edges --types sector comention corr --fold 0
 """
 
 from __future__ import annotations
@@ -35,6 +36,7 @@ def corr_edges(prices: pd.DataFrame, folds: list[Fold], top_k: int = CORR_TOP_K)
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--types", nargs="+", choices=EDGE_TYPES, default=list(EDGE_TYPES))
+    p.add_argument("--fold", type=int, required=True, help="walk-forward fold index (0-based)")
     p.parse_args()
     todo(28, "build_edges")
 
