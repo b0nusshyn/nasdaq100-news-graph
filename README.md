@@ -179,7 +179,11 @@ pip install -r requirements.txt
 ```
 
 PyTorch Geometric must match your CUDA and PyTorch versions. If installation fails locally,
-run the model stages on Colab, where compatible wheels are preinstalled.
+run the model stages on Colab, where compatible wheels are preinstalled. Check your install with:
+
+```bash
+python -m src.core.check_env    # versions + one tiny GAT forward pass
+```
 
 For the shared code and tests only, `pip install -r requirements-dev.txt` is enough
 (this is what CI runs):

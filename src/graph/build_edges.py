@@ -12,7 +12,7 @@ import argparse
 
 import pandas as pd
 
-from src.core.schema import EDGE_TYPES
+from src.core.schema import CORR_TOP_K, EDGE_TYPES
 from src.core.todo import todo
 from src.eval.splitter import Fold
 
@@ -27,8 +27,8 @@ def comention_edges(article_tickers: pd.DataFrame, folds: list[Fold]) -> pd.Data
     todo(21, "co-mention edges")
 
 
-def corr_edges(prices: pd.DataFrame, folds: list[Fold], top_k: int = 10) -> pd.DataFrame:
-    """Per fold: top-k return correlations per ticker over the training window."""
+def corr_edges(prices: pd.DataFrame, folds: list[Fold], top_k: int = CORR_TOP_K) -> pd.DataFrame:
+    """Per fold: each ticker's top-k most correlated peers over the training window, stored both ways."""
     todo(22, "correlation edges")
 
 

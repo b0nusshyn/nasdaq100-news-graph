@@ -47,11 +47,11 @@ lands.
 
 ## 0 · Day 0 — everyone
 
-- [ ] **0.1** · **Fri 13 Nov** — Kickoff meeting: confirm roles, fill in names above and in `README.md` · [#1](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/1)
-- [ ] **0.2** · **Fri 13 Nov** — Freeze `SCHEMA.md` (column names, dtypes, keys, date convention, 16:00 ET cutoff rule) · [#2](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/2)
-- [ ] **0.3** · **Fri 13 Nov** — Create repo skeleton (`src/data`, `src/nlp`, `src/graph`, `src/models`, `src/eval`, `configs/`, `notebooks/`, `results/`), `.gitignore` for `data/` · [#3](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/3)
-- [ ] **0.4** · **Fri 13 Nov** — Add `requirements.txt`; confirm PyTorch Geometric installs locally or on Colab for every member · [#4](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/4)
-- [ ] **0.5** · **Fri 13 Nov** — Each owner commits a synthetic fixture for their Parquet file under `tests/fixtures/` · [#5](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/5)
+- [x] **0.1** · **Fri 13 Nov** — Kickoff meeting: confirm roles, fill in names above and in `README.md` · [#1](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/1)
+- [x] **0.2** · **Fri 13 Nov** — Freeze `SCHEMA.md` (column names, dtypes, keys, date convention, 16:00 ET cutoff rule) · [#2](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/2)
+- [x] **0.3** · **Fri 13 Nov** — Create repo skeleton (`src/data`, `src/nlp`, `src/graph`, `src/models`, `src/eval`, `configs/`, `notebooks/`, `results/`), `.gitignore` for `data/` · [#3](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/3)
+- [x] **0.4** · **Fri 13 Nov** — Add `requirements.txt`; confirm PyTorch Geometric installs locally or on Colab for every member · [#4](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/4)
+- [x] **0.5** · **Fri 13 Nov** — Each owner commits a synthetic fixture for their Parquet file under `tests/fixtures/` · [#5](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/5)
 
 ---
 
