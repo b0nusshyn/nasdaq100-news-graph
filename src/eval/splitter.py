@@ -26,7 +26,7 @@ def walk_forward(
     *,
     train_days: int,
     test_days: int,
-    embargo_days: int,
+    horizon: int,
     step_days: int | None = None,
     expanding: bool = False,
     embargo_days: int | None = None,
