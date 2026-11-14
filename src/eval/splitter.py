@@ -1,11 +1,3 @@
-"""Walk-forward splitter with embargo. Owner: Evaluation. Issue #12.
-
-Folds are contiguous in time; between each training window and its test window sits an
-embargo of `embargo_days` trading days. It is 5, the longest horizon, for every horizon, so
-no training label overlaps the test window and the 1-day and 5-day models share identical
-folds. Settings come from configs/walk_forward.yaml, shared by every model.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -36,7 +28,7 @@ def walk_forward(
     `train_days` counts actual training days, followed by a separate embargo.
     The gap defaults to five trading days for both horizons, as configured in
     walk_forward.yaml. Test windows never overlap.
-    Dates must be unique, sorted, timezone-naive trading days at midnight.
+    Dates must be unique, sorted, timezone-naive trading days at midnight
     Empty or insufficient data returns an empty list; a partial final test is omitted.
     """
     if step_days is None:
