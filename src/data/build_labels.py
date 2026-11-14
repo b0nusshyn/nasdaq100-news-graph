@@ -16,7 +16,7 @@ from src.core.todo import todo
 
 
 def make_labels(prices: pd.DataFrame, horizons: tuple[int, ...] = HORIZONS) -> pd.DataFrame:
-    """ret_{h}d = close[t+h] / close[t] - 1 (per ticker, trading days); y_{h}d = ret > 0.
+    """fwd_ret_{h}d = close[t+h] / close[t] - 1 (per ticker, trading days); y_{h}d = fwd_ret > 0.
 
     The last h rows of each ticker have no label (NaN / <NA>).
     """
