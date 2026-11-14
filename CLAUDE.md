@@ -33,7 +33,7 @@ or training keeps all of them true, with a test where possible:
 - **Survivorship**: a ticker is in the sample only on days its `in_index` flag is true (membership rebuilt from Wikipedia history, never today's list).
 - **Look-ahead (news)**: articles timestamped after 16:00 ET belong to the next trading day.
 - **Look-ahead (features)**: indicators, `corr` edge weights, `comention` weights and normalisation statistics are fitted on the training fold only.
-- **Walk-forward**: splits are contiguous in time, with an embargo equal to the horizon between train and test. Random splits are never used.
+- **Walk-forward**: splits are contiguous in time, with an embargo of 5 trading days (the longest horizon) between train and test for every horizon, so all models share identical folds. Random splits are never used.
 - **Sparse news**: `has_news = 0` means "no coverage" and stays distinct from neutral sentiment.
 
 Baseline 6 (LSTM + news, no graph) is the proposed model with the GAT removed, sharing the same

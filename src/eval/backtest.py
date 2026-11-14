@@ -18,7 +18,10 @@ class BacktestResult:
     turnover: float
 
 
-def backtest(predictions: pd.DataFrame, labels: pd.DataFrame, horizon: int, cost_bps: float = 10.0) -> BacktestResult:
+def backtest(
+    predictions: pd.DataFrame, labels: pd.DataFrame, horizon: int, cost_bps_per_side: float = 5.0
+) -> BacktestResult:
     """Each day go long the top quantile of p_up and short the bottom, hold `horizon` days,
-    realise `ret_{horizon}d` from labels, charge `cost_bps` per unit of turnover."""
+    realise `ret_{horizon}d` from labels, charge `cost_bps_per_side` on every buy and every sell
+    (README: 5 bps per side)."""
     todo(18, "backtest")
