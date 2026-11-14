@@ -24,6 +24,10 @@ are in `tests/fixtures/` (regenerate with `python -m src.core.fixtures`).
   next trading day.
 - **Folds**: `fold` is the walk-forward fold index from `src.eval.splitter` (0-based). `-1`
   means "valid in every fold".
+- **Forward-looking columns** start with `fwd_` (or are labels, `y_`); every other column uses
+  data up to and including `date` only. A feature never shares a name with a `labels` column:
+  both are keyed on (`date`, `ticker`), so a merge would feed the future in as an input.
+  `tests/test_schema.py` enforces this against `src.data.indicators.FEATURES`.
 - **dtype** names: `date`, `string`, `bool`, `int8/16/32`, `float32/64`, and `Int8` (nullable int).
 
 ## `membership`
@@ -64,15 +68,15 @@ One row per trading day per ticker that was ever a member, including days outsid
 
 File: `labels.parquet` · Owner: Data · Issue #15
 
-Same rows as `prices`. `ret_hd = close[t+h] / close[t] - 1` over trading days; `y_hd = 1` if
-`ret_hd > 0`, else `0` — a flat return (`ret_hd = 0`) is "not up", so `y_hd = 0`. The last `h` days of each ticker are null.
+Same rows as `prices`. `fwd_ret_hd = close[t+h] / close[t] - 1` over trading days; `y_hd = 1` if
+`fwd_ret_hd > 0`, else `0` — a flat return (`fwd_ret_hd = 0`) is "not up", so `y_hd = 0`. The last `h` days of each ticker are null.
 
 | Column | dtype | nullable | Description |
 |---|---|---|---|
 | `date` | date | no | |
 | `ticker` | string | no | |
-| `ret_1d` | float64 | yes | Forward 1-day return (used by the backtest) |
-| `ret_5d` | float64 | yes | Forward 5-day return |
+| `fwd_ret_1d` | float64 | yes | Forward 1-day return (used by the backtest) |
+| `fwd_ret_5d` | float64 | yes | Forward 5-day return |
 | `y_1d` | Int8 | yes | 1 = up over 1 day |
 | `y_5d` | Int8 | yes | 1 = up over 5 days |
 
@@ -160,3 +164,6 @@ Frozen Fri 13 Nov 2026 in issue #2.
 2. **Ties** — a flat forward return counts as not up: `y = 0`. Every row with a full horizon keeps a label.
 3. **News aggregation** — plain mean of sentiment, confidence and embedding across a ticker-day's articles.
 4. **`corr` sparsity** — top-k with k = 10 per ticker, by training-window correlation.
+5. **Forward returns** (Sat 14 Nov) — `labels.ret_1d`/`ret_5d` renamed `fwd_ret_1d`/`fwd_ret_5d`.
+   The indicator `ret_1d` (task 1.5) is the trailing return; the shared name would have let a
+   merge pass the forward return off as an input.

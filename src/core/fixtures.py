@@ -58,7 +58,7 @@ def make_fixtures(n_days: int = 60, seed: int = 0) -> dict[str, pd.DataFrame]:
     by_ticker = prices.groupby("ticker")["close"]
     for h in HORIZONS:
         ret = by_ticker.shift(-h) / prices["close"] - 1
-        labels[f"ret_{h}d"] = ret
+        labels[f"fwd_ret_{h}d"] = ret
         labels[f"y_{h}d"] = pd.array(np.where(ret.isna(), pd.NA, (ret > 0).astype(int)), dtype="Int8")
 
     members = prices.loc[prices["in_index"], ["date", "ticker"]].reset_index(drop=True)

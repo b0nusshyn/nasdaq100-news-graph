@@ -74,7 +74,7 @@ LABELS = Table(
     "labels",
     _cols(
         ("date", "date"), ("ticker", "string"),
-        ("ret_1d", "float64", True), ("ret_5d", "float64", True),
+        ("fwd_ret_1d", "float64", True), ("fwd_ret_5d", "float64", True),
         ("y_1d", "Int8", True), ("y_5d", "Int8", True),
     ),
     key=("date", "ticker"),
