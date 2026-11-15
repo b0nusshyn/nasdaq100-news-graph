@@ -39,6 +39,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.core.paths import CONFIGS_DIR
+from src.core.tickers import SHARE_CLASSES
 
 ALIASES_CSV = CONFIGS_DIR / "ticker_aliases.csv"
 ET = "America/New_York"
@@ -46,9 +47,8 @@ CUTOFF_HOUR = 16  # NASDAQ close, 16:00 ET
 # New Fox Corporation began trading on 2019-03-19; earlier FOX/FOXA history is TFCF/TFCFA.
 FOX_SPINOFF = pd.Timestamp("2019-03-19", tz="America/New_York")
 FOX_OLD = {"FOX": "TFCF", "FOXA": "TFCFA"}
-# Share classes of one company: news about either applies to all (task 2.8 found FNSPID tags
-# Alphabet news as GOOG-only 7,036 times and GOOGL-only 341 times).
-SHARE_CLASSES = (("GOOG", "GOOGL"), ("FOX", "FOXA"), ("LBTYA", "LBTYK"), ("TFCF", "TFCFA"))
+# Share classes of one company (SHARE_CLASSES, src.core.tickers): news about either applies to
+# all (task 2.8 found FNSPID tags Alphabet news as GOOG-only 7,036 times and GOOGL-only 341 times).
 # FNSPID tags that collide with another company's symbol: ticker -> (headline pattern of the
 # other company, headline pattern that still means ours). AAL is also Anglo American's London
 # ticker; 2.8 found 442 of 5,078 AAL-tagged articles were mining/metals news.
