@@ -11,9 +11,11 @@ An article matches a ticker in two ways (the `source` column records which):
   (`Fastenal (FAST)`, the Zacks headline style) also match. Bare symbols never match
   on their own (`ON`, `A`, `TEAM` are ordinary words); only aliases listed in the CSV do.
 
-One company name can map to several share classes (`Alphabet` -> GOOG and GOOGL), which
-SCHEMA.md keeps as separate tickers. Before the 2019-03-19 Fox spin-off, `FOX`/`FOXA`
-refer to the old Twenty-First Century Fox issuer and are remapped to `TFCF`/`TFCFA`.
+Share classes are separate tickers in SCHEMA.md but one company, so a match on any class
+adds the others (`source = "share_class"`): GOOG/GOOGL, FOX/FOXA, LBTYA/LBTYK, TFCF/TFCFA.
+Before the 2019-03-19 Fox spin-off, `FOX`/`FOXA` refer to the old Twenty-First Century Fox
+issuer and are remapped to `TFCF`/`TFCFA`. FNSPID tags that belong to another company with
+the same symbol (AAL = Anglo American in London) are dropped by headline (`TAG_COLLISIONS`).
 
 Trading day (task 2.4): the UTC timestamp is converted to US/Eastern; at or after 16:00 ET,
 or on a non-trading day, the article belongs to the next NASDAQ session (the same calendar
@@ -44,6 +46,17 @@ CUTOFF_HOUR = 16  # NASDAQ close, 16:00 ET
 # New Fox Corporation began trading on 2019-03-19; earlier FOX/FOXA history is TFCF/TFCFA.
 FOX_SPINOFF = pd.Timestamp("2019-03-19", tz="America/New_York")
 FOX_OLD = {"FOX": "TFCF", "FOXA": "TFCFA"}
+# Share classes of one company: news about either applies to all (task 2.8 found FNSPID tags
+# Alphabet news as GOOG-only 7,036 times and GOOGL-only 341 times).
+SHARE_CLASSES = (("GOOG", "GOOGL"), ("FOX", "FOXA"), ("LBTYA", "LBTYK"), ("TFCF", "TFCFA"))
+# FNSPID tags that collide with another company's symbol: ticker -> (headline pattern of the
+# other company, headline pattern that still means ours). AAL is also Anglo American's London
+# ticker; 2.8 found 442 of 5,078 AAL-tagged articles were mining/metals news.
+TAG_COLLISIONS = {
+    "AAL": (r"(?i)copper|platinum|\bPGMs?\b|Amplats|Anglo American|De Beers|diamond|iron ore|\bminers?\b"
+            r"|mining|METALS-|Cochilco|Codelco|\bcoal\b|nickel|zinc|alumini?um",
+            r"(?i)American Airlines|\bAAL\b|airline"),
+}
 
 
 def article_id(url: str) -> str:
@@ -105,6 +118,7 @@ def match_articles(articles: pd.DataFrame, aliases: dict[str, list[str]]) -> pd.
     df["article_id"] = df["Url"].map(article_id)
     df["published_at"] = pd.to_datetime(df["Date"].str.replace(" UTC", "", regex=False), utc=True)
 
+    df = df[~_tag_collision(df)]
     tags = df.loc[df["ticker"].isin(universe), ["article_id", "published_at", "ticker"]]
     tags = tags.assign(source="tag")
 
@@ -121,8 +135,34 @@ def match_articles(articles: pd.DataFrame, aliases: dict[str, list[str]]) -> pd.
     out = _remap_old_fox(out)
     out = out[out["ticker"].isin(universe)]
     out = out.sort_values("source", kind="stable")  # "tag" before "title"
-    out = out.drop_duplicates(["article_id", "ticker"]).sort_values(["published_at", "article_id", "ticker"])
+    out = out.drop_duplicates(["article_id", "ticker"])
+    out = _expand_share_classes(out, universe)
+    out = out.sort_values(["published_at", "article_id", "ticker"])
     return out.reset_index(drop=True)
+
+
+def _tag_collision(df: pd.DataFrame) -> pd.Series:
+    """FNSPID rows whose tag belongs to a different company with the same symbol elsewhere."""
+    hit = pd.Series(False, index=df.index)
+    titles = df["Article_title"].fillna("")
+    for ticker, (other, ours) in TAG_COLLISIONS.items():
+        theirs = titles.str.contains(other, regex=True) & ~titles.str.contains(ours, regex=True)
+        hit |= (df["ticker"] == ticker) & theirs
+    return hit
+
+
+def _expand_share_classes(df: pd.DataFrame, universe: set[str]) -> pd.DataFrame:
+    """An article about one share class is about the company: add the other class(es)."""
+    extra = []
+    for group in SHARE_CLASSES:
+        present = df[df["ticker"].isin(group)].drop_duplicates("article_id")
+        for ticker in group:
+            if ticker in universe:
+                extra.append(present.assign(ticker=ticker, source="share_class"))
+    if not extra:
+        return df
+    # Existing rows win over the added ones, so a real tag/title match keeps its source.
+    return pd.concat([df, *extra], ignore_index=True).drop_duplicates(["article_id", "ticker"])
 
 
 def _remap_old_fox(df: pd.DataFrame) -> pd.DataFrame:

@@ -170,3 +170,30 @@ def test_no_date_only_article_lands_on_or_before_its_date():
     pub = pd.to_datetime(df["Date"].str[:10])
     assert len(out) == 2
     assert (out["date"].to_numpy() > pub.to_numpy()).all()
+
+
+# --- 2.8: systematic mismatch fixes --------------------------------------------------------
+
+
+def _one(url, date, title, tag):
+    return pd.DataFrame({"Url": [url], "Date": [date], "Article_title": [title], "ticker": [tag]})
+
+
+def test_share_class_tag_adds_the_other_class():
+    out = match_articles(_one("g", "2021-05-03 14:00:00 UTC", "Big tech earnings week", "GOOG"), ALIASES)
+    assert out.set_index("ticker")["source"].to_dict() == {"GOOG": "tag", "GOOGL": "share_class"}
+
+
+def test_share_class_keeps_old_fox_issuer():
+    out = match_articles(_one("f", "2019-02-01 15:00:00 UTC", "Media stocks", "FOXA"), ALIASES)
+    assert set(out["ticker"]) == {"TFCF", "TFCFA"}
+
+
+def test_aal_mining_headline_is_anglo_american_not_the_airline():
+    aliases = {**ALIASES, "AAL": ["American Airlines"]}
+    mining = _one("m", "2021-05-03 14:00:00 UTC", "Anglo American lifts copper output", "AAL")
+    assert match_articles(mining, aliases).empty
+    airline = _one("a", "2021-05-03 14:00:00 UTC", "American Airlines adds flights", "AAL")
+    assert match_articles(airline, aliases)["ticker"].tolist() == ["AAL"]
+    both = _one("b", "2021-05-03 14:00:00 UTC", "Airline fuel costs rise with copper", "AAL")
+    assert match_articles(both, aliases)["ticker"].tolist() == ["AAL"]
