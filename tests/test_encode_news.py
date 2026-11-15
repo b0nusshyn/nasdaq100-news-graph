@@ -2,16 +2,15 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.nlp.encode_news import EMB_COLUMNS, encode, encode_articles, headlines
+from src.nlp.encode_news import EMB_COLUMNS, aggregate, encode, encode_articles, headlines
 from src.nlp.match_tickers import article_id
-
-torch = pytest.importorskip("torch")
-transformers = pytest.importorskip("transformers")
 
 
 @pytest.fixture(scope="module")
 def tiny(tmp_path_factory):
     """A tiny random BERT classifier with FinBERT's label layout; no download, CPU only."""
+    torch = pytest.importorskip("torch")
+    pytest.importorskip("transformers")
     from transformers import BertConfig, BertForSequenceClassification, BertTokenizerFast
 
     vocab = ["[PAD]", "[UNK]", "[CLS]", "[SEP]", "[MASK]", "apple", "beats", "misses", "stocks", "fall"]
@@ -42,6 +41,8 @@ def test_encode_shapes_ranges_and_order(tiny):
 
 def test_sentiment_is_p_pos_minus_p_neg(tiny):
     tokenizer, model = tiny
+    import torch
+
     out = encode(["apple beats"], device="cpu", tokenizer=tokenizer, model=model)
     with torch.no_grad():
         probs = model(**tokenizer(["apple beats"], return_tensors="pt")).logits.softmax(-1)[0]
@@ -62,3 +63,56 @@ def test_encode_articles_keeps_ids(tiny):
     out = encode_articles(arts, device="cpu", tokenizer=tokenizer, model=model)
     assert out["article_id"].tolist() == ["a", "b"]
     assert len(out.columns) == 3 + len(EMB_COLUMNS)
+
+
+# --- 2.6: aggregation to news_features ------------------------------------------------------
+
+
+def _feats(rows):
+    """rows: article_id -> (sentiment, confidence, emb fill value)."""
+    data = {"article_id": list(rows)}
+    data["sentiment"] = np.array([v[0] for v in rows.values()], dtype=np.float32)
+    data["confidence"] = np.array([v[1] for v in rows.values()], dtype=np.float32)
+    emb = np.array([[v[2]] * len(EMB_COLUMNS) for v in rows.values()], dtype=np.float32)
+    return pd.concat([pd.DataFrame(data), pd.DataFrame(emb, columns=EMB_COLUMNS)], axis=1)
+
+
+def _prices():
+    d = pd.to_datetime(["2020-01-02", "2020-01-02", "2020-01-03", "2020-01-03", "2018-06-01"])
+    return pd.DataFrame({"date": d, "ticker": ["AAA", "BBB", "AAA", "BBB", "AAA"],
+                         "in_index": [True, True, True, False, True]})
+
+
+def test_aggregate_mean_counts_and_zero_rows():
+    from src.core.schema import conform
+
+    feats = _feats({"a1": (0.8, 0.9, 1.0), "a2": (-0.4, 0.7, 3.0), "a3": (0.5, 0.6, 5.0)})
+    links = pd.DataFrame({"article_id": ["a1", "a2", "a3"],
+                          "date": pd.to_datetime(["2020-01-02", "2020-01-02", "2020-01-03"]),
+                          "ticker": ["AAA", "AAA", "BBB"]})
+    out = aggregate(feats, links, _prices(), "2019-01-01", "2023-12-31")
+    conform(out, "news_features")
+    # Rows = in-index keys inside the window: no 2018 row, no BBB 01-03 (not in index).
+    assert list(zip(out["date"].dt.strftime("%m-%d"), out["ticker"], strict=True)) == [
+        ("01-02", "AAA"), ("01-02", "BBB"), ("01-03", "AAA")]
+    aaa = out.iloc[0]
+    assert aaa["has_news"] and aaa["n_articles"] == 2
+    assert aaa["sentiment"] == pytest.approx(0.2) and aaa["confidence"] == pytest.approx(0.8)
+    assert aaa["emb_0"] == pytest.approx(2.0) and aaa["emb_767"] == pytest.approx(2.0)
+
+
+def test_no_news_is_distinct_from_neutral():
+    feats = _feats({"a1": (0.0, 0.95, 1.0)})  # neutral news
+    links = pd.DataFrame({"article_id": ["a1"], "date": pd.to_datetime(["2020-01-02"]), "ticker": ["AAA"]})
+    out = aggregate(feats, links, _prices(), "2019-01-01", "2023-12-31").set_index("ticker")
+    day = out[out["date"] == "2020-01-02"]
+    assert day.loc["AAA", "has_news"] and day.loc["AAA", "sentiment"] == 0
+    assert not day.loc["BBB", "has_news"] and day.loc["BBB", "n_articles"] == 0
+    assert (day.loc["BBB", ["sentiment", "confidence", *EMB_COLUMNS]] == 0).all()
+
+
+def test_aggregate_refuses_missing_features():
+    links = pd.DataFrame({"article_id": ["a1", "zz"], "date": pd.to_datetime(["2020-01-02"] * 2),
+                          "ticker": ["AAA", "AAA"]})
+    with pytest.raises(ValueError, match="no features"):
+        aggregate(_feats({"a1": (0.1, 0.5, 0.0)}), links, _prices())
