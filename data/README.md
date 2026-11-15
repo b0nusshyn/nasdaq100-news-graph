@@ -20,7 +20,10 @@ records in `configs/quality_review.csv`. Warnings are retained, not silently rep
 
 
 Everything here except this file is gitignored. The team's copy lives in the shared Google
-Drive folder **`nasdaq100-news-graph/data`**, laid out exactly like this directory:
+Drive folder **`nasdaq100-news-graph/data`**
+([open on Google Drive](https://drive.google.com/drive/folders/1WFo7veigQ6npmJ0bk4YW7kGcpOJnrQ-p)),
+laid out exactly like this directory. Access is limited to the team; ask Shayanis (Modelling)
+to be added.
 
 ```
 data/
