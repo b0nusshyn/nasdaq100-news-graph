@@ -23,7 +23,7 @@ def make_labels(prices: pd.DataFrame, horizons: tuple[int, ...] = HORIZONS) -> p
     frame = checked_prices(prices)
     out = frame[["date", "ticker"]].copy()
     for horizon in HORIZONS:
-        out[f"ret_{horizon}d"] = float("nan")
+        out[f"fwd_ret_{horizon}d"] = float("nan")
         out[f"y_{horizon}d"] = pd.Series(pd.NA, index=out.index, dtype="Int8")
     if not frame.empty:
         sessions = trading_days(frame.date.min(), frame.date.max() + pd.Timedelta(days=30))
@@ -36,7 +36,7 @@ def make_labels(prices: pd.DataFrame, horizons: tuple[int, ...] = HORIZONS) -> p
                 source = group.loc[valid]
                 future = closes.reindex(targets).to_numpy()
                 returns = pd.Series(future / source.close.to_numpy() - 1, index=source.index)
-                out.loc[source.index, f"ret_{horizon}d"] = returns
+                out.loc[source.index, f"fwd_ret_{horizon}d"] = returns
                 y = returns.gt(0).astype("Int8").mask(returns.isna())
                 out.loc[source.index, f"y_{horizon}d"] = y
     out = conform(out, "labels")

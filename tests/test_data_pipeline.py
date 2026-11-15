@@ -69,7 +69,7 @@ def test_labels_formula_order_ties_and_trailing_nulls(sample_prices):
     sorted_prices = shuffled.sort_values(["ticker", "date"])
     for h in (1, 5):
         expected = sorted_prices.groupby("ticker").close.shift(-h) / sorted_prices.close - 1
-        np.testing.assert_allclose(sorted_labels[f"ret_{h}d"], expected, equal_nan=True)
+        np.testing.assert_allclose(sorted_labels[f"fwd_ret_{h}d"], expected, equal_nan=True)
         assert str(labels[f"y_{h}d"].dtype) == "Int8"
         for _, group in sorted_labels.groupby("ticker"):
             assert group[f"y_{h}d"].tail(h).isna().all()
@@ -80,14 +80,14 @@ def test_labels_formula_order_ties_and_trailing_nulls(sample_prices):
 def test_label_missing_target_does_not_extend_horizon(sample_prices):
     frame = sample_prices.iloc[:10].drop(index=1).reset_index(drop=True)
     labels = build_labels.make_labels(frame)
-    assert pd.isna(labels.ret_1d.iloc[0])
-    assert labels.ret_5d.iloc[0] == pytest.approx(105 / 100 - 1)
+    assert pd.isna(labels.fwd_ret_1d.iloc[0])
+    assert labels.fwd_ret_5d.iloc[0] == pytest.approx(105 / 100 - 1)
 
 
 def test_horizon_subset_keeps_frozen_contract(sample_prices):
     result = build_labels.make_labels(sample_prices, (1,))
     validate(result, "labels")
-    assert result.ret_5d.isna().all() and result.y_5d.isna().all()
+    assert result.fwd_ret_5d.isna().all() and result.y_5d.isna().all()
     for horizons in ((), (2,), (1, 1)):
         with pytest.raises(ValueError):
             build_labels.make_labels(sample_prices, horizons)

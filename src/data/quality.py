@@ -129,8 +129,8 @@ def quality_report(
     expected_labels = make_labels(prices)
     actual = labels.set_index(keys).reindex(pd.MultiIndex.from_frame(prices[keys]))
     for horizon in (1, 5):
-        observed_ret = actual[f"ret_{horizon}d"].to_numpy(dtype=float)
-        expected_ret = expected_labels[f"ret_{horizon}d"].to_numpy(dtype=float)
+        observed_ret = actual[f"fwd_ret_{horizon}d"].to_numpy(dtype=float)
+        expected_ret = expected_labels[f"fwd_ret_{horizon}d"].to_numpy(dtype=float)
         incorrect = ~np.isclose(observed_ret, expected_ret, rtol=1e-10, atol=1e-12, equal_nan=True) & in_scope
         if incorrect.any():
             add("label_return_mismatch", value=int(incorrect.sum()), detail=f"{horizon}d calendar horizon")

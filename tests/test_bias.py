@@ -48,4 +48,4 @@ def test_no_label_uses_prices_beyond_its_calendar_horizon():
     changed = prices.copy()
     changed.loc[changed.date.eq("2021-01-11"), ["open", "high", "low", "close"]] *= 2
     targeted = make_labels(changed)
-    assert not np.allclose(original.loc[source, "ret_5d"], targeted.loc[source, "ret_5d"])
+    assert not np.allclose(original.loc[source, "fwd_ret_5d"], targeted.loc[source, "fwd_ret_5d"])

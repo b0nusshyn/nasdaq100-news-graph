@@ -22,7 +22,7 @@ def sample():
 
 def test_bounds_filter_anomalies_and_balance_but_keep_prior_close():
     prices, labels, members = sample()
-    labels.loc[0, "ret_1d"] = -0.9  # outside the requested scope
+    labels.loc[0, "fwd_ret_1d"] = -0.9  # outside the requested scope
     report = quality.quality_report(prices, labels, members, start="2021-01-04", end="2021-01-05")
     assert "zero_volume" not in set(report["check"])
     assert "label_return_mismatch" not in set(report["check"])
