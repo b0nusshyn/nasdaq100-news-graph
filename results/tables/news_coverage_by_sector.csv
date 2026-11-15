@@ -1,0 +1,11 @@
+sector,ticker_days,with_news,share_with_news,articles_per_covered_day,tickers,tickers_without_news
+Energy,518,403,0.7780,2.7767,2,0
+Communication Services,18220,11023,0.6050,3.3257,21,0
+Consumer Staples,8362,4756,0.5688,2.9941,8,1
+Information Technology,50153,25906,0.5165,3.9509,56,1
+Consumer Discretionary,19574,9195,0.4698,4.0685,23,1
+Health Care,18077,7274,0.4024,2.8610,21,0
+Industrials,9347,3401,0.3639,2.2402,11,0
+Utilities,3532,1232,0.3488,1.6258,4,0
+Real Estate,402,121,0.3010,1.8843,1,0
+Financials,334,54,0.1617,3.1852,1,0
