@@ -1,0 +1,7 @@
+ticker,source_id,identity_url,identity_review
+CA,CA~201811,https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2018-153,reviewed
+DISH,DISH,https://ir.nasdaq.com/node/99026,reviewed
+ESRX,ESRX~201812,https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2018-152,reviewed
+HOLX,HOLX,https://www.nasdaq.com/about/press-center/annual-changes-nasdaq-100-index-0,reviewed
+QRTEA,QRTEA,https://www.nasdaq.com/about/press-center/annual-changes-nasdaq-100-index-0,reviewed
+SHPG,SHPG,https://www.nasdaq.com/about/press-center/annual-changes-nasdaq-100-index-0,reviewed

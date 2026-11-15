@@ -7,9 +7,14 @@ history (task 1.1, issue #6); chains such as A -> B -> C resolve to C.
 
 from __future__ import annotations
 
-# old symbol -> new symbol, with the date the new symbol started trading
+# Historical symbol -> current symbol (not a point-in-time symbol lookup).
 RENAMES: dict[str, str] = {
     "FB": "META",  # 2022-06-09
+    "PCLN": "BKNG",  # 2018-02-27
+    "CTRP": "TCOM",  # 2019-11-05
+    "WLTW": "WTW",  # 2022-01-10
+    "FI": "FISV",  # 2025-11-11: Fiserv returned to its original ticker
+    "NLOK": "GEN",  # 2022-11-08: continuing company, Gen Digital
 }
 
 

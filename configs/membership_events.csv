@@ -1,0 +1,3 @@
+date,added,removed,source_url,identity_url,reason
+2019-03-19,FOXA,TFCFA,https://huggingface.co/datasets/Liangzhi-Li/quant-papers-vs-baselines-data/resolve/79458172fb5190d72ab539e658e428c6810772f7/r3_data/us/ticker_map.csv,https://nasdaqtrader.com/TraderNews.aspx?id=ECA2019-26,New Fox Class A replaces old 21st Century Fox Class A; ticker reuse is not a rename
+2019-03-19,FOX,TFCF,https://huggingface.co/datasets/Liangzhi-Li/quant-papers-vs-baselines-data/resolve/79458172fb5190d72ab539e658e428c6810772f7/r3_data/us/ticker_map.csv,https://nasdaqtrader.com/TraderNews.aspx?id=ECA2019-26,New Fox Class B replaces old 21st Century Fox Class B; ticker reuse is not a rename
