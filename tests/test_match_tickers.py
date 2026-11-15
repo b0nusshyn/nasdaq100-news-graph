@@ -3,7 +3,9 @@ import pandas as pd
 from src.nlp.match_tickers import (
     ALIASES_CSV,
     article_id,
+    assign_trading_day,
     build_aliases,
+    build_article_tickers,
     match_articles,
     title_matches,
 )
@@ -96,3 +98,75 @@ def test_alias_table_covers_members():
     assert set(aliases) == {"AAPL", "GOOG", "GOOGL"}
     table = pd.read_csv(ALIASES_CSV, dtype=str)
     assert table["alias"].notna().all() and not table.duplicated().any()
+
+
+# --- 2.4: trading-day alignment -------------------------------------------------------------
+
+# Thu 2020-07-02, (Fri 07-03 holiday), Mon 07-06, Tue 07-07
+DAYS = pd.DatetimeIndex(["2020-07-01", "2020-07-02", "2020-07-06", "2020-07-07"])
+
+
+def utc(*stamps):
+    return pd.Series(pd.to_datetime(list(stamps), utc=True, format="ISO8601"))
+
+
+def test_before_close_same_day_after_close_next_day():
+    # 2020-07-02 is EDT (UTC-4): 19:59 UTC = 15:59 ET, 20:00 UTC = 16:00 ET.
+    got = assign_trading_day(utc("2020-07-02 19:59:59", "2020-07-02 20:00:00", "2020-07-02 23:30"), DAYS)
+    assert got.tolist() == [pd.Timestamp("2020-07-02"), pd.Timestamp("2020-07-06"), pd.Timestamp("2020-07-06")]
+
+
+def test_utc_after_midnight_is_still_previous_et_evening():
+    # 03:00 UTC on 07-02 is 23:00 ET on 07-01, after close -> 07-02.
+    assert assign_trading_day(utc("2020-07-02 03:00"), DAYS).tolist() == [pd.Timestamp("2020-07-02")]
+
+
+def test_holiday_and_weekend_roll_to_next_session():
+    # Holiday Friday morning, Saturday, Sunday evening -> Monday.
+    got = assign_trading_day(utc("2020-07-03 14:00", "2020-07-04 15:00", "2020-07-05 23:00"), DAYS)
+    assert set(got) == {pd.Timestamp("2020-07-06")}
+
+
+def test_winter_offset_uses_est():
+    days = pd.DatetimeIndex(["2020-01-06", "2020-01-07"])
+    # January is EST (UTC-5): 20:30 UTC = 15:30 ET (same day), 21:00 UTC = 16:00 ET (next day).
+    got = assign_trading_day(utc("2020-01-06 20:30", "2020-01-06 21:00"), days)
+    assert got.tolist() == [pd.Timestamp("2020-01-06"), pd.Timestamp("2020-01-07")]
+
+
+def test_no_following_session_is_nat():
+    assert assign_trading_day(utc("2020-07-07 22:00"), DAYS).isna().all()
+
+
+def test_build_article_tickers_window_and_schema():
+    from src.core.schema import conform
+
+    df = pd.DataFrame({
+        "Url": ["a", "b", "c"],
+        "Date": ["2020-07-01 21:00:00 UTC", "2020-07-07 14:00:00 UTC", "2020-07-07 22:00:00 UTC"],
+        "Article_title": ["Apple news", "Intel news", "Nvidia news"],
+        "ticker": ["AAPL", "INTC", "NVDA"],
+    })
+    out = build_article_tickers(df, ALIASES, DAYS, "2020-07-02", "2020-07-07")
+    # a: after close 07-01 -> 07-02 (inside); b: 07-07; c: no next session -> dropped.
+    assert dict(zip(out["ticker"], out["date"], strict=True)) == {
+        "AAPL": pd.Timestamp("2020-07-02"), "INTC": pd.Timestamp("2020-07-07")}
+    conform(out[["article_id", "date", "ticker"]], "article_tickers")
+
+
+
+def test_date_only_goes_to_next_session_never_same_day():
+    # Date-only 2020-07-02 (a session) -> 07-06; date-only holiday 07-03 -> 07-06.
+    got = assign_trading_day(utc("2020-07-02 00:00:00", "2020-07-03 00:00:00"), DAYS)
+    assert got.tolist() == [pd.Timestamp("2020-07-06"), pd.Timestamp("2020-07-06")]
+
+
+def test_no_date_only_article_lands_on_or_before_its_date():
+    df = pd.DataFrame({
+        "Url": ["a", "b"], "Date": ["2020-07-01 00:00:00 UTC", "2020-07-06 00:00:00 UTC"],
+        "Article_title": ["Apple news", "Intel news"], "ticker": ["AAPL", "INTC"],
+    })
+    out = build_article_tickers(df, ALIASES, DAYS, "2020-07-01", "2020-07-07")
+    pub = pd.to_datetime(df["Date"].str[:10])
+    assert len(out) == 2
+    assert (out["date"].to_numpy() > pub.to_numpy()).all()

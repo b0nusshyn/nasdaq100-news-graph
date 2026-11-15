@@ -14,6 +14,18 @@ An article matches a ticker in two ways (the `source` column records which):
 One company name can map to several share classes (`Alphabet` -> GOOG and GOOGL), which
 SCHEMA.md keeps as separate tickers. Before the 2019-03-19 Fox spin-off, `FOX`/`FOXA`
 refer to the old Twenty-First Century Fox issuer and are remapped to `TFCF`/`TFCFA`.
+
+Trading day (task 2.4): the UTC timestamp is converted to US/Eastern; at or after 16:00 ET,
+or on a non-trading day, the article belongs to the next NASDAQ session (the same calendar
+`src.data` uses for prices). About 99.5% of FNSPID articles carry only a date (00:00:00 UTC):
+they may have appeared after that day's close, so they go to the first session *after* their
+date, never to the date itself (no look-ahead). Days outside [start, end] are dropped.
+Membership is not applied per day here: models filter on `in_index`.
+
+    python -m src.nlp.match_tickers
+
+Writes `article_tickers.parquet` and `raw/article_tickers_audit.csv` (adds the UTC
+`published_at` and the match `source`, for the 2.8 spot check).
 """
 
 from __future__ import annotations
@@ -25,9 +37,10 @@ from pathlib import Path
 import pandas as pd
 
 from src.core.paths import CONFIGS_DIR
-from src.core.todo import todo
 
 ALIASES_CSV = CONFIGS_DIR / "ticker_aliases.csv"
+ET = "America/New_York"
+CUTOFF_HOUR = 16  # NASDAQ close, 16:00 ET
 # New Fox Corporation began trading on 2019-03-19; earlier FOX/FOXA history is TFCF/TFCFA.
 FOX_SPINOFF = pd.Timestamp("2019-03-19", tz="America/New_York")
 FOX_OLD = {"FOX": "TFCF", "FOXA": "TFCFA"}
@@ -118,6 +131,78 @@ def _remap_old_fox(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def is_date_only(published_at: pd.Series) -> pd.Series:
+    """FNSPID stamps most articles at exactly 00:00:00 UTC: only the publication date is known."""
+    utc = published_at.dt.tz_convert("UTC")
+    return (utc.dt.hour == 0) & (utc.dt.minute == 0) & (utc.dt.second == 0)
+
+
 def assign_trading_day(published_at: pd.Series, trading_days: pd.DatetimeIndex) -> pd.Series:
-    """Convert to America/New_York; after 16:00 ET, or on a non-trading day, roll to the next trading day."""
-    todo(17, "timestamp alignment")
+    """Trading day an article belongs to; tz-naive midnight dates, NaT if no session follows.
+
+    Timed articles: convert to America/New_York; at or after 16:00 ET, or on a non-trading
+    day, roll to the next session. Exactly 16:00:00 rolls forward (not in that day's close).
+    The cutoff is 16:00 on every session, including early closes, as SCHEMA.md fixes it.
+
+    Date-only articles (`is_date_only`, date D = publication date) cannot be placed against
+    the cutoff: they may have appeared after D's close, so they go to the first session
+    strictly after D. Never D itself, so no after-close article leaks into D.
+    """
+    et = published_at.dt.tz_convert(ET)
+    undated = is_date_only(published_at)
+    pub_date = published_at.dt.tz_convert("UTC").dt.tz_localize(None).dt.normalize()
+    day = et.dt.tz_localize(None).dt.normalize().where(~undated, pub_date)
+    strictly_after = (et.dt.hour >= CUTOFF_HOUR) | undated
+
+    days = pd.DatetimeIndex(trading_days).sort_values()
+    pos = days.searchsorted(day.to_numpy(), side="left")
+    on_day = (pos < len(days)) & (days[pos.clip(max=len(days) - 1)] == day.to_numpy())
+    pos = pos + (strictly_after.to_numpy() & on_day)
+    out = pd.Series(pd.NaT, index=published_at.index, dtype="datetime64[ns]")
+    ok = pos < len(days)
+    out[ok] = days[pos[ok]]
+    return out
+
+
+def build_article_tickers(articles: pd.DataFrame, aliases: dict[str, list[str]],
+                          trading_days: pd.DatetimeIndex, start: str, end: str) -> pd.DataFrame:
+    """Match, assign trading days, keep days in [start, end]. Keeps `published_at`/`source` for audit."""
+    matched = match_articles(articles, aliases)
+    matched["date"] = assign_trading_day(matched["published_at"], trading_days)
+    keep = matched["date"].between(pd.Timestamp(start), pd.Timestamp(end))
+    return matched.loc[keep, ["article_id", "date", "ticker", "published_at", "source"]].reset_index(drop=True)
+
+
+def main() -> None:
+    import argparse
+
+    from src.core.io import read_table, write_table
+    from src.core.paths import raw_dir
+    from src.data.build_index_history import trading_days
+    from src.nlp.filter_fnspid import universe
+
+    p = argparse.ArgumentParser(description="Match FNSPID articles to tickers and trading days (tasks 2.3, 2.4).")
+    p.add_argument("--input", type=Path, default=None, help="default: <data>/raw/fnspid_filtered.csv")
+    p.add_argument("--start", default="2019-01-01")
+    p.add_argument("--end", default="2023-12-31")
+    args = p.parse_args()
+
+    source = args.input or raw_dir() / "fnspid_filtered.csv"
+    articles = pd.read_csv(source, usecols=["Url", "Date", "Article_title", "ticker"], dtype=str)
+    membership = read_table("membership")
+    members = universe(membership, args.start, args.end)
+    aliases = {t: a for t, a in build_aliases(membership).items() if t in members}
+    pad = pd.Timedelta(days=10)
+    days = trading_days(pd.Timestamp(args.start) - pad, pd.Timestamp(args.end) + pad)
+
+    out = build_article_tickers(articles, aliases, days, args.start, args.end)
+    path = write_table(out[["article_id", "date", "ticker"]], "article_tickers")
+    audit = raw_dir() / "article_tickers_audit.csv"
+    out.to_csv(audit, index=False)
+    print(f"{len(out):,} article-ticker rows, {out['article_id'].nunique():,} articles, "
+          f"{out['ticker'].nunique()} tickers -> {path}")
+    print(f"sources: {out['source'].value_counts().to_dict()}; audit with timestamps -> {audit}")
+
+
+if __name__ == "__main__":
+    main()
