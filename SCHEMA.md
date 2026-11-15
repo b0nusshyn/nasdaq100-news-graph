@@ -122,9 +122,15 @@ news have `has_news = false`, `n_articles = 0`, and zeros everywhere else; model
 
 File: `edges.parquet` · Owner: Modelling · Issues #8, #21, #22, #28
 
-Directed edges; an undirected relation is stored in both directions. No self-loops.
+Directed edges; an undirected relation is stored in both directions. No self-loops, and no
+`comention` or `corr` edge between two share classes of one company (`src.core.tickers.same_company`).
 `corr` edges: for each ticker, its 10 peers with the highest training-window return correlation
 (`CORR_TOP_K` in `src/core/schema.py`); a pair selected from either side is stored both ways.
+`comention` edges: weight is the Jaccard overlap of the two firms' training-window articles,
+`co / (n_a + n_b - co)`, where an article naming k companies counts 1 / (k - 1) towards every
+total (share classes count as one company). A pair needs at least 2 articles naming both
+(`COMENTION_MIN_COUNT`); each ticker then keeps its 10 peers with the highest weight
+(`COMENTION_TOP_K`), and a pair selected from either side is stored both ways.
 
 | Column | dtype | nullable | Description |
 |---|---|---|---|
@@ -132,7 +138,7 @@ Directed edges; an undirected relation is stored in both directions. No self-loo
 | `src` | string | no | Ticker the signal comes from |
 | `dst` | string | no | Ticker the signal goes to |
 | `edge_type` | string | no | One of `sector`, `comention`, `corr` |
-| `weight` | float32 | no | 1 for `sector`; co-mention count; return correlation |
+| `weight` | float32 | no | 1 for `sector`; co-mention Jaccard in [0, 1]; return correlation |
 
 **Key:** `fold`, `src`, `dst`, `edge_type`
 
@@ -167,3 +173,11 @@ Frozen Fri 13 Nov 2026 in issue #2.
 5. **Forward returns** (Sat 14 Nov) — `labels.ret_1d`/`ret_5d` renamed `fwd_ret_1d`/`fwd_ret_5d`.
    The indicator `ret_1d` (task 1.5) is the trailing return; the shared name would have let a
    merge pass the forward return off as an input.
+6. **`comention` weight** (Sun 15 Nov, task 3.3, #21) — co-mention Jaccard instead of a raw
+   count, so heavily covered pairs (AAPL–MSFT) do not outrank genuine peers (EA–TTWO).
+   Articles weigh 1 / (k - 1) for k companies named, so market roundups count little without
+   a hard cutoff. Top-k with k = 10 per ticker after a minimum of 2 co-mentions: a count
+   threshold alone left max degree at 41–130 of ~140 nodes; a minimum of 5 would remove ~25
+   low-coverage firms, the ones propagation is meant to help. Share classes of one company
+   are tagged together by news matching, so they never form `comention` or `corr` edges.
+   Measurements: `results/tables/comention_report.md`.

@@ -17,6 +17,8 @@ EDGE_TYPES = ("sector", "comention", "corr")
 HORIZONS = (1, 5)
 ALL_FOLDS = -1  # `fold` value for edges valid in every fold (e.g. sector)
 CORR_TOP_K = 10  # corr edges: peers kept per ticker (SCHEMA.md decision 4)
+COMENTION_TOP_K = 10  # comention edges: peers kept per ticker (SCHEMA.md decision 6)
+COMENTION_MIN_COUNT = 2  # comention edges: articles naming both firms needed to be a candidate
 
 # Logical dtypes used in SCHEMA.md. `conform` casts to the pandas dtype on the right.
 PANDAS_DTYPE = {

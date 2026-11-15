@@ -223,6 +223,8 @@ python -m src.nlp.encode_news --input data/raw/fnspid_filtered.csv
 # Graph edges: run once per walk-forward fold (0, 1, 2, …); corr and comention
 # are rebuilt from each fold's training window, sector edges are static
 python -m src.graph.build_edges --types sector comention corr --fold 0
+# Measurements behind the comention defaults (SCHEMA.md decision 6)
+python -m src.graph.comention_report --output results/tables
 ```
 
 ### Training and evaluation
