@@ -32,3 +32,11 @@ def test_check_env():
     from src.core.check_env import check
 
     assert check()["gat_forward"] == "ok"
+
+
+@pytest.mark.parametrize("old,current", [
+    ("PCLN", "BKNG"), ("CTRP", "TCOM"), ("WLTW", "WTW"), ("FI", "FISV"), ("NLOK", "GEN"),
+])
+def test_data_pipeline_historical_renames(old, current):
+    assert canonical_ticker(old) == current
+    assert canonical_ticker(current) == current

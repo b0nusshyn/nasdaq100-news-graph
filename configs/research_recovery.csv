@@ -1,0 +1,15 @@
+ticker,source_id,identity_url,identity_review
+ALXN,ALXN,https://www.sec.gov/Archives/edgar/data/899866/000089986620000012/alxn10k12312019.htm,reviewed
+ANSS,ANSS,https://www.sec.gov/Archives/edgar/data/1013462/000101346224000007/anss-20231231.htm,reviewed
+ATVI,ATVI,https://www.sec.gov/Archives/edgar/data/718877/000141057819001036/tv528805_8k.htm,reviewed
+CELG,CELG,https://www.sec.gov/Archives/edgar/data/816284/000110465919058070/tm1921268-1_8k.htm,reviewed
+CERN,CERN,https://www.sec.gov/Archives/edgar/data/804753/000080475319000022/may72019form8-k.htm,reviewed
+CTXS,CTXS,https://www.sec.gov/Archives/edgar/data/877890/000087789019000134/R1.htm,reviewed
+EA,EA,https://www.sec.gov/Archives/edgar/data/712515/000071251523000031/R1.htm,reviewed
+MXIM,MXIM,https://www.sec.gov/Archives/edgar/data/743316/000074331619000013/R1.htm,reviewed
+SGEN,SGEN,https://www.sec.gov/Archives/edgar/data/1060736/000106073623000009/sgen-20221231.htm,reviewed
+SPLK,SPLK,https://www.sec.gov/Archives/edgar/data/1353283/000135328323000011/splk-20230131.htm,reviewed
+TFCF,FOX~201903,https://nasdaqtrader.com/TraderNews.aspx?id=ECA2019-26,reviewed
+TFCFA,FOXA~201903,https://nasdaqtrader.com/TraderNews.aspx?id=ECA2019-26,reviewed
+WBA,WBA,https://www.sec.gov/Archives/edgar/data/1618921/000161892123000062/wba-20230831.htm,reviewed
+XLNX,XLNX,https://www.sec.gov/Archives/edgar/data/743988/000074398819000030/form8-k2019annmtg.htm,reviewed
