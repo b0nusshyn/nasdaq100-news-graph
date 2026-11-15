@@ -7,8 +7,10 @@ Output: `news_features.parquet` (SCHEMA.md). GPU recommended (an 8 GB card is en
 Task 2.5 (this step) encodes each article once, by headline, and writes the per-article
 features to `<data>/raw/article_features.parquet` (raw, outside SCHEMA.md): `article_id`,
 `sentiment` (p_pos - p_neg), `confidence` (max class probability) and `emb_0..emb_767`
-(final-layer [CLS]). Only articles present in `article_tickers` are encoded. Task 2.6 then
-averages them per (date, ticker) into `news_features.parquet`.
+(final-layer [CLS]). Only articles present in `article_tickers` are encoded; an existing file is
+reused unless `--reencode`. Task 2.6 (`aggregate`) then takes a plain mean per in-index
+(date, ticker) in the study window and writes `news_features.parquet`; ticker-days without
+news get `has_news = False`, `n_articles = 0` and zeros, so "no coverage" stays distinct.
 
 Headlines, not bodies: every article has one (23% have no body), FinBERT was trained on short
 financial sentences, and one text type keeps the features consistent across articles.
@@ -23,7 +25,6 @@ import numpy as np
 import pandas as pd
 
 from src.core.schema import EMB_DIM
-from src.core.todo import todo
 
 MODEL_NAME = "ProsusAI/finbert"
 MAX_LENGTH = 128  # tokens; headlines are far shorter, this only guards outliers
@@ -104,9 +105,51 @@ def encode_articles(arts: pd.DataFrame, **kwargs) -> pd.DataFrame:
     return feats
 
 
-def aggregate(article_features: pd.DataFrame, article_tickers: pd.DataFrame, prices: pd.DataFrame) -> pd.DataFrame:
-    """One row per in-index (date, ticker); ticker-days without news get has_news=False and zeros."""
-    todo(24, "aggregate news features")
+def aggregate(article_features: pd.DataFrame, article_tickers: pd.DataFrame, prices: pd.DataFrame,
+              start: str | None = None, end: str | None = None) -> pd.DataFrame:
+    """One row per in-index (date, ticker); ticker-days without news get has_news=False and zeros.
+
+    Several articles on one ticker-day are combined with a plain mean (SCHEMA.md decision 3).
+    `start`/`end` limit the rows to the study window (news was only collected for it); rows
+    outside it are left out, which the models read as "no coverage" as well. Article-ticker
+    rows that are not in-index days are ignored (survivorship: `in_index` is the filter).
+    """
+    keys = prices.loc[prices["in_index"], ["date", "ticker"]]
+    if start is not None:
+        keys = keys[keys["date"] >= pd.Timestamp(start)]
+    if end is not None:
+        keys = keys[keys["date"] <= pd.Timestamp(end)]
+    keys = keys.drop_duplicates().sort_values(["date", "ticker"]).reset_index(drop=True)
+
+    value_cols = ["sentiment", "confidence", *EMB_COLUMNS]
+    feats = article_features.set_index("article_id")[value_cols]
+    links = article_tickers[["article_id", "date", "ticker"]]
+    links = links[links["article_id"].isin(feats.index)]
+    missing = article_tickers["article_id"].nunique() - links["article_id"].nunique()
+    if missing:
+        raise ValueError(f"{missing} article_tickers articles have no features; rerun encoding")
+
+    # Plain mean per (date, ticker): sort by group, sum with reduceat, divide by counts.
+    links = links.merge(keys.reset_index().rename(columns={"index": "row"}), on=["date", "ticker"])
+    links = links.sort_values("row", kind="stable")
+    values = feats.loc[links["article_id"]].to_numpy(dtype=np.float64)
+    rows = links["row"].to_numpy()
+    starts = np.flatnonzero(np.r_[True, rows[1:] != rows[:-1]]) if len(rows) else np.array([], dtype=int)
+    group_rows = rows[starts]
+    counts = np.diff(np.r_[starts, len(rows)])
+
+    out_values = np.zeros((len(keys), len(value_cols)), dtype=np.float32)
+    if len(rows):
+        out_values[group_rows] = (np.add.reduceat(values, starts, axis=0) / counts[:, None]).astype(np.float32)
+    n_articles = np.zeros(len(keys), dtype=np.int32)
+    n_articles[group_rows] = counts
+
+    out = pd.DataFrame(out_values, columns=value_cols)
+    out.insert(0, "n_articles", n_articles)
+    out.insert(0, "has_news", n_articles > 0)
+    out.insert(0, "ticker", keys["ticker"].astype("string").to_numpy())
+    out.insert(0, "date", keys["date"].to_numpy())
+    return out
 
 
 def main() -> None:
@@ -115,21 +158,36 @@ def main() -> None:
     p.add_argument("--batch-size", type=int, default=64)
     p.add_argument("--device", default="cuda")
     p.add_argument("--limit", type=int, default=None, help="encode only the first N articles (smoke test)")
+    p.add_argument("--reencode", action="store_true",
+                   help="run FinBERT even if raw/article_features.parquet already exists")
+    p.add_argument("--start", default="2019-01-01", help="first day of news_features rows")
+    p.add_argument("--end", default="2023-12-31", help="last day of news_features rows")
     args = p.parse_args()
 
-    from src.core.io import read_table
+    from src.core.io import read_table, write_table
     from src.core.paths import raw_dir
 
-    filtered = pd.read_csv(args.input, usecols=["Url", "Article_title"], dtype=str)
-    arts = headlines(filtered, read_table("article_tickers")["article_id"])
-    if args.limit:
-        arts = arts.head(args.limit)
-    print(f"encoding {len(arts):,} headlines on {args.device}")
-    feats = encode_articles(arts, batch_size=args.batch_size, device=args.device, progress=True)
-    out = raw_dir() / "article_features.parquet"
-    feats.to_parquet(out, index=False)
-    print(f"wrote {len(feats):,} article features -> {out}")
-    print("aggregation to news_features.parquet is task 2.6 (issue #24), not implemented yet")
+    article_tickers = read_table("article_tickers")
+    features_path = raw_dir() / "article_features.parquet"
+    if args.reencode or args.limit or not features_path.exists():
+        filtered = pd.read_csv(args.input, usecols=["Url", "Article_title"], dtype=str)
+        arts = headlines(filtered, article_tickers["article_id"])
+        if args.limit:
+            arts = arts.head(args.limit)
+        print(f"encoding {len(arts):,} headlines on {args.device}")
+        feats = encode_articles(arts, batch_size=args.batch_size, device=args.device, progress=True)
+        feats.to_parquet(features_path, index=False)
+        print(f"wrote {len(feats):,} article features -> {features_path}")
+        if args.limit:
+            print("--limit is a smoke test: news_features.parquet not written")
+            return
+    else:
+        print(f"using existing {features_path} (pass --reencode to run FinBERT again)")
+        feats = pd.read_parquet(features_path)
+
+    news = aggregate(feats, article_tickers, read_table("prices"), args.start, args.end)
+    path = write_table(news, "news_features")
+    print(f"{len(news):,} in-index ticker-days, {news['has_news'].mean():.1%} with news -> {path}")
 
 
 if __name__ == "__main__":
