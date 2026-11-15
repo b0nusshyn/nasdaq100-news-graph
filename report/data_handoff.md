@@ -5,32 +5,25 @@ Owner: Chotima. Local working tree; no push or issue closure has been performed.
 | Item | Current result |
 |---|---|
 | Membership | 189 spells / 182 ever-members; daily count 101–103 in 2019–2023 |
-| Prices and labels | 232,956 matching keys / 168 tickers; 2018-01-02 through 2023-12-29 |
+| Prices and labels | 238,195 matching keys / 174 tickers; 2018-01-02 through 2023-12-29 |
 | Main-window coverage | 128,519 observed of 128,524 expected member/session keys |
 | Remaining main-window gaps | Five XLNX sessions, 2022-02-14 through 2022-02-18; documented trading halt before index removal |
 | Unexplained main-window quote gaps | Zero; this does not certify quote accuracy or adjustment consistency |
 | Historical issuer identity | Old FOX/FOXA separately represented as TFCF/TFCFA through 2019-03-18 |
 | Research download | 185,296,627-byte checksum-pinned daily archive downloaded successfully |
-| 2018 warm-up recovery | 1,462 candidate rows for CA, DISH, ESRX, HOLX, QRTEA, SHPG staged; not applied |
-| Code validation | 149 tests, ruff and git diff --check passed in the installed environment |
+| 2018 warm-up recovery | 5,239 rows for six reviewed series applied; ESRX 2018-12-21 documented halt |
+| Code validation | 153 tests and ruff passed in the installed environment |
 | Demo | Data-stage notebook prepared; NLP/model artifacts remain absent |
 
 ## Before training or evaluation
 
-1. Review the six staged 2018 series and issuer evidence before applying them. ESRX source
-   ends 2018-12-20 although membership includes December 21; investigate the merger/halt.
-   Do not forward-fill or substitute acquirer prices.
-2. Review source adjustment and volume limitations. The applied research cohort uses published
-   adjustment factors consistently; overlapping checksum-pinned archived quote OHLC is preserved
-   before adjustment. Recovered volume follows Alpaca SIP conventions, which differ from Yahoo.
-   Published adjusted prices can be rounded. See `raw/recovery_provenance.json` and
-   `configs/research_recovery.csv` for exact source identities and the backup chain.
-3. Review `quality_review_register.csv`: six in-index large moves and GEN zero volume remain
-   open. Ten other large moves and three zero-volume findings are outside the main index sample.
-4. Preserve the five XLNX nontrading rows as documented missing quotes, using
-   `configs/nontrading_events.csv`; do not fabricate prices or shorten membership.
-5. Rebuild labels, quality and audit after any additional recovery. The audit rejects stale
-   membership flags. The default audit scope is 2019–2023; it does not claim complete 2018 coverage.
+Task 1.6 checks and disposition review are complete locally: **PASS_WITH_FLAGS**.
+Read [the quality report](data_quality_1_6.md) for retained price/volume limitations.
+There are zero unexplained in-index quote gaps across 2018–2023. Six absent sessions
+are documented nontrading days; no prices have been fabricated. Source adjustment
+rounding and SIP/Yahoo volume differences remain limitations. Preserve flags in
+volume-sensitive and warm-up analysis, and rerun strict quality checks after changes.
+The main audit still covers 2019–2023, while the quality summary includes 2018.
 
 ## Other Data tasks
 

@@ -5,11 +5,12 @@ Prepared locally; delivery has not yet been confirmed. See `data_handoff.md` for
 ## Ready inputs
 
 - `membership.parquet`: 189 membership spells, 182 historical tickers.
-- `prices.parquet` and `labels.parquet`: 232,956 matching date/ticker keys, 168 tickers.
+- `prices.parquet` and `labels.parquet`: 238,195 matching date/ticker keys, 174 tickers.
 - Main analysis window: 2019–2023. Filter prices by `in_index` and the date window.
 - Five absent XLNX sessions (2022-02-14–18) are documented nontrading days;
   no prices have been invented. Other quote/adjustment QA remains open.
-- Six 2018 warm-up series are staged separately and are not in these artifacts yet.
+- Six recovered 2018 warm-up series are now included; ESRX 2018-12-21 is a documented halt.
+- Task 1.6 passed with retained price/volume flags; read `data_quality_1_6.md` before training.
 
 Use `src.core.io.read_table` and set `NDX_DATA_DIR` to the extracted data directory.
 Use the full membership ticker universe to filter FNSPID, rather than today's constituents

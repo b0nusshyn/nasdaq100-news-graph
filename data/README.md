@@ -1,5 +1,24 @@
 # data/
 
+## Current review snapshot — Task 1.6
+
+As of 15 November 2026: 238,195 price/label rows, 174 tickers; membership has
+189 spells / 182 tickers. The 2018–2023 quality run is **PASS_WITH_FLAGS**:
+zero unexplained member-session gaps, six documented nontrading sessions,
+17 large-return flags and four zero-volume ticker findings. Eight absent histories
+have membership only after the audit window. Earlier acquisition counts below
+are historical checkpoints, superseded by this snapshot.
+
+```bash
+python -m src.data.quality --start 2018-01-01 --end 2023-12-31 --strict
+python -m src.data.audit --start 2019-01-01 --end 2023-12-31
+```
+
+See [Task 1.6 review](../report/data_quality_1_6.md) for exact limitations and output files.
+Strict quality fails structural errors, unexplained gaps and unreviewed/stale anomaly
+records in `configs/quality_review.csv`. Warnings are retained, not silently repaired.
+
+
 Everything here except this file is gitignored. The team's copy lives in the shared Google
 Drive folder **`nasdaq100-news-graph/data`**, laid out exactly like this directory:
 

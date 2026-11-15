@@ -1,5 +1,10 @@
 # Dataset and bias handling
 
+Current Task 1.6 snapshot: 238,195 price/label rows across 174 tickers, with zero unexplained
+in-index quote gaps across 2018–2023 and six documented nontrading sessions. Quality is
+PASS_WITH_FLAGS; [the detailed review](../data_quality_1_6.md) documents retained price/volume
+flags and annual class balance. Acquisition counts below describe earlier recovery stages.
+
 Owner: Data · Issue #46. Measured acquisition/recovery audit below; unresolved data and model inputs remain pending.
 
 The intended experiment covers NASDAQ-100 securities during 2019–2023. Prices are requested
