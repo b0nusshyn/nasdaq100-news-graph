@@ -135,21 +135,17 @@ def test_committed_synthetic_labels(horizon):
         "AAA": 0.9, "BBB": 0.8, "CCC": 0.6, "DDD": 0.4, "EEE": 0.2, "FFF": 0.1,
     })
 
-    # Only adapt these known fixtures after verifying their forward-return meaning.
+    # Verify the fixture returns against future prices for each horizon.
     sorted_prices = prices.sort_values(["ticker", "date"])
     future_close = sorted_prices.groupby("ticker")["close"].shift(-horizon)
     expected_returns = sorted_prices[["date", "ticker"]].copy()
     expected_returns["forward_return"] = future_close / sorted_prices["close"] - 1
     checked_labels = labels.merge(expected_returns, on=["date", "ticker"], validate="one_to_one")
     np.testing.assert_allclose(
-        checked_labels[f"ret_{horizon}d"], checked_labels["forward_return"], equal_nan=True,
+        checked_labels[f"fwd_ret_{horizon}d"], checked_labels["forward_return"], equal_nan=True,
     )
 
-    with pytest.raises(ValueError, match=f"fwd_ret_{horizon}d"):
-        backtest(predictions, labels, horizon)
-
-    renamed_labels = labels.rename(columns={"ret_1d": "fwd_ret_1d", "ret_5d": "fwd_ret_5d"})
-    result = backtest(predictions, renamed_labels, horizon)
+    result = backtest(predictions, labels, horizon)
 
     assert result.turnover > 0
     assert np.isfinite(result.cumulative_return)

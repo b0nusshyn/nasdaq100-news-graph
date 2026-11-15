@@ -5,6 +5,9 @@ Task breakdown and deadlines for the NASDAQ-100 news-propagation project.
 **Final deadline: Saturday 21 November 2026**
 **Start: Friday 13 November 2026** (9 days, inclusive)
 
+**Required submission items** (course brief): the **presentation file** (0.8) and the **demo**
+(1.9 → 1.12). Neither is optional or a stretch goal.
+
 Every deadline is **23:59 on the date shown** unless a time is given. Tick a box only when the
 output is pushed to `main` and the next person in the chain can use it.
 
@@ -47,11 +50,11 @@ lands.
 
 ## 0 · Day 0 — everyone
 
-- [ ] **0.1** · **Fri 13 Nov** — Kickoff meeting: confirm roles, fill in names above and in `README.md` · [#1](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/1)
-- [ ] **0.2** · **Fri 13 Nov** — Freeze `SCHEMA.md` (column names, dtypes, keys, date convention, 16:00 ET cutoff rule) · [#2](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/2)
-- [ ] **0.3** · **Fri 13 Nov** — Create repo skeleton (`src/data`, `src/nlp`, `src/graph`, `src/models`, `src/eval`, `configs/`, `notebooks/`, `results/`), `.gitignore` for `data/` · [#3](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/3)
-- [ ] **0.4** · **Fri 13 Nov** — Add `requirements.txt`; confirm PyTorch Geometric installs locally or on Colab for every member · [#4](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/4)
-- [ ] **0.5** · **Fri 13 Nov** — Each owner commits a synthetic fixture for their Parquet file under `tests/fixtures/` · [#5](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/5)
+- [x] **0.1** · **Fri 13 Nov** — Kickoff meeting: confirm roles, fill in names above and in `README.md` · [#1](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/1)
+- [x] **0.2** · **Fri 13 Nov** — Freeze `SCHEMA.md` (column names, dtypes, keys, date convention, 16:00 ET cutoff rule) · [#2](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/2)
+- [x] **0.3** · **Fri 13 Nov** — Create repo skeleton (`src/data`, `src/nlp`, `src/graph`, `src/models`, `src/eval`, `configs/`, `notebooks/`, `results/`), `.gitignore` for `data/` · [#3](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/3)
+- [x] **0.4** · **Fri 13 Nov** — Add `requirements.txt`; confirm PyTorch Geometric installs locally or on Colab for every member · [#4](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/4)
+- [x] **0.5** · **Fri 13 Nov** — Each owner commits a synthetic fixture for their Parquet file under `tests/fixtures/` · [#5](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/5)
 
 ---
 
@@ -65,8 +68,9 @@ lands.
 - [ ] **1.6** · **Mon 16 Nov** — Data-quality checks: missing days, delisted tickers, splits/adjustments, label class balance per year · [#20](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/20)
 - [ ] **1.7** · **Tue 17 Nov** — Bias tests: assert no ticker appears before it joined the index; assert no label uses future prices beyond its horizon · [#26](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/26)
 - [ ] **1.8** · **Tue 17 Nov** — Investing.com earnings-date pull; report FNSPID coverage gaps to NLP · [#27](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/27)
-- [ ] **1.9** · **Wed 18 Nov** — `notebooks/demo.ipynb`: end-to-end run on a small slice (load → features → model → prediction) · [#34](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/34)
+- [ ] **1.9** · **Wed 18 Nov** — ⚑ **Required submission item.** Demo, first runnable version: `notebooks/demo.ipynb` end-to-end on a small slice (load → features → model → prediction), as soon as the model trains end to end (3.6) · [#34](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/34)
 - [ ] **1.10** · **Thu 19 Nov** — Reproducibility run: fresh clone, follow `README.md` Setup exactly, fix anything that breaks · [#40](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/40)
+- [ ] **1.12** · **Thu 19 Nov** — ⚑ **Required submission item.** Demo polished by the feature freeze: runs top to bottom on the real data, uses the final model, shows one attention trace (2.10); no edits after this except fixes · [#60](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/60)
 - [ ] **1.11** · **Fri 20 Nov** — Write Dataset & bias-handling section of the report · [#46](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/46)
 
 ## 2 · NLP — Kornchawal
@@ -95,11 +99,12 @@ lands.
 - [ ] **3.8** · **Wed 18 Nov** — Full walk-forward training run, both horizons (1d, 5d); save predictions per fold · [#36](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/36)
 - [ ] **3.9** · **Thu 19 Nov** — Ablations: drop each edge type in turn; drop news features · [#41](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/41)
 - [ ] **3.10** · **Thu 19 Nov** — Expose attention weights per prediction for NLP's interpretability work · [#42](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/42)
+- [ ] **3.12** · **Thu 19 Nov** — Fine-tuning pass (course brief: "Re-run + fine-tune"): log at least 5–6 GAT + LSTM runs in `results/tables/tuning_gat_lstm.md` with columns learning rate, hidden dim, attention heads, dropout, validation MCC; score on the validation split inside each training fold, never the test windows; re-run 3.8 with the best config; include the table in the report · [#58](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/58)
 - [ ] **3.11** · **Fri 20 Nov** — Write Method (graph + model) section of the report · [#47](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/47)
 
 ## 4 · Evaluation — Nonlada
 
-- [ ] **4.1** · **Sat 14 Nov** — Walk-forward splitter with embargo = horizon ✱ hand-off to Modelling · [#12](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/12)
+- [ ] **4.1** · **Sat 14 Nov** — Walk-forward splitter with a 5-trading-day embargo (longest horizon), the same for every horizon ✱ hand-off to Modelling · [#12](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/12)
 - [ ] **4.2** · **Sat 14 Nov** — Metrics module: accuracy, F1, MCC, AUC; unit-test on the synthetic fixtures · [#13](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/13)
 - [ ] **4.3** · **Sun 15 Nov** — Backtest module: long/short from P(up), cumulative return, Sharpe, max drawdown, net of transaction costs · [#18](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/18)
 - [ ] **4.4** · **Mon 16 Nov** — Baselines 1–3: buy-and-hold, ARIMA, logistic regression · [#25](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/25)
@@ -109,6 +114,7 @@ lands.
 - [ ] **4.8** · **Wed 18 Nov** — `run_baselines --all` runs every baseline on the same folds as the proposed model · [#39](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/39)
 - [ ] **4.9** · **Thu 19 Nov** — Significance test: proposed model vs Baseline 6 (paired test across folds, e.g. bootstrap on MCC) · [#44](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/44)
 - [ ] **4.10** · **Thu 19 Nov** — `compare.py`: results table + figures (equity curves, metric per fold) into `results/` · [#45](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/45)
+- [ ] **4.13** · **Thu 19 Nov** — Fine-tuning pass for the LSTM baselines (5 and 6): log at least 5–6 runs in `results/tables/tuning_baselines.md` with columns learning rate, hidden dim, attention heads (n/a), dropout, validation MCC, using the same validation split and a similar budget to 3.12 so Baseline 6 is tuned as fairly as the proposed model; include the table in the report · [#59](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/59)
 - [ ] **4.11** · **Fri 20 Nov** — Fill in the Results table and ablation table in `README.md` · [#49](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/49)
 - [ ] **4.12** · **Fri 20 Nov** — Write Evaluation & Results sections of the report · [#50](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/50)
 
@@ -118,7 +124,7 @@ lands.
 
 - [ ] **0.6** · **Fri 20 Nov, 12:00** — All report sections drafted; merge into one document · [#51](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/51)
 - [ ] **0.7** · **Fri 20 Nov** — Cross-review: each member reads one other member's section and code · [#52](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/52)
-- [ ] **0.8** · **Fri 20 Nov** — Slides / presentation (if required) and one rehearsal · [#53](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/53)
+- [ ] **0.8** · **Fri 20 Nov** — ⚑ **Required submission item.** Presentation file and one rehearsal · [#53](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/53)
 - [ ] **0.9** · **Sat 21 Nov, 12:00** — Final fixes; update `README.md` status from "in development" to final · [#54](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/54)
 - [ ] **0.10** · **Sat 21 Nov, 18:00** — **Submit.** Tag the release (`git tag v1.0`) · [#55](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/55)
 

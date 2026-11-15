@@ -57,8 +57,8 @@ each headline. Named-entity matching assigns each article to one or more tickers
 | Edge type | Source | Rationale |
 |---|---|---|
 | `sector` | GICS classification | Firms in the same industry share demand shocks |
-| `comention` | Articles naming both firms | Empirically the strongest spillover channel (Ge et al., 2025) |
-| `corr` | Return correlation, training window only | Captures links not visible in text |
+| `comention` | Articles naming both firms, training window of each fold | Empirically the strongest spillover channel (Ge et al., 2025) |
+| `corr` | Return correlation, training window of each fold | Captures links not visible in text |
 
 **3. Signal propagation.** A Graph Attention Network passes news features from the company
 named in an article to its neighbours. Attention weights are learned, so the model infers
@@ -76,6 +76,10 @@ company. Its hidden state is the node feature the GAT operates on.
 - **Ordering.** The LSTM runs before the GAT, so the graph operates on temporal summaries
   rather than raw daily features. This follows Feng et al. (2019) and keeps tensor shapes
   tractable.
+- **Signed propagation.** Sector edges are not assumed to transmit the same
+  sign. A shock that rotates market share within an industry moves
+  competitors in opposite directions, so propagation weights are left
+  unconstrained and the sign is learned rather than imposed.
 
 ---
 
@@ -93,7 +97,9 @@ table. Training on today's constituent list would restrict the sample to firms t
 and inflate every reported metric.
 
 **Look-ahead bias.** Articles published after 16:00 ET are assigned to the next trading day.
-Return correlations used as edge weights are computed within the training window only.
+Both `corr` and `comention` edges are rebuilt per fold from that fold's training window only.
+Co-mention counts aggregated over the full sample would tell the model which firms are
+discussed together in the future. Only `sector` edges are static.
 
 ### Data contract
 
@@ -132,11 +138,13 @@ propagation hypothesis is not supported, and that is the result we report.
 
 - **Walk-forward validation**, not a random split. Each fold trains on a contiguous past
   window and tests on the window immediately following it.
-- **Embargo period** between train and test equal to the prediction horizon, so a 5-day label
-  cannot overlap the test window.
+- **Embargo** of 5 trading days — the longest horizon in the study — between every train and
+  test window. The same embargo applies to all horizons so that every model is evaluated on
+  identical folds.
 - **Normalisation statistics** are fitted on the training fold only.
 - **Metrics:** accuracy, F1, MCC, AUC.
-- **Backtest:** cumulative return, Sharpe ratio and maximum drawdown, net of transaction costs.
+- **Backtest:** cumulative return, Sharpe ratio and maximum drawdown, net of transaction costs
+  assuming 5 bps per side.
 
 ---
 
@@ -179,7 +187,11 @@ pip install -r requirements.txt
 ```
 
 PyTorch Geometric must match your CUDA and PyTorch versions. If installation fails locally,
-run the model stages on Colab, where compatible wheels are preinstalled.
+run the model stages on Colab, where compatible wheels are preinstalled. Check your install with:
+
+```bash
+python -m src.core.check_env    # versions + one tiny GAT forward pass
+```
 
 For the shared code and tests only, `pip install -r requirements-dev.txt` is enough
 (this is what CI runs):
@@ -200,14 +212,17 @@ real artifacts exist, set `NDX_DATA_DIR=tests/fixtures`.
 ```bash
 # Price data and labels
 python -m src.data.build_index_history
-python -m src.data.fetch_prices --start 2018-01-01 --end 2023-12-31
+# Prices run past 2023 on purpose: the main experiment is bounded to 2019–2023 by
+# configs/walk_forward.yaml, but the lead-lag persistence check needs prices through 2026.
+python -m src.data.fetch_prices --start 2018-01-01 --end 2026-11-30
 python -m src.data.build_labels --horizons 1 5
 
 # News features (GPU recommended)
 python -m src.nlp.encode_news --input data/raw/fnspid_filtered.csv
 
-# Graph edges
-python -m src.graph.build_edges --types sector comention corr
+# Graph edges: run once per walk-forward fold (0, 1, 2, …); corr and comention
+# are rebuilt from each fold's training window, sector edges are static
+python -m src.graph.build_edges --types sector comention corr --fold 0
 ```
 
 ### Training and evaluation
@@ -223,6 +238,20 @@ python -m src.eval.compare --output results/
 ## Results
 
 Pending. The table below will be completed after the evaluation runs.
+
+**Horizon: 1 day**
+
+| Model | Accuracy | F1 | MCC | AUC | Sharpe (net) |
+|---|---|---|---|---|---|
+| Buy-and-hold | — | — | — | — | — |
+| ARIMA | — | — | — | — | — |
+| Logistic regression | — | — | — | — | — |
+| XGBoost | — | — | — | — | — |
+| LSTM (price only) | — | — | — | — | — |
+| LSTM + news, no graph | — | — | — | — | — |
+| **Proposed (GAT + LSTM)** | — | — | — | — | — |
+
+**Horizon: 5 days**
 
 | Model | Accuracy | F1 | MCC | AUC | Sharpe (net) |
 |---|---|---|---|---|---|

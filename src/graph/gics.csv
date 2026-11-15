@@ -1,0 +1,183 @@
+ticker,gics_sector,gics_industry,gics_sub_industry,source,yahoo_industry,crosscheck
+AAL,Industrials,Passenger Airlines,Passenger Airlines,manual,Industrials / Airlines,agree
+AAPL,Information Technology,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",wikipedia_sp500,,
+ABNB,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,wikipedia_sp500_pre2023,,
+ADBE,Information Technology,Software,Application Software,wikipedia_sp500,,
+ADI,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+ADP,Information Technology,IT Services,Data Processing & Outsourced Services,wikipedia_sp500_pre2023,,
+ADSK,Information Technology,Software,Application Software,wikipedia_sp500,,
+AEP,Utilities,Electric Utilities,Electric Utilities,wikipedia_sp500,,
+ALAB,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,manual_out_of_window,,
+ALGN,Health Care,Health Care Equipment & Supplies,Health Care Supplies,wikipedia_sp500,,
+ALNY,Health Care,Biotechnology,Biotechnology,manual_out_of_window,,
+ALXN,Health Care,Biotechnology,Biotechnology,manual,,unavailable
+AMAT,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,wikipedia_sp500,,
+AMD,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+AMGN,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+AMZN,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,wikipedia_sp500_pre2023,,
+ANSS,Information Technology,Software,Application Software,manual,,unavailable
+APP,Communication Services,Media,Advertising,wikipedia_sp500,,
+ARM,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,manual_out_of_window,,
+ASML,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,manual,Technology / Semiconductor Equipment & Materials,agree
+ATVI,Communication Services,Entertainment,Interactive Home Entertainment,manual,,unavailable
+AVGO,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+AXON,Industrials,Aerospace & Defense,Aerospace & Defense,wikipedia_sp500,,
+AZN,Health Care,Pharmaceuticals,Pharmaceuticals,manual,Healthcare / Drug Manufacturers - General,agree
+BIDU,Communication Services,Interactive Media & Services,Interactive Media & Services,manual,Communication Services / Internet Content & Information,agree
+BIIB,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+BKNG,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,wikipedia_sp500_pre2023,,
+BKR,Energy,Energy Equipment & Services,Oil & Gas Equipment & Services,wikipedia_sp500,,
+BMRN,Health Care,Biotechnology,Biotechnology,manual,Healthcare / Biotechnology,agree
+CA,Information Technology,Software,Systems Software,manual_out_of_window,,
+CCEP,Consumer Staples,Beverages,Soft Drinks & Non-alcoholic Beverages,manual,Consumer Defensive / Beverages - Non-Alcoholic,agree
+CDNS,Information Technology,Software,Application Software,wikipedia_sp500,,
+CDW,Information Technology,"Electronic Equipment, Instruments & Components",Technology Distributors,wikipedia_sp500,,
+CEG,Utilities,Electric Utilities,Electric Utilities,wikipedia_sp500,,
+CELG,Health Care,Biotechnology,Biotechnology,manual,,unavailable
+CERN,Health Care,Health Care Technology,Health Care Technology,manual,,unavailable
+CHKP,Information Technology,Software,Systems Software,manual,Technology / Software - Infrastructure,agree
+CHTR,Communication Services,Media,Cable & Satellite,wikipedia_sp500,,
+CMCSA,Communication Services,Media,Cable & Satellite,wikipedia_sp500,,
+COST,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Merchandise Retail,wikipedia_sp500,,
+CPRT,Industrials,Commercial Services & Supplies,Diversified Support Services,wikipedia_sp500,,
+CRWD,Information Technology,Software,Systems Software,wikipedia_sp500,,
+CRWV,Information Technology,IT Services,Internet Services & Infrastructure,manual_out_of_window,,
+CSCO,Information Technology,Communications Equipment,Communications Equipment,wikipedia_sp500,,
+CSGP,Real Estate,Real Estate Management & Development,Real Estate Services,wikipedia_sp500,,
+CSX,Industrials,Ground Transportation,Rail Transportation,wikipedia_sp500,,
+CTAS,Industrials,Commercial Services & Supplies,Diversified Support Services,wikipedia_sp500,,
+CTSH,Information Technology,IT Services,IT Consulting & Other Services,wikipedia_sp500,,
+CTXS,Information Technology,Software,Application Software,manual,,unavailable
+DASH,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,wikipedia_sp500_pre2023,,
+DDOG,Information Technology,Software,Application Software,wikipedia_sp500,,
+DISH,Communication Services,Media,Cable & Satellite,manual_out_of_window,,
+DLTR,Consumer Discretionary,Multiline Retail,General Merchandise Stores,wikipedia_sp500_pre2023,,
+DOCU,Information Technology,Software,Application Software,manual,Technology / Software - Application,agree
+DXCM,Health Care,Health Care Equipment & Supplies,Health Care Equipment,wikipedia_sp500,,
+EA,Communication Services,Entertainment,Interactive Home Entertainment,manual,Communication Services / Electronic Gaming & Multimedia,agree
+EBAY,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,wikipedia_sp500_pre2023,,
+ENPH,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,manual,Technology / Solar,disagree
+ESRX,Health Care,Health Care Providers & Services,Health Care Services,manual_out_of_window,,
+EXC,Utilities,Electric Utilities,Electric Utilities,wikipedia_sp500,,
+EXPE,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,wikipedia_sp500_pre2023,,
+FANG,Energy,"Oil, Gas & Consumable Fuels",Oil & Gas Exploration & Production,wikipedia_sp500,,
+FAST,Industrials,Trading Companies & Distributors,Trading Companies & Distributors,wikipedia_sp500,,
+FER,Industrials,Construction & Engineering,Construction & Engineering,manual_out_of_window,,
+FISV,Information Technology,IT Services,Data Processing & Outsourced Services,wikipedia_sp500_pre2023,,
+FOX,Communication Services,Media,Broadcasting,wikipedia_sp500,,
+FOXA,Communication Services,Media,Broadcasting,wikipedia_sp500,,
+FTNT,Information Technology,Software,Systems Software,wikipedia_sp500,,
+GEHC,Health Care,Health Care Equipment & Supplies,Health Care Equipment,wikipedia_sp500,,
+GEN,Information Technology,Software,Systems Software,wikipedia_sp500,,
+GFS,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,manual,Technology / Semiconductors,agree
+GILD,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+GOOG,Communication Services,Interactive Media & Services,Interactive Media & Services,wikipedia_sp500,,
+GOOGL,Communication Services,Interactive Media & Services,Interactive Media & Services,wikipedia_sp500,,
+HAS,Consumer Discretionary,Leisure Products,Leisure Products,wikipedia_sp500,,
+HOLX,Health Care,Health Care Equipment & Supplies,Health Care Equipment,manual_out_of_window,,
+HON,Industrials,Industrial Conglomerates,Industrial Conglomerates,wikipedia_sp500,,
+HONA,Industrials,Aerospace & Defense,Aerospace & Defense,wikipedia_sp500,,
+HSIC,Health Care,Health Care Providers & Services,Health Care Distributors,wikipedia_sp500,,
+IDXX,Health Care,Health Care Equipment & Supplies,Health Care Equipment,wikipedia_sp500,,
+ILMN,Health Care,Life Sciences Tools & Services,Life Sciences Tools & Services,wikipedia_sp500,,
+INCY,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+INSM,Health Care,Biotechnology,Biotechnology,manual_out_of_window,,
+INTC,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+INTU,Information Technology,Software,Application Software,wikipedia_sp500,,
+ISRG,Health Care,Health Care Equipment & Supplies,Health Care Equipment,wikipedia_sp500,,
+JBHT,Industrials,Ground Transportation,Cargo Ground Transportation,wikipedia_sp500,,
+JD,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,manual,Consumer Cyclical / Internet Retail,agree
+KDP,Consumer Staples,Beverages,Soft Drinks & Non-alcoholic Beverages,wikipedia_sp500,,
+KHC,Consumer Staples,Food Products,Packaged Foods & Meats,wikipedia_sp500,,
+KLAC,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,wikipedia_sp500,,
+LBTYA,Communication Services,Media,Cable & Satellite,manual,Communication Services / Telecom Services,agree
+LBTYK,Communication Services,Media,Cable & Satellite,manual,Communication Services / Telecom Services,agree
+LCID,Consumer Discretionary,Automobiles,Automobile Manufacturers,manual,Consumer Cyclical / Auto Manufacturers,agree
+LIN,Materials,Chemicals,Industrial Gases,wikipedia_sp500,,
+LITE,Information Technology,Communications Equipment,Communications Equipment,wikipedia_sp500,,
+LRCX,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,wikipedia_sp500,,
+LULU,Consumer Discretionary,"Textiles, Apparel & Luxury Goods","Apparel, Accessories & Luxury Goods",wikipedia_sp500,,
+MAR,Consumer Discretionary,"Hotels, Restaurants & Leisure","Hotels, Resorts & Cruise Lines",wikipedia_sp500,,
+MCHP,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+MDB,Information Technology,IT Services,Internet Services & Infrastructure,manual,Technology / Software - Infrastructure,agree
+MDLZ,Consumer Staples,Food Products,Packaged Foods & Meats,wikipedia_sp500,,
+MELI,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,manual,Consumer Cyclical / Internet Retail,agree
+META,Communication Services,Interactive Media & Services,Interactive Media & Services,wikipedia_sp500,,
+MNST,Consumer Staples,Beverages,Soft Drinks & Non-alcoholic Beverages,wikipedia_sp500,,
+MPWR,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+MRNA,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+MRVL,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+MSFT,Information Technology,Software,Systems Software,wikipedia_sp500,,
+MSTR,Information Technology,Software,Application Software,manual_out_of_window,,
+MTCH,Communication Services,Interactive Media & Services,Interactive Media & Services,manual,Communication Services / Internet Content & Information,agree
+MU,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+MXIM,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,manual,,unavailable
+MYL,Health Care,Pharmaceuticals,Pharmaceuticals,manual,,unavailable
+NBIS,Information Technology,IT Services,Internet Services & Infrastructure,manual_out_of_window,,
+NFLX,Communication Services,Entertainment,Movies & Entertainment,wikipedia_sp500,,
+NTAP,Information Technology,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",wikipedia_sp500,,
+NTES,Communication Services,Entertainment,Interactive Home Entertainment,manual,Communication Services / Electronic Gaming & Multimedia,agree
+NVDA,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+NXPI,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+ODFL,Industrials,Ground Transportation,Cargo Ground Transportation,wikipedia_sp500,,
+OKTA,Information Technology,Software,Application Software,wikipedia_sp500,,
+ON,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+ORLY,Consumer Discretionary,Specialty Retail,Automotive Retail,wikipedia_sp500,,
+PANW,Information Technology,Software,Systems Software,wikipedia_sp500,,
+PAYX,Information Technology,IT Services,Data Processing & Outsourced Services,wikipedia_sp500_pre2023,,
+PCAR,Industrials,Machinery,Construction Machinery & Heavy Transportation Equipment,wikipedia_sp500,,
+PDD,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,manual,Consumer Cyclical / Internet Retail,agree
+PEP,Consumer Staples,Beverages,Soft Drinks & Non-alcoholic Beverages,wikipedia_sp500,,
+PLTR,Information Technology,Software,Application Software,wikipedia_sp500,,
+PTON,Consumer Discretionary,Leisure Products,Leisure Products,manual,Consumer Cyclical / Leisure,agree
+PYPL,Information Technology,IT Services,Data Processing & Outsourced Services,wikipedia_sp500_pre2023,,
+QCOM,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+QRTEA,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,manual_out_of_window,,
+REGN,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+RIVN,Consumer Discretionary,Automobiles,Automobile Manufacturers,manual,Consumer Cyclical / Auto Manufacturers,agree
+RKLB,Industrials,Aerospace & Defense,Aerospace & Defense,manual_out_of_window,,
+ROP,Information Technology,"Electronic Equipment, Instruments & Components",Electronic Equipment & Instruments,wikipedia_sp500,,
+ROST,Consumer Discretionary,Specialty Retail,Apparel Retail,wikipedia_sp500,,
+SBUX,Consumer Discretionary,"Hotels, Restaurants & Leisure",Restaurants,wikipedia_sp500,,
+SGEN,Health Care,Biotechnology,Biotechnology,manual,,unavailable
+SHOP,Information Technology,IT Services,Internet Services & Infrastructure,manual_out_of_window,,
+SHPG,Health Care,Pharmaceuticals,Pharmaceuticals,manual_out_of_window,,
+SIRI,Communication Services,Media,Broadcasting,manual,Communication Services / Entertainment,disagree
+SMCI,Information Technology,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",wikipedia_sp500,,
+SNDK,Information Technology,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",wikipedia_sp500,,
+SNPS,Information Technology,Software,Application Software,wikipedia_sp500,,
+SOLS,Materials,Chemicals,Specialty Chemicals,manual_out_of_window,,
+SPCX,Industrials,Aerospace & Defense,Aerospace & Defense,manual_out_of_window,,
+SPLK,Information Technology,Software,Application Software,manual,,unavailable
+STX,Information Technology,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",wikipedia_sp500,,
+SWKS,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+TCOM,Consumer Discretionary,Internet & Direct Marketing Retail,Internet & Direct Marketing Retail,manual,Consumer Cyclical / Travel Services,agree
+TEAM,Information Technology,Software,Application Software,manual,Technology / Software - Application,agree
+TER,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductor Materials & Equipment,wikipedia_sp500,,
+TFCF,Communication Services,Entertainment,Movies & Entertainment,manual,,unavailable
+TFCFA,Communication Services,Entertainment,Movies & Entertainment,manual,,unavailable
+TMUS,Communication Services,Wireless Telecommunication Services,Wireless Telecommunication Services,wikipedia_sp500,,
+TRI,Industrials,Professional Services,Research & Consulting Services,manual_out_of_window,,
+TSLA,Consumer Discretionary,Automobiles,Automobile Manufacturers,wikipedia_sp500,,
+TTD,Information Technology,Software,Application Software,manual,Communication Services / Advertising Agencies,disagree
+TTWO,Communication Services,Entertainment,Interactive Home Entertainment,wikipedia_sp500,,
+TXN,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,wikipedia_sp500,,
+UAL,Industrials,Passenger Airlines,Passenger Airlines,wikipedia_sp500,,
+ULTA,Consumer Discretionary,Specialty Retail,Other Specialty Retail,wikipedia_sp500,,
+VOD,Communication Services,Wireless Telecommunication Services,Wireless Telecommunication Services,manual_out_of_window,,
+VRSK,Industrials,Professional Services,Research & Consulting Services,wikipedia_sp500,,
+VRSN,Information Technology,IT Services,Internet Services & Infrastructure,wikipedia_sp500,,
+VRTX,Health Care,Biotechnology,Biotechnology,wikipedia_sp500,,
+VSNT,Communication Services,Media,Broadcasting,manual_out_of_window,,
+WBA,Consumer Staples,Consumer Staples Distribution & Retail,Drug Retail,manual,,unavailable
+WBD,Communication Services,Entertainment,Movies & Entertainment,manual,Communication Services / Entertainment,agree
+WDAY,Information Technology,Software,Application Software,wikipedia_sp500,,
+WDC,Information Technology,"Technology Hardware, Storage & Peripherals","Technology Hardware, Storage & Peripherals",wikipedia_sp500,,
+WMT,Consumer Staples,Consumer Staples Distribution & Retail,Consumer Staples Merchandise Retail,wikipedia_sp500,,
+WTW,Financials,Insurance,Insurance Brokers,wikipedia_sp500,,
+WYNN,Consumer Discretionary,"Hotels, Restaurants & Leisure",Casinos & Gaming,wikipedia_sp500,,
+XEL,Utilities,Multi-Utilities,Multi-Utilities,wikipedia_sp500,,
+XLNX,Information Technology,Semiconductors & Semiconductor Equipment,Semiconductors,manual,,unavailable
+XRAY,Health Care,Health Care Equipment & Supplies,Health Care Supplies,manual_out_of_window,,
+ZM,Information Technology,Software,Application Software,manual,Technology / Software - Application,agree
+ZS,Information Technology,Software,Systems Software,manual,Technology / Software - Infrastructure,agree

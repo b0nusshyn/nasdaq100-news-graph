@@ -16,7 +16,7 @@ from src.core.todo import todo
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--output", type=Path, default=Path("results"))
-    p.add_argument("--cost-bps", type=float, default=10.0)
+    p.add_argument("--cost-bps-per-side", type=float, default=5.0, help="transaction cost per side, bps")
     p.parse_args()
     todo(45, "compare")
 

@@ -16,6 +16,7 @@ EMB_COLS = tuple(f"emb_{i}" for i in range(EMB_DIM))
 EDGE_TYPES = ("sector", "comention", "corr")
 HORIZONS = (1, 5)
 ALL_FOLDS = -1  # `fold` value for edges valid in every fold (e.g. sector)
+CORR_TOP_K = 10  # corr edges: peers kept per ticker (SCHEMA.md decision 4)
 
 # Logical dtypes used in SCHEMA.md. `conform` casts to the pandas dtype on the right.
 PANDAS_DTYPE = {
@@ -73,7 +74,7 @@ LABELS = Table(
     "labels",
     _cols(
         ("date", "date"), ("ticker", "string"),
-        ("ret_1d", "float64", True), ("ret_5d", "float64", True),
+        ("fwd_ret_1d", "float64", True), ("fwd_ret_5d", "float64", True),
         ("y_1d", "Int8", True), ("y_5d", "Int8", True),
     ),
     key=("date", "ticker"),

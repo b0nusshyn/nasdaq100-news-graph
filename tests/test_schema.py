@@ -93,3 +93,12 @@ def test_schema_md_matches_code():
         assert md[name]["columns"] == [(c.name, c.dtype, c.nullable) for c in table.columns], name
         assert md[name]["key"] == table.key, name
     assert len([c for c in md["news_features"]["columns"] if c[0].startswith("emb_")]) == EMB_DIM
+
+
+def test_forward_looking_columns_are_marked_and_never_reused_as_inputs():
+    # labels hold the future; a feature sharing a name with one would leak it through a merge.
+    from src.data.indicators import FEATURES
+
+    future = [c for c in TABLES["labels"].column_names if c not in ("date", "ticker")]
+    assert all(c.startswith(("fwd_", "y_")) for c in future), future
+    assert not set(FEATURES) & set(future)
