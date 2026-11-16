@@ -240,6 +240,9 @@ python -m src.graph.corr_report --output results/tables
 python -m src.models.train --config configs/gat_lstm.yaml
 # Smoke run on one fold: prints wall-clock time and metrics, writes no predictions
 python -m src.models.train --config configs/gat_lstm.yaml --folds 0
+# Baselines 6 and 5: the same training loop with the GAT, then the news, removed
+python -m src.models.train --config configs/lstm_news.yaml
+python -m src.models.train --config configs/lstm_price.yaml
 python -m src.eval.run_baselines --all
 python -m src.eval.compare --output results/
 ```

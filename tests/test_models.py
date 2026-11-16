@@ -3,6 +3,7 @@
 CI installs only requirements-dev.txt (no torch), so these run locally or on Colab.
 """
 
+import numpy as np
 import pytest
 
 torch = pytest.importorskip("torch")
@@ -198,3 +199,95 @@ def test_run_record_stores_each_fold_threshold_beside_the_predictions(tmp_path):
     record = json.loads(out.read_text())
     assert out.name == "gat_lstm_no_news_run.json" and record["model"] == "gat_lstm_no_news"
     assert record["folds"][0]["threshold"] == 0.53 and "git_commit" in record
+
+
+# --------------------------------------------------------------------------- Baseline 6 = minus the GAT (#35)
+
+
+def test_without_edge_types_the_model_is_dense_over_the_encoder():
+    from src.models.gat_lstm import GATLSTM
+
+    m = GATLSTM(n_features=F, hidden=H, heads=HEADS, edge_types=()).eval()
+    assert not m.has_graph and len(m.convs) == 0 and m.head.in_features == H
+    x = torch.randn(N, T, F)
+    no_edges = (torch.zeros(2, 0, dtype=torch.long), torch.zeros(0, dtype=torch.long), torch.zeros(0))
+    logits, attention = m(x, *no_edges)
+    with torch.no_grad():
+        assert torch.allclose(logits, m.head(m.encoder(x)).squeeze(-1))
+    assert attention.shape == (0, HEADS)
+
+
+def test_one_seed_gives_both_models_the_same_initial_encoder():
+    from src.models.gat_lstm import GATLSTM
+
+    torch.manual_seed(7)
+    with_graph = GATLSTM(n_features=F, hidden=H, heads=HEADS, edge_types=TYPES)
+    torch.manual_seed(7)
+    without = GATLSTM(n_features=F, hidden=H, heads=HEADS, edge_types=())
+    for (name, a), (_, b) in zip(with_graph.encoder.state_dict().items(), without.encoder.state_dict().items(),
+                                 strict=True):
+        assert torch.equal(a, b), name
+
+
+def test_baseline_6_is_the_proposed_model_with_every_edge_type_ablated(fixture_inputs):
+    # Same settings: Baseline 6's config and the all-edges ablation are one experiment, so the
+    # ablation table and the baseline table can cite one run (before 4.13 tunes them apart).
+    from src.models.train import train_fold
+
+    panel, edges, folds = fixture_inputs
+    b6 = SMALL | {"model": "lstm_news", "gat": {**SMALL["gat"], "edge_types": []}}
+    a, _ = train_fold(panel, None, folds[0], 1, b6, log=lambda *_: None)
+    b, _ = train_fold(panel, edges, folds[0], 1, SMALL, ablate=TYPES, log=lambda *_: None)
+    assert (a["model"] == "lstm_news").all()
+    assert a[["date", "ticker", "y_true"]].equals(b[["date", "ticker", "y_true"]])
+    assert np.array_equal(a["p_up"].to_numpy(), b["p_up"].to_numpy())
+
+
+def configs():
+    from src.core.config import load_config
+    from src.core.paths import CONFIGS_DIR
+
+    return {n: load_config(CONFIGS_DIR / f"{n}.yaml") for n in ("gat_lstm", "lstm_news", "lstm_price")}
+
+
+def test_baseline_configs_share_the_proposed_models_inputs_and_validation():
+    # 4.13 may tune lr, hidden, dropout apart; the inputs and the split may never drift.
+    c = configs()
+    for name in ("lstm_news", "lstm_price"):
+        assert c[name]["model"] == name and c[name]["gat"]["edge_types"] == []
+        for key in ("horizons", "window_days"):
+            assert c[name][key] == c["gat_lstm"][key], (name, key)
+        assert c[name]["features"]["price"] == c["gat_lstm"]["features"]["price"], name
+        assert c[name]["train"]["validation_fraction"] == c["gat_lstm"]["train"]["validation_fraction"], name
+        assert set(c[name]) == set(c["gat_lstm"]) and set(c[name]["train"]) == set(c["gat_lstm"]["train"]), name
+    assert c["lstm_news"]["features"] == c["gat_lstm"]["features"]
+    assert c["lstm_price"]["features"]["news"] == [] and c["lstm_price"]["features"]["embeddings"] is False
+
+
+@pytest.mark.parametrize("cls_name, news", [("LSTMNews", True), ("LSTMPrice", False)])
+def test_lstm_baselines_run_through_the_proposed_models_loop(fixture_inputs, tmp_path, cls_name, news):
+    import yaml
+
+    from src.models import baselines
+
+    panel, _, folds = fixture_inputs
+    cls = getattr(baselines, cls_name)
+    feat = SMALL["features"] if news else {**SMALL["features"], "news": [], "embeddings": False}
+    cfg = SMALL | {"model": cls.name, "gat": {**SMALL["gat"], "edge_types": []}, "features": feat}
+    path = tmp_path / "cfg.yaml"
+    path.write_text(yaml.safe_dump(cfg), encoding="utf-8")
+    preds, info = cls(path).run_fold(panel, folds[0], 5)
+    assert preds[["date", "ticker"]].equals(panel.rows(folds[0].test, 5)[["date", "ticker"]])
+    assert (preds["model"] == cls.name).all() and 0 <= info["threshold"] <= 1
+    assert info["features"] == (14 if news else 7)
+
+
+def test_an_lstm_baseline_refuses_a_config_with_a_graph(tmp_path):
+    import yaml
+
+    from src.models.baselines.lstm_news import LSTMNews
+
+    path = tmp_path / "cfg.yaml"
+    path.write_text(yaml.safe_dump(SMALL | {"model": "lstm_news"}), encoding="utf-8")
+    with pytest.raises(ValueError, match="not a lstm_news config"):
+        LSTMNews(path)
