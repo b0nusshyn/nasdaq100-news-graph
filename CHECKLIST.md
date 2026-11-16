@@ -89,10 +89,10 @@ lands.
 
 ## 3 · Modelling — Shayanis
 
-- [ ] **3.1** · **Sat 14 Nov** — `sector` edges from GICS classification · [#8](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/8)
+- [x] **3.1** · **Sat 14 Nov** — `sector` edges from GICS classification · [#8](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/8)
 - [ ] **3.2** · **Sat 14 Nov** — Model skeleton on synthetic fixtures: LSTM encoder → GAT → dense → P(up); confirm tensor shapes end to end · [#9](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/9)
-- [ ] **3.3** · **Mon 16 Nov** — `comention` edges from NLP's article → ticker matches (weight = co-mention count, training window only) · [#21](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/21)
-- [ ] **3.4** · **Mon 16 Nov** — `corr` edges from return correlation, **recomputed per training fold** using Evaluation's splitter · [#22](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/22)
+- [x] **3.3** · **Mon 16 Nov** — `comention` edges from NLP's article → ticker matches (weight = co-mention count, training window only) · [#21](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/21)
+- [x] **3.4** · **Mon 16 Nov** — `corr` edges from return correlation, **recomputed per training fold** using Evaluation's splitter · [#22](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/22)
 - [x] **3.5** · **Tue 17 Nov** — Write `edges.parquet` ✱ hand-off · [#28](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/28)
 - [ ] **3.6** · **Tue 17 Nov** — Training loop + `configs/gat_lstm.yaml`; normalisation fitted on training fold only · [#29](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/29)
 - [ ] **3.7** · **Wed 18 Nov** — Factor the LSTM encoder so Baseline 6 is the same model with the GAT removed ✱ hand-off to Evaluation · [#35](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/35)

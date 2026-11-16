@@ -184,6 +184,10 @@ def test_check_edges_accepts_a_symmetric_graph():
     check_edges(edge_table(*GOOD))
 
 
+def test_the_committed_fixture_follows_the_graph_rules():
+    check_edges(read_table("edges", FIXTURES_DIR / "edges.parquet"))
+
+
 @pytest.mark.parametrize("bad, message", [
     ([(0, "AAA", "AAA", "corr", 0.3)], "self-loops"),
     ([(0, "AAA", "DDD", "corr", 0.3)], "not stored in both directions"),
