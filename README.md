@@ -58,7 +58,7 @@ each headline. Named-entity matching assigns each article to one or more tickers
 |---|---|---|
 | `sector` | GICS classification | Firms in the same industry share demand shocks |
 | `comention` | Articles naming both firms, training window of each fold | Empirically the strongest spillover channel (Ge et al., 2025) |
-| `corr` | Return correlation, training window of each fold | Captures links not visible in text |
+| `corr` | Return correlation net of the market, training window of each fold | Captures links not visible in text |
 
 **3. Signal propagation.** A Graph Attention Network passes news features from the company
 named in an article to its neighbours. Attention weights are learned, so the model infers
@@ -225,6 +225,8 @@ python -m src.nlp.encode_news --input data/raw/fnspid_filtered.csv
 python -m src.graph.build_edges --types sector comention corr --fold 0
 # Measurements behind the comention defaults (SCHEMA.md decision 6)
 python -m src.graph.comention_report --output results/tables
+# Measurements behind the corr defaults (SCHEMA.md decision 7)
+python -m src.graph.corr_report --output results/tables
 ```
 
 ### Training and evaluation

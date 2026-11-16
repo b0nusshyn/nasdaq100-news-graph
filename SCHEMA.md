@@ -124,8 +124,13 @@ File: `edges.parquet` · Owner: Modelling · Issues #8, #21, #22, #28
 
 Directed edges; an undirected relation is stored in both directions. No self-loops, and no
 `comention` or `corr` edge between two share classes of one company (`src.core.tickers.same_company`).
-`corr` edges: for each ticker, its 10 peers with the highest training-window return correlation
-(`CORR_TOP_K` in `src/core/schema.py`); a pair selected from either side is stored both ways.
+`corr` edges: weight is the partial correlation of the two firms' daily returns given the
+equal-weight market, over the training window: each stock's market beta is fitted on those
+days and removed before correlating (`CORR_RESIDUAL`). Candidates are the tickers in the index
+on at least one training day, each using every training-window return it has. A pair needs at
+least 126 training days on which both have a return (`CORR_MIN_OVERLAP`); each ticker then keeps
+its 10 peers with the highest weight (`CORR_TOP_K`), and a pair selected from either side is
+stored both ways.
 `comention` edges: weight is the Jaccard overlap of the two firms' training-window articles,
 `co / (n_a + n_b - co)`, where an article naming k companies counts 1 / (k - 1) towards every
 total (share classes count as one company). A pair needs at least 2 articles naming both
@@ -138,7 +143,7 @@ total (share classes count as one company). A pair needs at least 2 articles nam
 | `src` | string | no | Ticker the signal comes from |
 | `dst` | string | no | Ticker the signal goes to |
 | `edge_type` | string | no | One of `sector`, `comention`, `corr` |
-| `weight` | float32 | no | 1 for `sector`; co-mention Jaccard in [0, 1]; return correlation |
+| `weight` | float32 | no | 1 for `sector`; co-mention Jaccard in [0, 1]; partial return correlation in [-1, 1] |
 
 **Key:** `fold`, `src`, `dst`, `edge_type`
 
@@ -181,3 +186,29 @@ Frozen Fri 13 Nov 2026 in issue #2.
    low-coverage firms, the ones propagation is meant to help. Share classes of one company
    are tagged together by news matching, so they never form `comention` or `corr` edges.
    Measurements: `results/tables/comention_report.md`.
+7. **`corr` weight** (Mon 16 Nov, task 3.4, #22; **pending team agreement**) — partial
+   correlation of daily returns given the equal-weight market, instead of raw correlation.
+   This is the third application of the principle behind decision 6: Jaccard removes
+   firm-level coverage, the 1 / (k - 1) weight removes roundup inflation, and residual returns
+   remove the common market factor. Each strips the component shared by all pairs, so the
+   weight reflects what is specific to the pair. On raw returns every pair carries the market
+   (mean pair correlation about 0.4), so top-k ranks pairs by beta similarity: MSFT becomes a
+   67-degree hub and the median selected edge is 0.52–0.60. Market residuals cap max degree at 31,
+   put the median selected edge at 0.22–0.25 and raise the overlap with `sector` edges from
+   24–31% to 29–35%.
+   - **Market proxy**: the equal-weight mean return of the tickers in the index that day, not
+     QQQ. QQQ is cap-weighted with AAPL near a tenth of it, so subtracting it from AAPL would
+     partly subtract AAPL from itself; equal weight gives each name about 1/100.
+   - **Fitted beta**: residual = r_i - alpha_i - beta_i * m, with beta fitted by OLS on the
+     fold's training days. Subtracting m with beta = 1 leaves (beta_i - 1) * m, so high-beta
+     names still cluster; in folds 3–4 (2022, beta p10–p90 of 0.4–1.7) it inflated the median
+     selected edge from 0.23 to 0.32–0.34. alpha does not change the correlation. One beta per stock
+     per fold is a simplification: betas drift within a two-year training window.
+   - **min_overlap 126**: the null standard error of a correlation is about 1 / sqrt(n - 1),
+     and the largest spurious value across the ~7,600 candidate pairs lands near 3.8 standard
+     errors: about 0.49 at 60 days, above most genuine edges, and 0.34 at 126. Because each
+     ticker uses its returns from before it joined the index, 126 leaves at most 2 of ~120
+     candidates (1.6%) without `corr` edges in any fold; they keep `sector` and `comention`.
+   Raw correlation stays available for the 3.9 ablation (`residual=False`). If the team
+   prefers it as the default, set `CORR_RESIDUAL = False`. Measurements:
+   `results/tables/corr_report.md`.

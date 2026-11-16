@@ -195,3 +195,21 @@ def test_no_articles_gives_no_edges():
     edges = comention_edges(articles(("AMD",)), [FOLD])
     validate(edges, "edges")
     assert edges.empty
+
+
+# --------------------------------------------------------------------------- report
+
+
+def test_report_builds_on_the_committed_fixtures(monkeypatch):
+    # The committed fixtures cover 60 trading days, too short for configs/walk_forward.yaml.
+    from src.core.io import read_table
+    from src.core.paths import DATA_DIR_ENV, FIXTURES_DIR
+    from src.graph.comention_report import build
+
+    monkeypatch.setenv(DATA_DIR_ENV, str(FIXTURES_DIR))
+    cfg = {"period": {"start": "2021-01-01", "end": "2021-12-31"}, "train_days": 30, "test_days": 10,
+           "step_days": 10, "expanding": False, "embargo_days": 5}
+    report, top = build(read_table("article_tickers"), read_table("prices", columns=["date", "in_index"]), cfg)
+    for section in ("## 1 ·", "## 2 ·", "## 3 ·", "## 4 ·"):
+        assert section in report
+    assert list(top.columns) == ["fold", "src", "dst", "weight"]

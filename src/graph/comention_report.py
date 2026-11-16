@@ -83,17 +83,35 @@ def degree_row(edges: pd.DataFrame) -> dict:
     }
 
 
-def build(article_tickers: pd.DataFrame, prices: pd.DataFrame) -> tuple[str, pd.DataFrame]:
-    from src.core.config import walk_forward_config
-    from src.core.schema import COMENTION_MIN_COUNT, COMENTION_TOP_K
-    from src.eval.splitter import walk_forward
-    from src.graph.build_edges import comention_edges, comention_pairs
+def period_days(prices: pd.DataFrame, cfg: dict | None = None) -> tuple[pd.DatetimeIndex, dict]:
+    """Trading days of `prices` inside the study period, and the walk-forward settings used.
 
-    cfg = walk_forward_config()
+    `cfg` has the shape of `configs/walk_forward.yaml` and defaults to it.
+    """
+    from src.core.config import walk_forward_config
+
+    cfg = walk_forward_config() if cfg is None else cfg
     days = pd.DatetimeIndex(sorted(prices.loc[prices["in_index"], "date"].unique()))
     days = days[(days >= pd.Timestamp(cfg["period"]["start"])) & (days <= pd.Timestamp(cfg["period"]["end"]))]
+    return days, cfg
+
+
+def shared_folds(prices: pd.DataFrame, cfg: dict | None = None) -> list:
+    """The walk-forward folds every model uses (`period_days` explains `cfg`)."""
+    from src.eval.splitter import walk_forward
+
+    days, cfg = period_days(prices, cfg)
     settings = {k: cfg[k] for k in ("train_days", "test_days", "step_days", "expanding", "embargo_days")}
-    folds = walk_forward(days, horizon=5, **settings)
+    return walk_forward(days, horizon=5, **settings)
+
+
+def build(article_tickers: pd.DataFrame, prices: pd.DataFrame, cfg: dict | None = None) -> tuple[str, pd.DataFrame]:
+    """Report text and top pairs. `cfg` defaults to `configs/walk_forward.yaml`."""
+    from src.core.schema import COMENTION_MIN_COUNT, COMENTION_TOP_K
+    from src.graph.build_edges import comention_edges, comention_pairs
+
+    days, _ = period_days(prices, cfg)
+    folds = shared_folds(prices, cfg)
     shown = [folds[0], folds[-1]]
     out = [
         "# Co-mention edges: measurements (task 3.3, #21)",
