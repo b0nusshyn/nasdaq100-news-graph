@@ -364,7 +364,7 @@ def summary_text(edges: pd.DataFrame, n_folds: int | None = None) -> str:
     if n_folds is not None:
         missing = sorted(set(range(n_folds)) - set(present))
         status = f"MISSING {missing}" if missing else "all present"
-        lines[0] += f" (walk_forward.yaml gives folds 0–{n_folds - 1}: {status})"
+        lines[0] += f" (walk_forward.yaml gives folds 0 to {n_folds - 1}: {status})"
     sector = edges[edges["edge_type"] == "sector"]
     classes = sum(s < d and same_company(s, d) for s, d in zip(sector["src"], sector["dst"], strict=True))
     lines += [
@@ -499,7 +499,7 @@ def build_edges_file(
     if not all_folds:
         raise ValueError("the walk-forward settings give no folds on these prices")
     if fold is not None and not 0 <= fold < len(all_folds):
-        raise ValueError(f"fold {fold} does not exist: the walk-forward settings give folds 0–{len(all_folds) - 1}")
+        raise ValueError(f"fold {fold} does not exist: the walk-forward settings give folds 0 to {len(all_folds) - 1}")
     folds = all_folds if fold is None else [all_folds[fold]]
 
     parts, sources = [], {}
@@ -546,11 +546,10 @@ def build_edges_file(
                 "inputs": {n: hashes[n] for n in INPUTS[t]}, **code,
             }
 
+    # Serialise first: an entry JSON cannot store fails here, before the old table is replaced.
+    body = json.loads(json.dumps([entries[k] for k in sorted(entries)]))
     out = write_table(edges, "edges")
-    manifest = {
-        "edges_sha256": _sha256(out), "written_at_utc": stamp,
-        "entries": [entries[k] for k in sorted(entries)],
-    }
+    manifest = {"edges_sha256": _sha256(out), "written_at_utc": stamp, "entries": body}
     out.with_name(MANIFEST_NAME).write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
     keys = set(zip(edges["fold"].astype(int), edges["edge_type"], strict=True))

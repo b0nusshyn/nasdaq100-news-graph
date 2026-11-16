@@ -82,9 +82,17 @@ def test_manifest_records_parameters_inputs_and_window_per_fold_and_type(data):
     assert json.loads((data / MANIFEST_NAME).read_text())["edges_sha256"] == be._sha256(data / "edges.parquet")
 
 
+def test_period_bounds_read_from_yaml_as_dates_are_stored_as_iso_strings(data):
+    import datetime as dt
+
+    cfg = SHORT_FOLDS | {"period": {"start": dt.date(2021, 1, 1), "end": dt.date(2021, 12, 31)}}
+    build_edges_file(cfg=cfg, params=SHORT_PARAMS, gics_path=data / "gics.csv")
+    assert manifest(data)[(0, "corr")]["walk_forward"]["period"] == {"start": "2021-01-01", "end": "2021-12-31"}
+
+
 def test_summary_lists_every_fold_and_the_checks(data):
     text = summary_text(build(data).edges, 2)
-    assert "Folds present: -1, 0, 1 (walk_forward.yaml gives folds 0–1: all present)" in text
+    assert "Folds present: -1, 0, 1 (walk_forward.yaml gives folds 0 to 1: all present)" in text
     assert "Checks passed" in text
 
 
