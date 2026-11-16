@@ -1,5 +1,3 @@
-"""Long-only, equal-initial-capital benchmark, separate from probability ranking."""
-
 from __future__ import annotations
 
 from numbers import Real
@@ -16,13 +14,7 @@ def buy_and_hold_benchmark(
     *,
     cost_bps_per_side: float = 5.0,
 ) -> BacktestResult:
-    """Buy first-day members at adjusted close; hold fixed units with drifting weights.
 
-    Supply every session of one fold, including its final liquidation close.
-    Sell on the first observed nonmember close; retain cash and never add entrants.
-    Each call starts fresh capital. Halts/acquisitions without an exit quote
-    require a reviewed liquidation policy; missing prices or membership raise.
-    """
     if not isinstance(trading_days, pd.DatetimeIndex) or len(trading_days) < 2:
         raise ValueError("supply at least two trading sessions")
     if trading_days.hasnans or not trading_days.is_unique or not trading_days.is_monotonic_increasing:
