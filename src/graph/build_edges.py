@@ -15,8 +15,17 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from src.core.schema import ALL_FOLDS, COMENTION_MIN_COUNT, COMENTION_TOP_K, CORR_TOP_K, EDGE_TYPES, conform
-from src.core.tickers import canonical_ticker, company
+from src.core.schema import (
+    ALL_FOLDS,
+    COMENTION_MIN_COUNT,
+    COMENTION_TOP_K,
+    CORR_MIN_OVERLAP,
+    CORR_RESIDUAL,
+    CORR_TOP_K,
+    EDGE_TYPES,
+    conform,
+)
+from src.core.tickers import canonical_ticker, company, same_company
 from src.core.todo import todo
 from src.eval.splitter import Fold
 
@@ -153,13 +162,88 @@ def comention_edges(
     return conform(edges, "edges")
 
 
-def corr_edges(prices: pd.DataFrame, folds: list[Fold], top_k: int = CORR_TOP_K) -> pd.DataFrame:
-    """Per fold: each ticker's top-k most correlated peers over the training window, stored both ways.
+def market_model(prices: pd.DataFrame, days: pd.DatetimeIndex) -> tuple[pd.DataFrame, pd.Series]:
+    """Daily returns over the trading `days` given, with the equal-weight market removed.
 
-    Exclude share classes of one company (`src.core.tickers.same_company`): their returns are
-    near-identical, so they would take each other's top slot. Select with `top_k_both_ways`.
+    Pass a fold's training window, never more. Candidates are the tickers `in_index` on at least
+    one of `days`; each uses every return it has on those days, in the index or not (all past
+    data). Returns are close-to-close on the `prices` calendar, so the first day's return uses
+    the previous close. The market m_t is the mean return of the tickers in the index on day t;
+    each candidate's beta is the OLS slope of its returns on m over its own observed days.
+
+    Returns (`residual`, `beta`): residual r_i - alpha_i - beta_i * m (dates x tickers, NaN where
+    a ticker has no return), and beta per ticker.
     """
-    todo(22, "correlation edges")
+    close = prices.pivot(index="date", columns="ticker", values="close").sort_index()
+    member = prices.pivot(index="date", columns="ticker", values="in_index").reindex_like(close)
+    member = member.fillna(False).astype(bool)
+    ret = close.pct_change(fill_method=None)
+    ret, member = ret[ret.index.isin(days)], member[member.index.isin(days)]
+    market = ret.where(member).mean(axis=1)
+
+    ret = ret.loc[:, member.any()]
+    seen = ret.notna()
+    m = pd.DataFrame(np.where(seen, market.to_numpy()[:, None], np.nan), ret.index, ret.columns)
+    dm, dr = m - m.mean(), ret - ret.mean()
+    beta = (dm * dr).sum() / (dm**2).sum()
+    alpha = ret.mean() - beta * m.mean()
+    residual = ret - alpha - m.mul(beta, axis=1)
+    return residual, beta
+
+
+def corr_pairs(prices: pd.DataFrame, days: pd.DatetimeIndex, *, residual: bool = CORR_RESIDUAL) -> pd.DataFrame:
+    """Return correlation for every unordered pair (`a` < `b`) of candidates over the trading `days`.
+
+    Candidates and returns as in `market_model`; pass a fold's training window, never more. With
+    `residual` (the default) the weight is the partial correlation given the equal-weight
+    market: each stock's fitted market beta is removed before correlating, so two high-beta
+    names are not related merely because both move a lot with the market. `residual=False`
+    correlates raw returns (ablation). Two share classes of one company are never a pair.
+
+    Columns: `n_obs` (days on which both have a return) and `corr` (Pearson over those days).
+    """
+    resid, _ = market_model(prices, days)
+    if not residual:
+        close = prices.pivot(index="date", columns="ticker", values="close").sort_index()
+        resid = close.pct_change(fill_method=None).reindex(index=resid.index, columns=resid.columns)
+    seen = resid.notna().astype(float)
+    n_obs = seen.T @ seen
+    corr = resid.corr(min_periods=2)
+    tickers = resid.columns.tolist()
+    ia, ib = np.triu_indices(len(tickers), k=1)
+    out = pd.DataFrame({
+        "a": np.array(tickers, dtype=object)[ia],
+        "b": np.array(tickers, dtype=object)[ib],
+        "n_obs": n_obs.to_numpy()[ia, ib].astype(int),
+        "corr": corr.to_numpy()[ia, ib],
+    })
+    keep = out["corr"].notna() & ~np.array([same_company(a, b) for a, b in zip(out["a"], out["b"], strict=True)])
+    return out[keep].reset_index(drop=True)
+
+
+def corr_edges(
+    prices: pd.DataFrame,
+    folds: list[Fold],
+    *,
+    top_k: int | None = CORR_TOP_K,
+    min_overlap: int = CORR_MIN_OVERLAP,
+    residual: bool = CORR_RESIDUAL,
+) -> pd.DataFrame:
+    """Per fold: weight = training-window return correlation (`corr_pairs`), stored both ways.
+
+    A pair needs `min_overlap` training days on which both firms have a return to be a
+    candidate; each ticker then keeps its `top_k` peers by weight (`top_k_both_ways`). Share
+    classes of one company never pair. Defaults are SCHEMA.md decision 7; the keyword arguments
+    exist for the 3.9 ablations.
+    """
+    parts = []
+    for fold in folds:
+        p = corr_pairs(prices, fold.train, residual=residual)
+        p = p[p["n_obs"] >= min_overlap].rename(columns={"corr": "weight"})
+        parts.append(top_k_both_ways(p, top_k).assign(fold=fold.index, edge_type="corr"))
+    columns = ["fold", "src", "dst", "edge_type", "weight"]
+    edges = pd.concat(parts, ignore_index=True) if parts else pd.DataFrame(columns=columns)
+    return conform(edges, "edges")
 
 
 def main() -> None:
