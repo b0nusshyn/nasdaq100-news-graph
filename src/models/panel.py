@@ -22,10 +22,16 @@ its own, which is the case graph propagation is meant to help.
 
 Windows are the `window` trading days up to and including the row's date: every feature uses
 data up to that day's close only.
+
+**Validation and threshold** (`split_validation`, `choose_threshold`): every model holds out
+the same last part of each training fold, embargoed from the days it fits on, and picks its
+operating threshold there, never on the test window. AUC needs no threshold and is the
+headline metric; accuracy, F1 and MCC use the chosen threshold.
 """
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 
 import numpy as np
@@ -218,3 +224,33 @@ def fit_features(
 
     x = np.concatenate(parts, axis=-1).astype(np.float32)
     return FoldFeatures(names, x, window, stats)
+
+
+def split_validation(train_days: pd.DatetimeIndex, fraction: float, embargo: int):
+    """(fit days, validation days): the last `fraction` of a fold's training days validate, and the
+    `embargo` days before them are used for neither, so a label on the last fitted day cannot
+    reach into the validation days."""
+    n_val = max(1, math.ceil(fraction * len(train_days)))
+    fit = train_days[: len(train_days) - n_val - embargo]
+    if len(fit) == 0:
+        raise ValueError("training window too short for the validation split and embargo")
+    return fit, train_days[-n_val:]
+
+
+def choose_threshold(y: np.ndarray, p: np.ndarray, *, candidates: int = 99) -> float:
+    """The cutoff on P(up) that maximises MCC on validation rows (`y` labels, `p` probabilities).
+
+    Candidates are quantiles of `p`, so the threshold always splits the predictions: a model whose
+    probabilities all sit above 0.5 still gets a cutoff inside their range. Returns 0.5 when no
+    candidate gives a defined MCC (constant predictions or one-class labels).
+    """
+    y, p = np.asarray(y).astype(bool), np.asarray(p, dtype=float)
+    if len(y) == 0 or y.all() or not y.any():
+        return 0.5
+    t = np.unique(np.quantile(p, np.linspace(0.01, 0.99, candidates)))
+    up = p[None, :] >= t[:, None]  # [thresholds, rows]
+    tp, fp = (up & y).sum(1).astype(float), (up & ~y).sum(1).astype(float)
+    fn, tn = y.sum() - tp, (~y).sum() - fp
+    denom = np.sqrt((tp + fp) * (tp + fn) * (tn + fp) * (tn + fn))
+    mcc = np.where(denom > 0, (tp * tn - fp * fn) / np.where(denom > 0, denom, 1), -np.inf)
+    return float(t[np.argmax(mcc)]) if np.isfinite(mcc).any() else 0.5

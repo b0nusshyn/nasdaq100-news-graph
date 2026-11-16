@@ -166,3 +166,24 @@ def test_frame_gives_tabular_baselines_the_same_features(panel, train):
 def test_unknown_feature_names_are_rejected(panel, train):
     with pytest.raises(ValueError, match="unknown features"):
         fit(panel, train, price=("close",))
+
+
+# --------------------------------------------------------------------------- validation and threshold
+
+
+def test_threshold_is_chosen_inside_the_range_of_predictions():
+    from src.models.panel import choose_threshold
+
+    rng = np.random.default_rng(0)
+    y = rng.random(2000) < 0.55
+    p = 0.55 + 0.05 * y + rng.normal(0, 0.02, 2000)  # every probability above 0.5, ranking informative
+    t = choose_threshold(y, p)
+    assert p.min() < t < p.max()
+    assert 0.1 < (p >= t).mean() < 0.9  # splits the predictions instead of calling every row "up"
+
+
+def test_threshold_falls_back_to_one_half_when_mcc_is_undefined():
+    from src.models.panel import choose_threshold
+
+    assert choose_threshold(np.array([1, 1, 1]), np.array([0.2, 0.6, 0.7])) == 0.5
+    assert choose_threshold(np.array([0, 1, 0]), np.array([0.6, 0.6, 0.6])) == 0.5

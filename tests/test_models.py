@@ -97,7 +97,7 @@ def fixture_inputs():
 def test_validation_days_are_embargoed_from_the_days_the_model_fits_on():
     import pandas as pd
 
-    from src.models.train import split_validation
+    from src.models.panel import split_validation
 
     days = pd.bdate_range("2021-01-04", periods=100)
     fit, val = split_validation(days, 0.1, 5)
@@ -141,6 +141,7 @@ def test_a_fold_trains_and_predicts_exactly_the_shared_row_set(fixture_inputs, t
         assert (preds["y_true"].to_numpy() == expected["y"].to_numpy()).all()
         assert preds["p_up"].between(0, 1).all() and (preds["fold"] == 0).all() and (preds["horizon"] == h).all()
         assert 1 <= info["epochs"] <= 3
+        assert 0 <= info["threshold"] <= 1 and 0 <= info["val_base_rate"] <= 1
     monkeypatch.setenv(DATA_DIR_ENV, str(tmp_path))
     write_predictions(preds, "gat_lstm")  # validates against SCHEMA.md
     assert len(read_predictions("gat_lstm")) == len(preds)
@@ -170,3 +171,30 @@ def test_edge_of_a_type_the_model_lacks_is_an_error():
     m = model(edge_types=("sector", "comention"))
     with pytest.raises(ValueError, match="edge type"):
         m(torch.randn(N, T, F), *graph())
+
+
+def test_fold_report_leads_with_auc_and_reports_the_base_rate_beside_accuracy():
+    import pandas as pd
+
+    from src.models.train import fold_report
+
+    # Every probability is above 0.5 but the ranking is perfect: AUC 1, and a threshold chosen
+    # inside the range of predictions gives a real MCC instead of an all-up NaN.
+    preds = pd.DataFrame({"y_true": [0, 0, 1, 1, 1], "p_up": [0.55, 0.56, 0.60, 0.61, 0.62]})
+    at_half = fold_report(preds, {"threshold": 0.5})
+    assert at_half["share_predicted_up"] == 1 and at_half["accuracy"] == at_half["base_rate"] == 0.6
+    chosen = fold_report(preds, {"threshold": 0.60})
+    assert list(chosen)[0] == "auc" and chosen["auc"] == 1.0
+    assert chosen["mcc"] == 1.0 and chosen["accuracy"] == 1.0
+
+
+def test_run_record_stores_each_fold_threshold_beside_the_predictions(tmp_path):
+    import json
+
+    from src.models.train import write_run_record
+
+    out = write_run_record(tmp_path / "gat_lstm_no_news.parquet", {"seed": 0}, ["news"],
+                           [{"fold": 0, "horizon": 1, "threshold": 0.53}])
+    record = json.loads(out.read_text())
+    assert out.name == "gat_lstm_no_news_run.json" and record["model"] == "gat_lstm_no_news"
+    assert record["folds"][0]["threshold"] == 0.53 and "git_commit" in record

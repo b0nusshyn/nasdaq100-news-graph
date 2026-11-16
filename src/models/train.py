@@ -32,16 +32,6 @@ def model_name(ablate=()) -> str:
     return MODEL + "".join(f"_no_{a}" for a in sorted(ablate))
 
 
-def split_validation(train_days: pd.DatetimeIndex, fraction: float, embargo: int):
-    """(fit days, validation days): the last `fraction` of the fold's training days validate, and
-    the `embargo` days before them are used for neither."""
-    n_val = max(1, math.ceil(fraction * len(train_days)))
-    fit = train_days[: len(train_days) - n_val - embargo]
-    if len(fit) == 0:
-        raise ValueError("training window too short for the validation split and embargo")
-    return fit, train_days[-n_val:]
-
-
 def fold_edges(edges: pd.DataFrame, panel, fold: int, edge_types: tuple[str, ...]) -> dict[str, np.ndarray]:
     """This fold's edges (its own rows plus the shared `sector` rows) as ticker-index arrays."""
     from src.core.schema import ALL_FOLDS
@@ -106,7 +96,7 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
 
     from src.core.config import walk_forward_config
     from src.models.gat_lstm import GATLSTM
-    from src.models.panel import fit_features
+    from src.models.panel import choose_threshold, fit_features, split_validation
 
     start = time.perf_counter()
     feat, enc, gat, tr = cfg["features"], cfg["encoder"], cfg["gat"], cfg["train"]
@@ -168,25 +158,47 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     model.load_state_dict(best_state)
 
     model.eval()
-    parts = []
-    with torch.no_grad():
-        for chunk in _chunks(test_idx, tr["batch_days"]):
-            b = make_batch(chunk, panel, features, graph, horizon)
-            p = torch.sigmoid(run(b))[b["target"]].numpy()
-            at = b["at"][b["target"].numpy()]
-            parts.append(pd.DataFrame({
-                "date": panel.days[at[:, 0]], "ticker": panel.tickers[at[:, 1]].astype("string"),
-                "p_up": p, "y_true": b["y"][b["target"]].numpy().astype("int8"),
-            }))
-    preds = pd.concat(parts, ignore_index=True).assign(model=model_name(ablate), horizon=horizon, fold=fold.index)
-    preds = preds.sort_values(["date", "ticker"]).reset_index(drop=True)
+
+    def predict(day_idx: np.ndarray) -> pd.DataFrame:
+        parts = []
+        with torch.no_grad():
+            for chunk in _chunks(day_idx, tr["batch_days"]):
+                b = make_batch(chunk, panel, features, graph, horizon)
+                p = torch.sigmoid(run(b))[b["target"]].numpy()
+                at = b["at"][b["target"].numpy()]
+                parts.append(pd.DataFrame({
+                    "date": panel.days[at[:, 0]], "ticker": panel.tickers[at[:, 1]].astype("string"),
+                    "p_up": p, "y_true": b["y"][b["target"]].numpy().astype("int8"),
+                }))
+        return pd.concat(parts, ignore_index=True).sort_values(["date", "ticker"]).reset_index(drop=True)
+
+    # The operating threshold is chosen on the validation days, never the test window.
+    val = predict(val_idx)
+    threshold = choose_threshold(val["y_true"].to_numpy(), val["p_up"].to_numpy())
+    preds = predict(test_idx).assign(model=model_name(ablate), horizon=horizon, fold=fold.index)
     info = {
         "fold": fold.index, "horizon": horizon, "seconds": time.perf_counter() - start,
         "epochs": len(history), "best_epoch": int(np.argmin(history)) + 1, "best_val_loss": best,
+        "threshold": threshold, "val_base_rate": float(val["y_true"].mean()),
         "fit_days": len(fit_idx), "val_days": len(val_idx), "test_rows": len(preds),
         "features": len(features.names), "edges_per_day": len(graph["src"]),
     }
     return preds, info
+
+
+def fold_report(preds: pd.DataFrame, info: dict) -> dict:
+    """Test metrics for one fold-horizon: AUC (no threshold) first, then accuracy, F1 and MCC at
+    the validation-chosen threshold, with the base rate that always predicting "up" scores."""
+    import warnings
+
+    from src.eval.metrics import classification_metrics
+
+    y, p = preds["y_true"].to_numpy(), preds["p_up"].to_numpy()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)  # undefined MCC is reported as NaN
+        m = classification_metrics(y, p, threshold=info["threshold"])
+    return {"auc": m["auc"], "threshold": info["threshold"], "accuracy": m["accuracy"], "base_rate": float(y.mean()),
+            "f1": m["f1"], "mcc": m["mcc"], "share_predicted_up": float((p >= info["threshold"]).mean())}
 
 
 def folds_for(panel, wf: dict | None = None) -> list:
@@ -208,7 +220,6 @@ def main() -> None:
 
     from src.core.config import load_config
     from src.core.io import read_table, write_predictions
-    from src.eval.metrics import classification_metrics
     from src.models.panel import load_panel
 
     cfg = load_config(args.config)
@@ -229,10 +240,12 @@ def main() -> None:
     for h in horizons:
         for fold in chosen:
             preds, info = train_fold(panel, edges, fold, h, cfg, ablate=tuple(args.ablate))
-            m = classification_metrics(preds["y_true"].to_numpy(), preds["p_up"].to_numpy())
+            info["test"] = m = fold_report(preds, info)
             print(f"WALL CLOCK h={h} fold {fold.index}: {info['seconds'] / 60:.1f} min "
-                  f"({info['epochs']} epochs, best {info['best_epoch']}) | AUC {m['auc']:.3f} MCC {m['mcc']:.3f} "
-                  f"acc {m['accuracy']:.3f} | {info['test_rows']} test rows")
+                  f"({info['epochs']} epochs, best {info['best_epoch']}) | AUC {m['auc']:.3f} | "
+                  f"threshold {m['threshold']:.3f} (validation): acc {m['accuracy']:.3f} vs base rate "
+                  f"{m['base_rate']:.3f}, MCC {m['mcc']:.3f}, F1 {m['f1']:.3f}, "
+                  f"{m['share_predicted_up']:.0%} predicted up | {info['test_rows']} test rows")
             out.append(preds)
             infos.append(info)
     total = sum(i["seconds"] for i in infos)
@@ -242,7 +255,26 @@ def main() -> None:
         print("Smoke run (--folds): predictions not written.")
         return
     path = write_predictions(pd.concat(out, ignore_index=True), model_name(args.ablate))
-    print(f"Wrote {path}")
+    sidecar = write_run_record(path, cfg, args.ablate, infos)
+    print(f"Wrote {path} and {sidecar.name}")
+
+
+def write_run_record(predictions_path: Path, cfg: dict, ablate, infos: list[dict]) -> Path:
+    """`<model>_run.json` beside the predictions: per fold-horizon the validation-chosen threshold,
+    base rates, test metrics and timing, plus the config and code version. The threshold is not
+    a `predictions` column (SCHEMA.md), so Evaluation reads it from here."""
+    import json
+    from datetime import datetime, timezone
+
+    from src.graph.build_edges import _code_version
+
+    record = {
+        "model": model_name(ablate), "ablate": sorted(ablate), "written_at_utc": datetime.now(timezone.utc).isoformat(
+            timespec="seconds"), **_code_version(), "config": cfg, "folds": infos,
+    }
+    out = predictions_path.with_name(f"{model_name(ablate)}_run.json")
+    out.write_text(json.dumps(record, indent=2, default=str) + "\n", encoding="utf-8")
+    return out
 
 
 if __name__ == "__main__":
