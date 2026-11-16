@@ -1,11 +1,12 @@
-# Proposed model. Owner: Modelling (#29). Draft values.
+# Proposed model (#29). Folds and the embargo come from walk_forward.yaml, shared by every model.
 seed: 42
-horizons: [1, 5]
-window_days: 20            # LSTM look-back
-features:
+horizons: [1, 5]           # one model per horizon and fold
+window_days: 20            # LSTM look-back, trading days up to and including the prediction day
+features:                  # src.models.panel; every statistic is fitted on the training fold only
   price: [ret_1d, volatility_20d, rsi_14, macd, macd_signal, volume_z_20d]
-  news: [has_news, sentiment, confidence, embeddings]
-  embedding_dim: 64        # 768-d FinBERT embedding projected down before the LSTM
+  news: [has_news, sentiment, confidence]
+  embeddings: true         # FinBERT embedding via per-fold PCA; false is the "do embeddings help" ablation
+  embedding_dim: 64        # PCA components kept
 encoder:
   hidden: 64
   layers: 1
@@ -15,7 +16,9 @@ gat:
   edge_types: [sector, comention, corr]
 train:
   epochs: 30
-  batch_days: 32
+  batch_days: 32           # trading days per optimiser step, batched as one disjoint graph
   lr: 0.001
   weight_decay: 0.0001
-  early_stopping_patience: 5   # on the last 10% of each training fold
+  grad_clip: 1.0
+  validation_fraction: 0.1     # last 10% of each training fold, after the embargo, for early stopping
+  early_stopping_patience: 5   # epochs without a lower validation loss

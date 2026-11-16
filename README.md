@@ -238,6 +238,8 @@ python -m src.graph.corr_report --output results/tables
 
 ```bash
 python -m src.models.train --config configs/gat_lstm.yaml
+# Smoke run on one fold: prints wall-clock time and metrics, writes no predictions
+python -m src.models.train --config configs/gat_lstm.yaml --folds 0
 python -m src.eval.run_baselines --all
 python -m src.eval.compare --output results/
 ```

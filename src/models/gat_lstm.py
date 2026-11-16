@@ -19,13 +19,22 @@ class GATLSTM(nn.Module):
     The dense layer sees the company's own state next to the graph signal, `[h ; g]`, so the
     model contains Baseline 6 (`dense(h)`) and any gap over it is the graph's contribution."""
 
-    def __init__(self, n_features: int, hidden: int = 64, heads: int = 4, edge_types: tuple[str, ...] = ()):
+    def __init__(
+        self,
+        n_features: int,
+        hidden: int = 64,
+        heads: int = 4,
+        edge_types: tuple[str, ...] = (),
+        *,
+        layers: int = 1,
+        dropout: float = 0.1,
+    ):
         super().__init__()
         from torch_geometric.nn import GATConv
 
         self.edge_types = tuple(edge_types)
         self.heads = heads
-        self.encoder = CompanyEncoder(n_features, hidden)
+        self.encoder = CompanyEncoder(n_features, hidden, layers=layers, dropout=dropout)
         # No self-loops: a company's own state reaches the dense layer through the skip link.
         # Edge weight (co-mention count, correlation) is an edge feature of the attention score.
         self.convs = nn.ModuleList(

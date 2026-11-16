@@ -67,36 +67,102 @@ def test_a_shock_reaches_neighbours_along_edges_and_nowhere_else():
     # 3 is two hops away (via 2) and the model has one GAT layer, so it does not move either.
 
 
-def fixture_tables():
+# --------------------------------------------------------------------------- training (#29)
+
+SMALL = {
+    "seed": 0, "horizons": [1, 5], "window_days": 5,
+    "features": {"price": ["ret_1d", "volatility_20d", "rsi_14", "macd", "macd_signal", "volume_z_20d"],
+                 "news": ["has_news", "sentiment", "confidence"], "embeddings": True, "embedding_dim": 4},
+    "encoder": {"hidden": 8, "layers": 1, "dropout": 0.0},
+    "gat": {"heads": 2, "edge_types": list(TYPES)},
+    "train": {"epochs": 3, "batch_days": 8, "lr": 0.01, "weight_decay": 0.0, "grad_clip": 1.0,
+              "validation_fraction": 0.1, "early_stopping_patience": 2},
+}
+SHORT_FOLDS = {"period": {"start": "2021-01-01", "end": "2021-12-31"}, "train_days": 30, "test_days": 10,
+               "step_days": 10, "expanding": False, "embargo_days": 5}
+
+
+@pytest.fixture(scope="module")
+def fixture_inputs():
     from src.core.io import read_table
     from src.core.paths import FIXTURES_DIR
+    from src.models.panel import build_panel
+    from src.models.train import folds_for
 
-    return {n: read_table(n, FIXTURES_DIR / f"{n}.parquet") for n in ("prices", "news_features", "edges")}
+    t = {n: read_table(n, FIXTURES_DIR / f"{n}.parquet") for n in ("prices", "labels", "news_features", "edges")}
+    panel = build_panel(t["prices"], t["labels"], t["news_features"])
+    return panel, t["edges"], folds_for(panel, SHORT_FOLDS)
 
 
-def test_fixture_day_runs_end_to_end_for_in_index_companies_only():
-    from src.models.snapshot import build_snapshot
+def test_validation_days_are_embargoed_from_the_days_the_model_fits_on():
+    import pandas as pd
 
-    tables = fixture_tables()
-    dates = sorted(tables["prices"]["date"].unique())
-    before_join, after_join = dates[25], dates[-1]  # FFF joins the index at day 30
+    from src.models.train import split_validation
 
-    early = build_snapshot(before_join, **tables, fold=0, window=T, edge_types=TYPES)
-    assert early.tickers == ["AAA", "BBB", "CCC", "DDD", "EEE"]
+    days = pd.bdate_range("2021-01-04", periods=100)
+    fit, val = split_validation(days, 0.1, 5)
+    assert len(val) == 10 and val[-1] == days[-1]
+    assert days.get_loc(val[0]) - days.get_loc(fit[-1]) == 6  # five unused days in between
 
-    snap = build_snapshot(after_join, **tables, fold=0, window=T, edge_types=TYPES)
-    assert snap.tickers == ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"]
-    n = len(snap.tickers)
-    assert snap.x.shape == (n, T, 4)  # trailing return, has_news, sentiment, confidence
-    assert int(snap.edge_index.max()) < n
 
-    from src.models.gat_lstm import GATLSTM
+def test_ablation_runs_are_named_after_what_they_drop():
+    from src.models.train import model_name
 
-    m = GATLSTM(n_features=4, hidden=H, heads=HEADS, edge_types=TYPES).eval()
-    logits, attention = m(snap.x, snap.edge_index, snap.edge_type, snap.edge_weight)
-    p_up = torch.sigmoid(logits)
-    assert p_up.shape == (n,) and ((p_up >= 0) & (p_up <= 1)).all()
-    assert attention.shape == (snap.edge_index.shape[1], HEADS)
+    assert model_name() == "gat_lstm"
+    assert model_name(["news", "corr"]) == "gat_lstm_no_corr_no_news"
+
+
+def test_a_batch_has_the_in_index_companies_of_each_day_and_only_their_edges(fixture_inputs):
+    import numpy as np
+
+    from src.models.panel import fit_features
+    from src.models.train import fold_edges, make_batch
+
+    panel, edges, folds = fixture_inputs
+    features = fit_features(panel, folds[0].train, window=5, embedding_dim=4)
+    days = np.array([25, 45])  # FFF joins at day 30
+    b = make_batch(days, panel, features, fold_edges(edges, panel, 0, TYPES), horizon=1)
+    assert b["x"].shape == (5 + 6, 5, len(features.names))
+    assert b["at"][:5, 1].tolist() == [0, 1, 2, 3, 4] and b["at"][5:, 1].tolist() == [0, 1, 2, 3, 4, 5]
+    src, dst = b["edge_index"]
+    assert ((src < 5) == (dst < 5)).all()  # no edge crosses from one day's graph to another's
+
+
+def test_a_fold_trains_and_predicts_exactly_the_shared_row_set(fixture_inputs, tmp_path, monkeypatch):
+    from src.core.io import read_predictions, write_predictions
+    from src.core.paths import DATA_DIR_ENV
+    from src.models.train import train_fold
+
+    panel, edges, folds = fixture_inputs
+    for h in (1, 5):
+        preds, info = train_fold(panel, edges, folds[0], h, SMALL, log=lambda *_: None)
+        expected = panel.rows(folds[0].test, h)
+        assert preds[["date", "ticker"]].equals(expected[["date", "ticker"]])
+        assert (preds["y_true"].to_numpy() == expected["y"].to_numpy()).all()
+        assert preds["p_up"].between(0, 1).all() and (preds["fold"] == 0).all() and (preds["horizon"] == h).all()
+        assert 1 <= info["epochs"] <= 3
+    monkeypatch.setenv(DATA_DIR_ENV, str(tmp_path))
+    write_predictions(preds, "gat_lstm")  # validates against SCHEMA.md
+    assert len(read_predictions("gat_lstm")) == len(preds)
+
+
+def test_ablations_drop_news_features_and_edge_types(fixture_inputs):
+    from src.models.train import train_fold
+
+    panel, edges, folds = fixture_inputs
+    _, full = train_fold(panel, edges, folds[0], 1, SMALL, log=lambda *_: None)
+    preds, ablated = train_fold(panel, edges, folds[0], 1, SMALL, ablate=("news", "corr"), log=lambda *_: None)
+    assert ablated["features"] == 7 and full["features"] == 7 + 3 + 4  # price + flag; news scalars; PCA
+    assert ablated["edges_per_day"] < full["edges_per_day"]
+    assert (preds["model"] == "gat_lstm_no_corr_no_news").all()
+
+
+def test_a_fold_without_edges_of_a_type_is_an_error(fixture_inputs):
+    from src.models.train import fold_edges
+
+    panel, edges, _ = fixture_inputs
+    with pytest.raises(ValueError, match="rebuild it"):
+        fold_edges(edges, panel, 1, TYPES)  # the fixture has comention/corr rows for fold 0 only
 
 
 def test_edge_of_a_type_the_model_lacks_is_an_error():
