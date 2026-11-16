@@ -491,7 +491,8 @@ def build_edges_file(
         kw[t] = {**kw[t], **override}
     cfg = walk_forward_config() if cfg is None else cfg
     settings = ("train_days", "test_days", "step_days", "expanding", "embargo_days")
-    wf = {"period": cfg["period"], **{k: cfg[k] for k in settings}}
+    # YAML reads the period bounds as dates; the manifest stores them as ISO strings.
+    wf = json.loads(json.dumps({"period": cfg["period"], **{k: cfg[k] for k in settings}}, default=str))
 
     prices = read_table("prices", columns=["date", "ticker", "close", "in_index"])
     all_folds = shared_folds(prices, cfg)
