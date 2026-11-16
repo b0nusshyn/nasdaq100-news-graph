@@ -220,8 +220,13 @@ python -m src.data.build_labels --horizons 1 5
 # News features (GPU recommended)
 python -m src.nlp.encode_news --input data/raw/fnspid_filtered.csv
 
-# Graph edges: run once per walk-forward fold (0, 1, 2, …); corr and comention
-# are rebuilt from each fold's training window, sector edges are static
+# Graph edges: every walk-forward fold in one run. corr and comention are rebuilt from
+# each fold's training window; sector edges are static (fold -1) and shared by every fold.
+# Also writes edges_manifest.json: parameters, input hashes and build time per fold and type.
+python -m src.graph.build_edges --types sector comention corr
+# --fold N rebuilds fold N's corr and comention rows, but it also rewrites the sector rows
+# that the other four folds read, and leaves those folds' own rows from earlier runs. The
+# file then mixes builds (the run warns); rebuild in full, without --fold, before a hand-off.
 python -m src.graph.build_edges --types sector comention corr --fold 0
 # Measurements behind the comention defaults (SCHEMA.md decision 6)
 python -m src.graph.comention_report --output results/tables
