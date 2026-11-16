@@ -2,16 +2,23 @@
 
 from __future__ import annotations
 
-import pandas as pd
+from numbers import Integral
 
-from src.core.todo import todo
+import pandas as pd
 
 
 class BuyAndHold:
     name = "buy_and_hold"
 
     def fit(self, panel: pd.DataFrame, train_dates: pd.DatetimeIndex, horizon: int) -> None:
-        todo(25, "buy_and_hold.fit")
+        """Validate the horizon; this constant baseline has nothing to learn."""
+        if isinstance(horizon, bool) or not isinstance(horizon, Integral) or horizon not in (1, 5):
+            raise ValueError("horizon must be 1 or 5")
 
     def predict_proba(self, panel: pd.DataFrame, test_dates: pd.DatetimeIndex) -> pd.Series:
-        todo(25, "buy_and_hold.predict_proba")
+        """Predict up for in-index test rows, preserving their order.
+
+        The caller attaches labels and removes missing outcomes for evaluation.
+        """
+        test_rows = panel.index.get_level_values("date").isin(test_dates) & panel["in_index"]
+        return pd.Series(1.0, index=panel.index[test_rows], dtype="float32", name="p_up")
