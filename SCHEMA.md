@@ -186,7 +186,7 @@ Frozen Fri 13 Nov 2026 in issue #2.
    low-coverage firms, the ones propagation is meant to help. Share classes of one company
    are tagged together by news matching, so they never form `comention` or `corr` edges.
    Measurements: `results/tables/comention_report.md`.
-7. **`corr` weight** (Mon 16 Nov, task 3.4, #22; **pending team agreement**) — partial
+7. **`corr` weight** (Mon 16 Nov, task 3.4, #22; agreed by the team) — partial
    correlation of daily returns given the equal-weight market, instead of raw correlation.
    This is the third application of the principle behind decision 6: Jaccard removes
    firm-level coverage, the 1 / (k - 1) weight removes roundup inflation, and residual returns
@@ -209,6 +209,5 @@ Frozen Fri 13 Nov 2026 in issue #2.
      errors: about 0.49 at 60 days, above most genuine edges, and 0.34 at 126. Because each
      ticker uses its returns from before it joined the index, 126 leaves at most 2 of ~120
      candidates (1.6%) without `corr` edges in any fold; they keep `sector` and `comention`.
-   Raw correlation stays available for the 3.9 ablation (`residual=False`). If the team
-   prefers it as the default, set `CORR_RESIDUAL = False`. Measurements:
+   Raw correlation stays available for the 3.9 ablation (`residual=False`). Measurements:
    `results/tables/corr_report.md`.

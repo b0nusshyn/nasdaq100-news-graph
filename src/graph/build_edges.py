@@ -1,15 +1,29 @@
 """Company graph edges. Owner: Modelling. Issues #8, #21, #22, #28.
 
-Output: `edges.parquet` (SCHEMA.md). `sector` edges are static (fold = -1); `comention` and
-`corr` weights are computed per walk-forward fold from that fold's training window only, so
-this runs once per fold and each run replaces that fold's rows.
+Output: `edges.parquet` (SCHEMA.md) and `edges_manifest.json` beside it. `sector` edges are
+static (fold = -1, shared by every fold); `comention` and `corr` weights are computed per
+walk-forward fold from that fold's training window only.
 
-    python -m src.graph.build_edges --types sector comention corr --fold 0
+    python -m src.graph.build_edges --types sector comention corr            # every fold
+    python -m src.graph.build_edges --types sector comention corr --fold 0   # one fold
+
+Without `--fold`, every fold of `configs/walk_forward.yaml` is rebuilt and the requested types
+are replaced wholesale. With `--fold N`, only fold N's `comention` / `corr` rows are replaced;
+`sector` rows, if requested, are rewritten too, and those are the rows every other fold reads.
+The other folds keep rows from earlier runs, so the file then mixes builds: the manifest records
+each (fold, edge type)'s parameters, inputs and build time, and the run warns. Rebuild in full
+before handing the file off.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
+import subprocess
+import sys
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -26,13 +40,16 @@ from src.core.schema import (
     conform,
 )
 from src.core.tickers import canonical_ticker, company, same_company
-from src.core.todo import todo
 from src.eval.splitter import Fold
 
 # Static input, not a SCHEMA.md artifact: committed with the code so every fold and every
 # teammate builds the same sector edges.
 GICS_CSV = Path(__file__).with_name("gics.csv")
 GICS_LEVELS = ("gics_sector", "gics_industry", "gics_sub_industry")
+SECTOR_LEVEL = "gics_industry"
+MANIFEST_NAME = "edges_manifest.json"
+EDGE_COLUMNS = ["fold", "src", "dst", "edge_type", "weight"]
+WEIGHT_RANGE = {"sector": (1.0, 1.0), "comention": (0.0, 1.0), "corr": (-1.0, 1.0)}
 
 
 def load_gics(path: Path = GICS_CSV) -> pd.DataFrame:
@@ -55,7 +72,7 @@ def check_gics_coverage(gics: pd.DataFrame, membership: pd.DataFrame) -> None:
         raise ValueError(f"no GICS classification for former or current members: {missing}")
 
 
-def sector_edges(gics: pd.DataFrame, level: str = "gics_industry") -> pd.DataFrame:
+def sector_edges(gics: pd.DataFrame, level: str = SECTOR_LEVEL) -> pd.DataFrame:
     """Both directions between every pair sharing a GICS `level`; weight 1, fold -1."""
     tickers = gics[["ticker", level]]
     pairs = tickers.merge(tickers, on=level, suffixes=("_src", "_dst"))
@@ -246,12 +263,323 @@ def corr_edges(
     return conform(edges, "edges")
 
 
+# --------------------------------------------------------------------------- edges.parquet
+
+# Inputs whose content determines each edge type. `prices` sets the fold calendar, so the
+# per-fold types depend on it even when, like `comention`, they read no price.
+INPUTS = {"sector": ("gics.csv", "membership"), "comention": ("article_tickers", "prices"), "corr": ("prices",)}
+
+
+def default_params() -> dict[str, dict]:
+    """Builder keyword arguments per edge type, at the SCHEMA.md defaults (decisions 4, 6, 7)."""
+    return {
+        "sector": {"level": SECTOR_LEVEL},
+        "comention": {
+            "top_k": COMENTION_TOP_K, "min_count": COMENTION_MIN_COUNT, "max_companies": None, "inverse": True,
+        },
+        "corr": {"top_k": CORR_TOP_K, "min_overlap": CORR_MIN_OVERLAP, "residual": CORR_RESIDUAL},
+    }
+
+
+def check_edges(edges: pd.DataFrame) -> None:
+    """Raise ValueError listing every way `edges` breaks the SCHEMA.md graph rules.
+
+    `validate` checks columns and dtypes; this checks the graph: one row per key, no self-loops,
+    `sector` only at fold -1 and the per-fold types only at folds >= 0, no `comention` / `corr`
+    edge between share classes of one company, every edge stored in both directions with the
+    same weight, and every weight inside its type's range.
+    """
+    errors = []
+    key = ["fold", "src", "dst", "edge_type"]
+    if n := edges.duplicated(key).sum():
+        errors.append(f"{n} duplicate (fold, src, dst, edge_type) rows")
+    if n := (edges["src"] == edges["dst"]).sum():
+        errors.append(f"{n} self-loops")
+    sector = edges["edge_type"] == "sector"
+    if n := (sector & (edges["fold"] != ALL_FOLDS)).sum():
+        errors.append(f"{n} sector rows outside fold {ALL_FOLDS}")
+    if n := (~sector & (edges["fold"] < 0)).sum():
+        errors.append(f"{n} comention/corr rows with a negative fold")
+    per_fold = edges[~sector]
+    if n := sum(same_company(s, d) for s, d in zip(per_fold["src"], per_fold["dst"], strict=True)):
+        errors.append(f"{n} comention/corr rows between share classes of one company")
+    if n := edges["weight"].isna().sum():
+        errors.append(f"{n} missing weights")
+    reverse = edges.rename(columns={"src": "dst", "dst": "src"})
+    both = edges.merge(reverse, on=key, how="left", suffixes=("", "_rev"))
+    if n := both["weight_rev"].isna().sum():
+        errors.append(f"{n} edges not stored in both directions")
+    paired = both.dropna(subset=["weight", "weight_rev"])
+    if n := (~np.isclose(paired["weight"], paired["weight_rev"])).sum():
+        errors.append(f"{n} edges whose two directions have different weights")
+    for t, (lo, hi) in WEIGHT_RANGE.items():
+        w = edges.loc[edges["edge_type"] == t, "weight"]
+        if n := ((w < lo) | (w > hi)).sum():
+            errors.append(f"{n} {t} weights outside [{lo:g}, {hi:g}]")
+    if errors:
+        raise ValueError("edges: " + "; ".join(errors))
+
+
+def summarize(edges: pd.DataFrame) -> pd.DataFrame:
+    """One row per (fold, edge_type): rows, nodes, weight range and the highest-degree node.
+
+    Edges are stored both ways, so a node's degree is its count of `src` rows; ties go to the
+    first ticker alphabetically.
+    """
+    rows = {}
+    for (fold, t), e in edges.groupby(["fold", "edge_type"], sort=True):
+        deg = e["src"].value_counts().sort_index()
+        rows[(fold, t)] = {
+            "rows": len(e),
+            "nodes": pd.concat([e["src"], e["dst"]]).nunique(),
+            "weight min": float(e["weight"].min()),
+            "weight max": float(e["weight"].max()),
+            "max degree": f"{deg.max()} ({deg.idxmax()})",
+        }
+    return pd.DataFrame.from_dict(rows, orient="index").rename_axis(["fold", "edge_type"])
+
+
+def fold_graphs(edges: pd.DataFrame) -> pd.DataFrame:
+    """The graph each walk-forward fold trains on: its own rows plus the shared `sector` rows."""
+    rows = {}
+    for fold in sorted(f for f in edges["fold"].unique() if f != ALL_FOLDS):
+        e = edges[edges["fold"].isin([fold, ALL_FOLDS])]
+        deg = e["src"].value_counts().sort_index()
+        rows[fold] = {
+            "rows": len(e),
+            **{t: int((e["edge_type"] == t).sum()) for t in EDGE_TYPES},
+            "nodes": pd.concat([e["src"], e["dst"]]).nunique(),
+            "mean degree": deg.mean(),
+            "max degree": f"{deg.max()} ({deg.idxmax()})",
+        }
+    return pd.DataFrame.from_dict(rows, orient="index").rename_axis("fold")
+
+
+def summary_text(edges: pd.DataFrame, n_folds: int | None = None) -> str:
+    """Markdown summary of an `edges` table that has passed `check_edges`."""
+    from src.graph.comention_report import md
+
+    present = sorted(int(f) for f in edges["fold"].unique())
+    lines = [f"Folds present: {', '.join(map(str, present))}"]
+    if n_folds is not None:
+        missing = sorted(set(range(n_folds)) - set(present))
+        status = f"MISSING {missing}" if missing else "all present"
+        lines[0] += f" (walk_forward.yaml gives folds 0 to {n_folds - 1}: {status})"
+    sector = edges[edges["edge_type"] == "sector"]
+    classes = sum(s < d and same_company(s, d) for s, d in zip(sector["src"], sector["dst"], strict=True))
+    lines += [
+        "", "**Per fold and edge type**", "", md(summarize(edges), digits=3),
+        "", "**Graph each fold trains on** (its own rows + the shared `sector` rows)", "",
+        md(fold_graphs(edges), digits=1),
+        "", "Checks passed (`check_edges`): no duplicate keys, no self-loops, no `comention` / `corr` "
+        "edge between share classes of one company, every edge stored both ways with equal weight, "
+        "every weight inside its type's range. "
+        f"`sector` pairs between share classes, which SCHEMA.md allows: {classes}.",
+    ]
+    return "\n".join(lines)
+
+
+def manifest_path() -> Path:
+    from src.core.paths import table_path
+
+    return table_path("edges").with_name(MANIFEST_NAME)
+
+
+def _sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _code_version() -> dict:
+    from src.core.paths import REPO_ROOT
+
+    def git(*args: str) -> str:
+        return subprocess.run(["git", *args], cwd=REPO_ROOT, capture_output=True, text=True, check=True).stdout.strip()
+
+    try:
+        commit, dirty = git("rev-parse", "HEAD"), git("status", "--porcelain", "--untracked-files=no")
+        return {"git_commit": commit, "git_dirty": bool(dirty)}
+    except (OSError, subprocess.CalledProcessError):
+        return {"git_commit": None, "git_dirty": None}
+
+
+def _load_manifest(edges_path: Path) -> tuple[dict, list[str]]:
+    """Entries keyed (fold, edge_type) from the manifest beside `edges_path`, and any notes.
+
+    A manifest describes the file it was written with; if the file has changed since (edited by
+    hand, or copied from another build), its entries no longer apply and are discarded.
+    """
+    path = edges_path.with_name(MANIFEST_NAME)
+    if not path.exists() or not edges_path.exists():
+        return {}, []
+    manifest = json.loads(path.read_text(encoding="utf-8"))
+    if manifest.get("edges_sha256") != _sha256(edges_path):
+        return {}, [f"{edges_path.name} changed since {MANIFEST_NAME} was written; its old entries were discarded"]
+    return {(e["fold"], e["edge_type"]): e for e in manifest["entries"]}, []
+
+
+def provenance_conflicts(entries: dict, keys: set[tuple[int, str]]) -> list[str]:
+    """Ways the (fold, edge_type) row groups `keys` of one edges file were not built alike.
+
+    Compares each type's parameters across folds, and every input hash, the walk-forward
+    settings and the code version across all entries; also flags row groups with no entry.
+    """
+    out = []
+    unknown = sorted(keys - set(entries))
+    if unknown:
+        out.append("no manifest entry, so unknown provenance, for " + ", ".join(f"fold {f} {t}" for f, t in unknown))
+
+    def differs(label: str, ents: list[dict], get) -> None:
+        seen: dict[str, list[str]] = {}
+        for e in ents:
+            seen.setdefault(json.dumps(get(e), sort_keys=True), []).append(f"fold {e['fold']} {e['edge_type']}")
+        if len(seen) > 1:
+            out.append(f"{label} differ: " + "; ".join(f"{v} for {', '.join(who)}" for v, who in seen.items()))
+
+    ents = sorted(entries.values(), key=lambda e: (e["fold"], e["edge_type"]))
+    for t in EDGE_TYPES:
+        differs(f"{t} parameters", [e for e in ents if e["edge_type"] == t], lambda e: e["params"])
+    for name in sorted({n for e in ents for n in e["inputs"]}):
+        differs(f"{name} inputs", [e for e in ents if name in e["inputs"]], lambda e, n=name: e["inputs"][n][:12])
+    differs("walk-forward settings", [e for e in ents if e["edge_type"] != "sector"], lambda e: e["walk_forward"])
+    differs("code versions", ents, lambda e: e["git_commit"])
+    dirty = [f"fold {e['fold']} {e['edge_type']}" for e in ents if e["git_dirty"]]
+    if dirty:
+        out.append("built from uncommitted changes: " + ", ".join(dirty))
+    return out
+
+
+@dataclass(frozen=True)
+class EdgeBuild:
+    """What `build_edges_file` wrote: the full `edges` table, the fold count, and warnings."""
+
+    edges: pd.DataFrame
+    n_folds: int
+    warnings: list[str]
+
+
+def build_edges_file(
+    types=EDGE_TYPES,
+    fold: int | None = None,
+    *,
+    cfg: dict | None = None,
+    params: dict[str, dict] | None = None,
+    gics_path: Path = GICS_CSV,
+) -> EdgeBuild:
+    """Build `types` and merge them into `edges.parquet`, recording each in `edges_manifest.json`.
+
+    `fold=None` builds every fold of `cfg` (default `configs/walk_forward.yaml`) and replaces
+    every row of the requested types. `fold=N` replaces only fold N's `comention` / `corr` rows,
+    plus the `sector` rows if requested, and warns that the file now mixes builds. `params`
+    overrides `default_params()` per type (ablations, short test fixtures). The merged table is
+    checked (`check_edges`) before anything is written, so a bad build leaves the old file.
+    """
+    from src.core.config import walk_forward_config
+    from src.core.io import read_table, write_table
+    from src.core.paths import table_path
+    from src.graph.comention_report import shared_folds
+
+    types = [t for t in EDGE_TYPES if t in types]
+    unknown = set(params or {}) - set(EDGE_TYPES)
+    if unknown:
+        raise ValueError(f"params for unknown edge types: {sorted(unknown)}")
+    kw = default_params()
+    for t, override in (params or {}).items():
+        kw[t] = {**kw[t], **override}
+    cfg = walk_forward_config() if cfg is None else cfg
+    settings = ("train_days", "test_days", "step_days", "expanding", "embargo_days")
+    # YAML reads the period bounds as dates; the manifest stores them as ISO strings.
+    wf = json.loads(json.dumps({"period": cfg["period"], **{k: cfg[k] for k in settings}}, default=str))
+
+    prices = read_table("prices", columns=["date", "ticker", "close", "in_index"])
+    all_folds = shared_folds(prices, cfg)
+    if not all_folds:
+        raise ValueError("the walk-forward settings give no folds on these prices")
+    if fold is not None and not 0 <= fold < len(all_folds):
+        raise ValueError(f"fold {fold} does not exist: the walk-forward settings give folds 0 to {len(all_folds) - 1}")
+    folds = all_folds if fold is None else [all_folds[fold]]
+
+    parts, sources = [], {}
+    if "sector" in types:
+        gics = load_gics(gics_path)
+        check_gics_coverage(gics, read_table("membership"))
+        parts.append(sector_edges(gics, **kw["sector"]))
+        sources["gics.csv"] = gics_path
+    if "comention" in types:
+        parts.append(comention_edges(read_table("article_tickers"), folds, **kw["comention"]))
+    if "corr" in types:
+        parts.append(corr_edges(prices, folds, **kw["corr"]))
+    new = pd.concat(parts, ignore_index=True)
+
+    path = table_path("edges")
+    existing = read_table("edges") if path.exists() else conform(pd.DataFrame(columns=EDGE_COLUMNS), "edges")
+    entries, warnings = _load_manifest(path)
+    built = {f.index for f in folds}
+
+    def rebuilt(f: int, t: str) -> bool:
+        return t in types and (t == "sector" or fold is None or f in built)
+
+    keep = ~np.array([rebuilt(f, t) for f, t in zip(existing["fold"], existing["edge_type"], strict=True)], dtype=bool)
+    edges = pd.concat([existing[keep], new], ignore_index=True)
+    edges = edges.sort_values(["fold", "edge_type", "src", "dst"], kind="stable").reset_index(drop=True)
+    check_edges(conform(edges, "edges"))
+
+    for name in {n for t in types for n in INPUTS[t]} - {"gics.csv"}:
+        sources[name] = table_path(name)
+    hashes = {name: _sha256(p) for name, p in sources.items()}
+    stamp, code = datetime.now(timezone.utc).isoformat(timespec="seconds"), _code_version()
+    entries = {k: e for k, e in entries.items() if not rebuilt(*k)}
+    windows = {ALL_FOLDS: None} | {
+        f.index: {"start": f"{f.train[0]:%Y-%m-%d}", "end": f"{f.train[-1]:%Y-%m-%d}", "days": len(f.train)}
+        for f in folds
+    }
+    for t in types:
+        for f in [ALL_FOLDS] if t == "sector" else sorted(built):
+            entries[(f, t)] = {
+                "fold": f, "edge_type": t, "built_at_utc": stamp,
+                "rows": int(((new["fold"] == f) & (new["edge_type"] == t)).sum()),
+                "params": kw[t], "train_window": windows[f],
+                "walk_forward": None if t == "sector" else wf,
+                "inputs": {n: hashes[n] for n in INPUTS[t]}, **code,
+            }
+
+    # Serialise first: an entry JSON cannot store fails here, before the old table is replaced.
+    body = json.loads(json.dumps([entries[k] for k in sorted(entries)]))
+    out = write_table(edges, "edges")
+    manifest = {"edges_sha256": _sha256(out), "written_at_utc": stamp, "entries": body}
+    out.with_name(MANIFEST_NAME).write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+    keys = set(zip(edges["fold"].astype(int), edges["edge_type"], strict=True))
+    warnings += provenance_conflicts(entries, keys)
+    if fold is not None:
+        per_fold = " and ".join(t for t in types if t != "sector") or "no per-fold"
+        what = f"only fold {fold}'s {per_fold} rows were rebuilt"
+        if "sector" in types:
+            what += f", and the sector rows (fold {ALL_FOLDS}) that every fold shares were rewritten"
+        warnings.insert(0, f"--fold {fold}: {what}. Other folds keep rows from earlier runs, so {out.name} now "
+                           f"mixes builds (see {MANIFEST_NAME}). Rebuild in full, without --fold, before a hand-off.")
+    return EdgeBuild(edges, len(all_folds), warnings)
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--types", nargs="+", choices=EDGE_TYPES, default=list(EDGE_TYPES))
-    p.add_argument("--fold", type=int, required=True, help="walk-forward fold index (0-based)")
-    p.parse_args()
-    todo(28, "build_edges")
+    p.add_argument(
+        "--fold", type=int, default=None,
+        help="rebuild only this walk-forward fold (0-based); requested sector rows, shared by every fold, are "
+             "rewritten too. Omit to rebuild every fold, which is what a hand-off needs.",
+    )
+    args = p.parse_args()
+    result = build_edges_file(args.types, args.fold)
+    from src.core.paths import table_path
+
+    print(f"Wrote {table_path('edges')} and {MANIFEST_NAME}\n")
+    print(summary_text(result.edges, result.n_folds))
+    for w in result.warnings:
+        print(f"WARNING: {w}", file=sys.stderr)
 
 
 if __name__ == "__main__":
