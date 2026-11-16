@@ -63,6 +63,7 @@ def test_provenance_is_recorded_for_every_row(gics):
     assert gics.loc[~manual, "crosscheck"].isna().all()
 
 
+@pytest.mark.real_data
 def test_every_member_is_classified(gics):
     path = table_path("membership")
     if not path.exists():

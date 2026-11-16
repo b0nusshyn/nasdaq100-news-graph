@@ -194,12 +194,16 @@ python -m src.core.check_env    # versions + one tiny GAT forward pass
 ```
 
 For the shared code and tests only, `pip install -r requirements-dev.txt` is enough
-(this is what CI runs):
+(CI's light job):
 
 ```bash
 ruff check .
-pytest
+pytest -rs    # -rs lists the tests skipped for a missing heavy dependency
 ```
+
+Tests that need torch, scikit-learn, statsmodels, xgboost or transformers skip on the light set.
+CI's full job installs `requirements.txt` and runs `NDX_NO_SKIPS=1 pytest`, where any skip fails
+the run. Use the same before trusting a green run locally.
 
 ### Data location
 
