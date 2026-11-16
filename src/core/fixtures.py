@@ -89,9 +89,12 @@ def make_fixtures(n_days: int = 60, seed: int = 0) -> dict[str, pd.DataFrame]:
     for a, b in itertools.permutations(TICKERS, 2):
         if SECTORS[a] == SECTORS[b]:
             edges.append((ALL_FOLDS, a, b, "sector", 1.0))
+    # Co-mention Jaccard, co / (n_a + n_b - co) (SCHEMA.md decision 6). Fixture articles name at
+    # most two firms, so the 1 / (k - 1) article weight is always 1 and plain counts suffice.
+    n = article_tickers.groupby("ticker").size()
     pairs = article_tickers.merge(article_tickers, on="article_id").query("ticker_x != ticker_y")
-    for (a, b), n in pairs.groupby(["ticker_x", "ticker_y"]).size().items():
-        edges.append((0, a, b, "comention", float(n)))
+    for (a, b), co in pairs.groupby(["ticker_x", "ticker_y"]).size().items():
+        edges.append((0, a, b, "comention", co / (n[a] + n[b] - co)))
     rets = prices.pivot(index="date", columns="ticker", values="close").pct_change().corr()
     for a, b in itertools.permutations(TICKERS, 2):
         edges.append((0, a, b, "corr", float(rets.loc[a, b])))

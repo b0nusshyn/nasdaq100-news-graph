@@ -34,6 +34,7 @@ data/
 ├── article_tickers.parquet
 ├── news_features.parquet
 ├── edges.parquet
+├── edges_manifest.json       # what built each (fold, edge type) of edges.parquet
 └── predictions/<model>.parquet
 ```
 

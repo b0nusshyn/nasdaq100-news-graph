@@ -89,15 +89,15 @@ lands.
 
 ## 3 · Modelling — Shayanis
 
-- [ ] **3.1** · **Sat 14 Nov** — `sector` edges from GICS classification · [#8](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/8)
+- [x] **3.1** · **Sat 14 Nov** — `sector` edges from GICS classification · [#8](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/8)
 - [ ] **3.2** · **Sat 14 Nov** — Model skeleton on synthetic fixtures: LSTM encoder → GAT → dense → P(up); confirm tensor shapes end to end · [#9](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/9)
-- [ ] **3.3** · **Mon 16 Nov** — `comention` edges from NLP's article → ticker matches (weight = co-mention count, training window only) · [#21](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/21)
-- [ ] **3.4** · **Mon 16 Nov** — `corr` edges from return correlation, **recomputed per training fold** using Evaluation's splitter · [#22](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/22)
-- [ ] **3.5** · **Tue 17 Nov** — Write `edges.parquet` ✱ hand-off · [#28](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/28)
+- [x] **3.3** · **Mon 16 Nov** — `comention` edges from NLP's article → ticker matches (weight = co-mention count, training window only) · [#21](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/21)
+- [x] **3.4** · **Mon 16 Nov** — `corr` edges from return correlation, **recomputed per training fold** using Evaluation's splitter · [#22](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/22)
+- [x] **3.5** · **Tue 17 Nov** — Write `edges.parquet` ✱ hand-off · [#28](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/28)
 - [ ] **3.6** · **Tue 17 Nov** — Training loop + `configs/gat_lstm.yaml`; normalisation fitted on training fold only · [#29](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/29)
 - [ ] **3.7** · **Wed 18 Nov** — Factor the LSTM encoder so Baseline 6 is the same model with the GAT removed ✱ hand-off to Evaluation · [#35](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/35)
 - [ ] **3.8** · **Wed 18 Nov** — Full walk-forward training run, both horizons (1d, 5d); save predictions per fold · [#36](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/36)
-- [ ] **3.9** · **Thu 19 Nov** — Ablations: drop each edge type in turn; drop news features · [#41](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/41)
+- [ ] **3.9** · **Thu 19 Nov** — Ablations: drop each edge type in turn; drop news features; drop the deal-arbitrage `corr` edges (ADI–MXIM, AMD–XLNX, AZN–ALXN; see 3.4) · [#41](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/41)
 - [ ] **3.10** · **Thu 19 Nov** — Expose attention weights per prediction for NLP's interpretability work · [#42](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/42)
 - [ ] **3.12** · **Thu 19 Nov** — Fine-tuning pass (course brief: "Re-run + fine-tune"): log at least 5–6 GAT + LSTM runs in `results/tables/tuning_gat_lstm.md` with columns learning rate, hidden dim, attention heads, dropout, validation MCC; score on the validation split inside each training fold, never the test windows; re-run 3.8 with the best config; include the table in the report · [#58](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/58)
 - [ ] **3.11** · **Fri 20 Nov** — Write Method (graph + model) section of the report · [#47](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/47)
