@@ -1,0 +1,28 @@
+# Baseline 6 (#38): the proposed model with the GAT removed, trained by the same
+# src.models.train.train_fold. Values start equal to gat_lstm.yaml; 4.13 tunes lr, hidden,
+# dropout and the training settings separately. features, window_days and the validation
+# split must stay equal to gat_lstm.yaml (tests/test_models.py checks it).
+model: lstm_news            # predictions/<model>.parquet
+seed: 42
+horizons: [1, 5]           # one model per horizon and fold
+window_days: 20            # LSTM look-back, trading days up to and including the prediction day
+features:                  # src.models.panel; every statistic is fitted on the training fold only
+  price: [ret_1d, volatility_20d, rsi_14, macd, macd_signal, volume_z_20d]
+  news: [has_news, sentiment, confidence]
+  embeddings: true         # FinBERT embedding via per-fold PCA; false is the "do embeddings help" ablation
+  embedding_dim: 64        # PCA components kept
+encoder:
+  hidden: 64
+  layers: 1
+  dropout: 0.1
+gat:
+  heads: 4
+  edge_types: []           # no GAT branch: the model is dense(encoder(x))
+train:
+  epochs: 30
+  batch_days: 32           # trading days per optimiser step, batched as one disjoint graph
+  lr: 0.001
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  validation_fraction: 0.1     # last 10% of each training fold, after the embargo, for early stopping
+  early_stopping_patience: 5   # epochs without a lower validation loss

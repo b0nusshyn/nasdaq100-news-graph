@@ -1,7 +1,9 @@
 """Train the proposed model across walk-forward folds and write predictions. Owner: Modelling. Issues #29, #36.
 
-Output: `<data>/predictions/gat_lstm.parquet` (SCHEMA.md `predictions`); an ablation run writes
-`gat_lstm_no_<what>.parquet`. One model per horizon and fold. Inputs come from
+Output: `<data>/predictions/<model>.parquet` (SCHEMA.md `predictions`), where `<model>` is the
+config's `model` (`gat_lstm`; `lstm_news` and `lstm_price` for Baselines 6 and 5, which are
+this same loop with the GAT, and then news, removed); an ablation run writes
+`<model>_no_<what>.parquet`. One model per horizon and fold. Inputs come from
 `src.models.panel`, the module every model shares: the same row set, and features normalised
 with statistics from each training fold only.
 
@@ -27,15 +29,19 @@ MODEL = "gat_lstm"
 NEWS = "news"  # --ablate value that drops every news feature, embeddings included
 
 
-def model_name(ablate=()) -> str:
-    """`gat_lstm`, or `gat_lstm_no_<a>_no_<b>` for an ablation (file name = `model` column)."""
-    return MODEL + "".join(f"_no_{a}" for a in sorted(ablate))
+def model_name(ablate=(), base: str = MODEL) -> str:
+    """`base` (the config's `model`, default `gat_lstm`), or `<base>_no_<a>_no_<b>` for an
+    ablation. The file name and the `model` column of the predictions."""
+    return base + "".join(f"_no_{a}" for a in sorted(ablate))
 
 
 def fold_edges(edges: pd.DataFrame, panel, fold: int, edge_types: tuple[str, ...]) -> dict[str, np.ndarray]:
     """This fold's edges (its own rows plus the shared `sector` rows) as ticker-index arrays."""
     from src.core.schema import ALL_FOLDS
 
+    if not edge_types:  # Baseline 6 and the all-edges ablation: no graph, edges not needed
+        empty = np.array([], dtype=np.int64)
+        return {"src": empty, "dst": empty, "type": empty, "weight": np.array([], dtype=np.float32)}
     e = edges[edges["fold"].isin([fold, ALL_FOLDS]) & edges["edge_type"].isin(edge_types)]
     missing = sorted(set(edge_types) - set(e["edge_type"]))
     if missing:
@@ -175,7 +181,8 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     # The operating threshold is chosen on the validation days, never the test window.
     val = predict(val_idx)
     threshold = choose_threshold(val["y_true"].to_numpy(), val["p_up"].to_numpy())
-    preds = predict(test_idx).assign(model=model_name(ablate), horizon=horizon, fold=fold.index)
+    name = model_name(ablate, cfg.get("model", MODEL))
+    preds = predict(test_idx).assign(model=name, horizon=horizon, fold=fold.index)
     info = {
         "fold": fold.index, "horizon": horizon, "seconds": time.perf_counter() - start,
         "epochs": len(history), "best_epoch": int(np.argmin(history)) + 1, "best_val_loss": best,
@@ -227,13 +234,14 @@ def main() -> None:
     if bad:
         p.error(f"--ablate: unknown {sorted(bad)}; choose from {cfg['gat']['edge_types'] + [NEWS]}")
     t0 = time.perf_counter()
+    name = model_name(args.ablate, cfg.get("model", MODEL))
     embeddings = bool(cfg["features"].get("embeddings", True)) and NEWS not in args.ablate
     panel = load_panel(embeddings=embeddings)
-    edges = read_table("edges")
+    edges = read_table("edges") if set(cfg["gat"]["edge_types"]) - set(args.ablate) else None
     folds = folds_for(panel)
     chosen = folds if args.folds is None else [folds[i] for i in args.folds]
     print(f"Loaded inputs in {time.perf_counter() - t0:.0f}s: {len(panel.days)} days x {len(panel.tickers)} tickers, "
-          f"{len(folds)} folds, model {model_name(args.ablate)}")
+          f"{len(folds)} folds, model {name}")
 
     horizons = [args.horizon] if args.horizon else cfg["horizons"]
     out, infos = [], []
@@ -254,7 +262,7 @@ def main() -> None:
     if args.folds is not None:
         print("Smoke run (--folds): predictions not written.")
         return
-    path = write_predictions(pd.concat(out, ignore_index=True), model_name(args.ablate))
+    path = write_predictions(pd.concat(out, ignore_index=True), name)
     sidecar = write_run_record(path, cfg, args.ablate, infos)
     print(f"Wrote {path} and {sidecar.name}")
 
@@ -268,11 +276,12 @@ def write_run_record(predictions_path: Path, cfg: dict, ablate, infos: list[dict
 
     from src.graph.build_edges import _code_version
 
+    name = model_name(ablate, cfg.get("model", MODEL))
     record = {
-        "model": model_name(ablate), "ablate": sorted(ablate), "written_at_utc": datetime.now(timezone.utc).isoformat(
+        "model": name, "ablate": sorted(ablate), "written_at_utc": datetime.now(timezone.utc).isoformat(
             timespec="seconds"), **_code_version(), "config": cfg, "folds": infos,
     }
-    out = predictions_path.with_name(f"{model_name(ablate)}_run.json")
+    out = predictions_path.with_name(f"{name}_run.json")
     out.write_text(json.dumps(record, indent=2, default=str) + "\n", encoding="utf-8")
     return out
 

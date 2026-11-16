@@ -1,4 +1,5 @@
 # Proposed model (#29). Folds and the embargo come from walk_forward.yaml, shared by every model.
+model: gat_lstm             # predictions/<model>.parquet
 seed: 42
 horizons: [1, 5]           # one model per horizon and fold
 window_days: 20            # LSTM look-back, trading days up to and including the prediction day
