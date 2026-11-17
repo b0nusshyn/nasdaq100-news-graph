@@ -247,6 +247,8 @@ python -m src.models.train --config configs/gat_lstm.yaml --folds 0
 # Baselines 6 and 5: the same training loop with the GAT, then the news, removed
 python -m src.models.train --config configs/lstm_news.yaml
 python -m src.models.train --config configs/lstm_price.yaml
+# The ladder 5 -> 6 -> proposed per fold and horizon, with the horizon-pattern flag
+python -m src.models.ladder_report --output results/tables
 python -m src.eval.run_baselines --all
 python -m src.eval.compare --output results/
 ```
