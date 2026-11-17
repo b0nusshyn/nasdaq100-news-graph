@@ -36,14 +36,30 @@ def auc(y: np.ndarray, p: np.ndarray) -> float:
     return float((ranks[y].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg))
 
 
-def auc_table(preds: dict[str, pd.DataFrame]) -> pd.DataFrame:
-    """AUC per (horizon, fold) and model, plus `mean` (of folds) and `pooled` (all test rows) rows."""
-    rows = {}
+def within_day_auc(df: pd.DataFrame) -> float:
+    """Mean over dates of the AUC among that day's tickers: stock selection, what a daily watch
+    list ranks. Market timing (calling whole days up or down) scores nothing here."""
+    return float(np.nanmean([auc(g["y_true"], g["p_up"]) for _, g in df.groupby("date")]))
+
+
+def timing_auc(df: pd.DataFrame) -> float:
+    """AUC of each day's mean P(up) for whether most tickers went up that day: market timing."""
+    day = df.groupby("date").agg(p=("p_up", "mean"), up=("y_true", "mean"))
+    return auc((day["up"] > 0.5).astype(int), day["p"])
+
+
+SCORES = {"fold": lambda g: auc(g["y_true"], g["p_up"]), "within_day": within_day_auc, "timing": timing_auc}
+
+
+def auc_table(preds: dict[str, pd.DataFrame], kind: str = "fold") -> pd.DataFrame:
+    """A score (`SCORES[kind]`) per (horizon, fold) and model, plus `mean` (of folds) and
+    `pooled` (every test row of the horizon at once) rows."""
+    score, rows = SCORES[kind], {}
     for name, df in preds.items():
         for (h, f), g in df.groupby(["horizon", "fold"]):
-            rows.setdefault((int(h), str(f)), {})[name] = auc(g["y_true"], g["p_up"])
+            rows.setdefault((int(h), str(f)), {})[name] = score(g)
         for h, g in df.groupby("horizon"):
-            rows.setdefault((int(h), "pooled"), {})[name] = auc(g["y_true"], g["p_up"])
+            rows.setdefault((int(h), "pooled"), {})[name] = score(g)
     t = pd.DataFrame.from_dict(rows, orient="index").rename_axis(["horizon", "fold"])
     folds = t[~t.index.get_level_values("fold").isin(["pooled"])]
     mean = folds.groupby(level="horizon").mean()
@@ -144,8 +160,8 @@ def build(preds: dict[str, pd.DataFrame], seed_runs: dict[int, dict] | None = No
     if differ:
         raise ValueError(f"predictions cover different rows from gat_lstm: {differ}")
 
-    t = auc_table(preds)
-    s = steps(t)
+    t, w, timing = auc_table(preds), auc_table(preds, "within_day"), auc_table(preds, "timing")
+    s, sw = steps(t), steps(w)
     base = {int(h): float(g["y_true"].mean()) for h, g in preds["gat_lstm"].groupby("horizon")}
     out = [
         "# Walk-forward ladder (task 3.8, #36)",
@@ -157,15 +173,32 @@ def build(preds: dict[str, pd.DataFrame], seed_runs: dict[int, dict] | None = No
         "",
         "## Horizon pattern",
         "",
-        "Propagation takes time: the graph step should be near zero at 1 day and positive at 5 days.",
+        "Propagation takes time: the graph step should be near zero at 1 day and positive at 5 days. "
+        "Checked on two scores. **Fold AUC** ranks every test row of a fold together, so a model also "
+        "scores by calling whole days up or down (market timing). **Within-day AUC** ranks only the "
+        "tickers of one day, then averages over days: stock selection, what a daily watch list does.",
+        "",
+        "**Fold AUC**",
         "",
         *[f"- {line}" for line in horizon_pattern(s)],
+        "",
+        "**Within-day AUC (stock selection)**",
+        "",
+        *[f"- {line}" for line in horizon_pattern(sw)],
     ]
     if seed_runs:
         out += ["", "### Across seeds", ""]
         for seed, sp in sorted(seed_runs.items()):
-            out += [f"- seed {seed}: {horizon_pattern(steps(auc_table(sp)))[-1]}"]
-    out += ["", "## AUC", "", _md(t.rename(columns=LABEL)), "", "## Steps", "", _md(s)]
+            out += [f"- seed {seed}: fold AUC {horizon_pattern(steps(auc_table(sp)))[-1][9:]}; within-day AUC "
+                    f"{horizon_pattern(steps(auc_table(sp, 'within_day')))[-1][9:]}"]
+    out += [
+        "", "## Within-day AUC (stock selection)", "", _md(w.rename(columns=LABEL)), "", _md(sw),
+        "", "## Fold AUC", "", _md(t.rename(columns=LABEL)), "", _md(s),
+        "", "## Market timing", "",
+        "AUC of each day's mean P(up) for whether most tickers rose that day. Overlapping 5-day labels give "
+        "about 25 independent periods per 126-day fold, so these numbers are noisy.", "",
+        _md(timing.rename(columns=LABEL)),
+    ]
     return "\n".join(out)
 
 

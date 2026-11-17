@@ -75,3 +75,17 @@ def test_report_states_the_rows_base_rate_and_the_verdict():
     text = build(synthetic(HOLDS))
     assert "## Horizon pattern" in text and "VERDICT" in text and "Base rate" in text
     assert f"{2 * FOLDS * ROWS:,}" in text
+
+
+def test_within_day_auc_ignores_market_timing():
+    # P(up) that only knows whether the whole day went up: perfect timing, no stock selection.
+    from src.models.ladder_report import timing_auc, within_day_auc
+
+    rng = np.random.default_rng(3)
+    days = pd.bdate_range("2021-01-04", periods=200)
+    up_day = rng.random(len(days)) < 0.5
+    df = pd.DataFrame([(d, t, int(rng.random() < (0.8 if u else 0.2)), 0.9 if u else 0.1)
+                       for d, u in zip(days, up_day, strict=True) for t in "ABCDEFGHIJ"],
+                      columns=["date", "ticker", "y_true", "p_up"])
+    assert auc(df["y_true"], df["p_up"]) > 0.7 and timing_auc(df) > 0.95
+    assert np.isnan(within_day_auc(df)) or within_day_auc(df) == pytest.approx(0.5)
