@@ -1,3 +1,9 @@
+"""Run the six existing baselines through shared folds and isolated workers.
+
+Prediction files follow SCHEMA.md. The parent publishes outputs only after all
+workers succeed; --folds performs a smoke run without persistent outputs.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -20,6 +26,8 @@ from src.core.schema import conform, validate
 
 # Keep in sync with src.models.baselines.BASELINES (not imported: heavy deps would slow --help).
 BASELINE_NAMES = ("buy_and_hold", "arima", "logistic", "xgboost", "lstm_price", "lstm_news")
+# Runtime help must also work when Python -OO removes module docstrings.
+CLI_DESCRIPTION = "Run baselines on the shared walk-forward folds."
 
 
 def input_hashes(include_news: bool) -> dict:
@@ -349,7 +357,7 @@ def run_worker(name: str, plan_path: Path) -> None:
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    p = argparse.ArgumentParser(description=CLI_DESCRIPTION)
     which = p.add_mutually_exclusive_group(required=True)
     which.add_argument("--all", action="store_true")
     which.add_argument("--only", nargs="+", choices=BASELINE_NAMES)

@@ -43,12 +43,100 @@ def call(inputs, names=("buy_and_hold",), horizons=(1, 5), **kwargs):
     return runner.run_baselines(*inputs, names, horizons, walk_forward=SHORT, **kwargs)
 
 
-def test_help_is_lightweight():
+@pytest.mark.parametrize("optimization", [(), ("-OO",)])
+def test_help_is_lightweight(optimization):
     result = subprocess.run(
-        [sys.executable, "-m", "src.eval.run_baselines", "--help"], capture_output=True, text=True, check=False
+        [sys.executable, *optimization, "-m", "src.eval.run_baselines", "--help"],
+        capture_output=True,
+        text=True,
+        check=False,
     )
     assert result.returncode == 0
     assert "--all" in result.stdout and "--folds" in result.stdout and "--legacy-labels" in result.stdout
+
+
+@pytest.mark.parametrize("documentation", [None, ""])
+def test_cli_help_does_not_depend_on_module_documentation(documentation, monkeypatch, capsys):
+    monkeypatch.setattr(runner, "__doc__", documentation)
+    monkeypatch.setattr(sys, "argv", ["run_baselines", "--help"])
+    with pytest.raises(SystemExit) as error:
+        runner.main()
+    assert error.value.code == 0
+    output = capsys.readouterr()
+    assert "Run baselines on the shared walk-forward folds" in output.out
+    assert "--all" in output.out and not output.err
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        [],
+        ["--all", "--only", "arima"],
+        ["--only", "unknown"],
+        ["--all", "--horizon", "2"],
+        ["--all", "--folds", "invalid"],
+    ],
+)
+def test_invalid_cli_arguments_are_reported_by_argparse(arguments):
+    result = subprocess.run(
+        [sys.executable, "-B", "-m", "src.eval.run_baselines", *arguments], capture_output=True, text=True, check=False
+    )
+    assert result.returncode == 2
+    assert "usage:" in result.stderr and "error:" in result.stderr
+    assert "Traceback" not in result.stderr
+
+
+def price_cli_inputs(tables, tmp_path, *, legacy_labels=False):
+    from src.data.build_labels import make_labels
+
+    tables["prices"].to_parquet(tmp_path / "prices.parquet", index=False)
+    labels = make_labels(tables["prices"])
+    if legacy_labels:
+        labels = labels.rename(columns={"fwd_ret_1d": "ret_1d", "fwd_ret_5d": "ret_5d"})
+    labels.to_parquet(tmp_path / "labels.parquet", index=False)
+    config = tmp_path / "walk_forward.json"
+    config.write_text(json.dumps(SHORT), encoding="utf-8")
+    command = [
+        sys.executable,
+        "-B",
+        "-m",
+        "src.eval.run_baselines",
+        "--only",
+        "buy_and_hold",
+        "--walk-forward-config",
+        str(config),
+        "--horizon",
+        "5",
+    ]
+    if legacy_labels:
+        command.append("--legacy-labels")
+    return command, {**os.environ, "NDX_DATA_DIR": str(tmp_path)}
+
+
+@pytest.mark.parametrize("legacy_labels", [False, True])
+def test_public_only_horizon_and_fold_selection(tables, tmp_path, legacy_labels):
+    command, environment = price_cli_inputs(tables, tmp_path, legacy_labels=legacy_labels)
+    before = {p: p.read_bytes() for p in tmp_path.iterdir()}
+    result = subprocess.run(
+        [*command, "--folds", "1"], env=environment, capture_output=True, text=True, check=False, timeout=60
+    )
+    assert result.returncode == 0, result.stderr
+    assert "buy_and_hold: horizon 5, fold 1" in result.stdout
+    assert "horizon 1" not in result.stdout and "fold 0" not in result.stdout
+    assert result.stdout.count("Starting isolated baseline:") == 1
+    assert "no persistent" in result.stdout
+    assert {p: p.read_bytes() for p in tmp_path.iterdir()} == before
+
+
+def test_public_invalid_fold_does_not_start_workers(tables, tmp_path):
+    command, environment = price_cli_inputs(tables, tmp_path)
+    result = subprocess.run(
+        [*command, "--folds", "-1"], env=environment, capture_output=True, text=True, check=False, timeout=60
+    )
+    assert result.returncode == 1
+    assert "fold indices" in result.stderr and "Traceback" not in result.stderr
+    assert "Starting isolated baseline:" not in result.stdout
+    assert not (tmp_path / "predictions").exists()
 
 
 def test_registry_is_exactly_the_six_expected_baselines():
@@ -464,6 +552,15 @@ def test_combined_smoke_has_no_persistent_outputs(combined_command, tmp_path):
     command, environment, _, _ = combined_command
     result = run_combined([*command, "--folds", "0"], environment)
     assert "no persistent" in result.stdout
+    assert not (tmp_path / "predictions").exists()
+
+
+def test_combined_cli_runs_when_python_strips_docstrings(combined_command, tmp_path):
+    command, environment, _, _ = combined_command
+    result = run_combined([*command, "--folds", "0"], {**environment, "PYTHONOPTIMIZE": "2"})
+    for name in runner.BASELINE_NAMES:
+        assert f"{name}: horizon 1, fold 0" in result.stdout
+        assert f"{name}: horizon 5, fold 0" in result.stdout
     assert not (tmp_path / "predictions").exists()
 
 
