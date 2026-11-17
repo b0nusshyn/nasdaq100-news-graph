@@ -64,6 +64,13 @@ def test_report_refuses_models_scored_on_different_rows():
         build(preds)
 
 
+def test_rows_are_compared_by_value_not_dtype():
+    # Regression: predictions read from parquet have int8/int16 keys, in-memory runs int64.
+    preds = synthetic(HOLDS)
+    preds["gat_lstm"] = preds["gat_lstm"].astype({"horizon": "int8", "fold": "int16", "ticker": "string"})
+    build(preds)
+
+
 def test_report_states_the_rows_base_rate_and_the_verdict():
     text = build(synthetic(HOLDS))
     assert "## Horizon pattern" in text and "VERDICT" in text and "Base rate" in text

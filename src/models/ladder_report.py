@@ -129,9 +129,14 @@ def classical_in_memory(panel, folds, horizons=(1, 5)) -> dict[str, pd.DataFrame
 
 
 def build(preds: dict[str, pd.DataFrame], seed_runs: dict[int, dict] | None = None) -> str:
+    from src.core.schema import conform
+
     missing = [m for m in LADDER if m not in preds]
     if missing:
         raise ValueError(f"missing ladder predictions: {missing}; run src.models.train with their configs")
+    # Files come back with SCHEMA.md dtypes (int8 horizon, int16 fold); in-memory runs do not.
+    # Conform first, so the check compares rows rather than dtypes.
+    preds = {m: conform(d, "predictions") for m, d in preds.items()}
     rows = {m: preds[m][["horizon", "fold", "date", "ticker"]].sort_values(["horizon", "fold", "date", "ticker"])
             .reset_index(drop=True) for m in preds}
     ref = rows["gat_lstm"]
