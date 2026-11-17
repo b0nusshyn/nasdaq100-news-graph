@@ -86,7 +86,7 @@ def test_invalid_cli_arguments_are_reported_by_argparse(arguments):
     assert "Traceback" not in result.stderr
 
 
-def price_cli_inputs(tables, tmp_path, *, legacy_labels=False):
+def price_cli_inputs(tables, tmp_path, *, legacy_labels=False, horizon=5):
     from src.data.build_labels import make_labels
 
     tables["prices"].to_parquet(tmp_path / "prices.parquet", index=False)
@@ -105,9 +105,9 @@ def price_cli_inputs(tables, tmp_path, *, legacy_labels=False):
         "buy_and_hold",
         "--walk-forward-config",
         str(config),
-        "--horizon",
-        "5",
     ]
+    if horizon is not None:
+        command += ["--horizon", str(horizon)]
     if legacy_labels:
         command.append("--legacy-labels")
     return command, {**os.environ, "NDX_DATA_DIR": str(tmp_path)}
@@ -555,12 +555,23 @@ def test_combined_smoke_has_no_persistent_outputs(combined_command, tmp_path):
     assert not (tmp_path / "predictions").exists()
 
 
-def test_combined_cli_runs_when_python_strips_docstrings(combined_command, tmp_path):
-    command, environment, _, _ = combined_command
-    result = run_combined([*command, "--folds", "0"], {**environment, "PYTHONOPTIMIZE": "2"})
-    for name in runner.BASELINE_NAMES:
-        assert f"{name}: horizon 1, fold 0" in result.stdout
-        assert f"{name}: horizon 5, fold 0" in result.stdout
+def test_cli_and_worker_run_when_python_strips_docstrings(tables, tmp_path):
+    # Test our CLI/worker contract, not optional learners' support for -OO.
+    # Affected XGBoost releases fail even on import: dmlc/xgboost#8537.
+    command, environment = price_cli_inputs(tables, tmp_path, horizon=None)
+    result = subprocess.run(
+        [*command, "--folds", "0"],
+        env={**environment, "PYTHONOPTIMIZE": "2"},
+        capture_output=True,
+        text=True,
+        check=False,
+        timeout=60,
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.count("Starting isolated baseline:") == 1
+    for horizon in (1, 5):
+        assert f"buy_and_hold: horizon {horizon}, fold 0" in result.stdout
+    assert "no persistent" in result.stdout
     assert not (tmp_path / "predictions").exists()
 
 
