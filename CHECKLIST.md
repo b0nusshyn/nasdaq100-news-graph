@@ -85,7 +85,7 @@ lands.
 - [ ] **2.8** · **Tue 17 Nov** — Spot-check 50 random matches by hand; fix any systematic mismatch (e.g. `META` vs `FB`, `GOOG`/`GOOGL`) · [#31](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/31)
 - [x] **2.9** · **Wed 18 Nov** — Interpretability tooling: extract GAT attention weights and trace a prediction back to source article + edge type · [#37](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/37)
 - [x] **2.10** · **Thu 19 Nov** — Produce 2–3 worked interpretability examples (e.g. NVDA article → ARM prediction) as figures in `results/` · [#43](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/43)
-- [ ] **2.11** · **Fri 20 Nov** — Write News encoding & Interpretability sections of the report · [#48](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/48)
+- [x] **2.11** · **Fri 20 Nov** — Write News encoding & Interpretability sections of the report · [#48](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/48)
 
 ## 3 · Modelling — Shayanis
 
