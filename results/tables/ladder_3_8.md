@@ -8,98 +8,98 @@ Propagation takes time: the graph step should be near zero at 1 day and positive
 
 **Within-day AUC (headline: stock selection)**
 
-- 1d: graph step per fold -0.000, +0.004, +0.009, +0.022, +0.001 (mean +0.007, positive in 4/5); ladder monotone in 3/5 folds
-- 5d: graph step per fold -0.003, -0.019, -0.017, +0.030, -0.002 (mean -0.002, positive in 1/5); ladder monotone in 1/5 folds
-- VERDICT: horizon pattern DOES NOT HOLD (5d monotone in 1/5 folds, need 4; mean graph step 5d -0.002 vs 1d +0.007)
+- 1d: graph step per fold +0.003, -0.007, +0.004, +0.017, +0.004 (mean +0.004, positive in 4/5); ladder monotone in 3/5 folds
+- 5d: graph step per fold -0.014, -0.013, -0.023, +0.015, -0.005 (mean -0.008, positive in 1/5); ladder monotone in 1/5 folds
+- VERDICT: horizon pattern DOES NOT HOLD (5d monotone in 1/5 folds, need 4; mean graph step 5d -0.008 vs 1d +0.004)
 
 **Fold AUC (diagnostic: selection plus timing)**
 
-- 1d: graph step per fold +0.005, -0.002, +0.013, +0.000, +0.012 (mean +0.006, positive in 4/5); ladder monotone in 1/5 folds
-- 5d: graph step per fold +0.019, -0.014, +0.029, +0.020, +0.005 (mean +0.012, positive in 4/5); ladder monotone in 3/5 folds
-- VERDICT: horizon pattern DOES NOT HOLD (5d monotone in 3/5 folds, need 4; mean graph step 5d +0.012 vs 1d +0.006)
+- 1d: graph step per fold -0.002, +0.003, +0.004, -0.007, +0.001 (mean -0.000, positive in 3/5); ladder monotone in 1/5 folds
+- 5d: graph step per fold -0.025, -0.018, +0.031, +0.014, -0.001 (mean +0.000, positive in 2/5); ladder monotone in 1/5 folds
+- VERDICT: horizon pattern DOES NOT HOLD (5d monotone in 1/5 folds, need 4; mean graph step 5d +0.000 vs 1d -0.000)
 
 ## Cross-sectional signal
 
 Within-day AUC of every model against chance (0.5). If Baseline 6 sits at chance too, news adds no cross-sectional signal with or without the graph.
 
-- 1d B5 LSTM price: mean 0.499, above 0.5 in 2/5 folds, range 0.491 to 0.511
-- 1d B6 LSTM + news: mean 0.505, above 0.5 in 4/5 folds, range 0.498 to 0.524
-- 1d proposed GAT + LSTM: mean 0.512, above 0.5 in 4/5 folds, range 0.499 to 0.523
-- 5d B5 LSTM price: mean 0.482, above 0.5 in 0/5 folds, range 0.464 to 0.500
-- 5d B6 LSTM + news: mean 0.499, above 0.5 in 1/5 folds, range 0.490 to 0.519
-- 5d proposed GAT + LSTM: mean 0.497, above 0.5 in 2/5 folds, range 0.476 to 0.529
+- 1d B5 LSTM price: mean 0.499, above 0.5 in 4/5 folds, range 0.478 to 0.510
+- 1d B6 LSTM + news: mean 0.505, above 0.5 in 3/5 folds, range 0.494 to 0.517
+- 1d proposed GAT + LSTM: mean 0.509, above 0.5 in 4/5 folds, range 0.487 to 0.524
+- 5d B5 LSTM price: mean 0.481, above 0.5 in 0/5 folds, range 0.468 to 0.493
+- 5d B6 LSTM + news: mean 0.507, above 0.5 in 3/5 folds, range 0.494 to 0.523
+- 5d proposed GAT + LSTM: mean 0.499, above 0.5 in 3/5 folds, range 0.482 to 0.513
 
 ## Within-day AUC (stock selection)
 
 | horizon | fold | B5 LSTM price | B6 LSTM + news | proposed GAT + LSTM |
 |---|---|---|---|---|
-| 1 | 0 | 0.511 | 0.524 | 0.523 |
-| 1 | 1 | 0.492 | 0.501 | 0.505 |
-| 1 | 2 | 0.499 | 0.501 | 0.510 |
-| 1 | 3 | 0.491 | 0.502 | 0.523 |
-| 1 | 4 | 0.503 | 0.498 | 0.499 |
-| 1 | mean | 0.499 | 0.505 | 0.512 |
-| 1 | pooled | 0.499 | 0.505 | 0.512 |
-| 5 | 0 | 0.491 | 0.519 | 0.517 |
-| 5 | 1 | 0.464 | 0.495 | 0.476 |
-| 5 | 2 | 0.465 | 0.494 | 0.476 |
-| 5 | 3 | 0.490 | 0.499 | 0.529 |
-| 5 | 4 | 0.500 | 0.490 | 0.488 |
-| 5 | mean | 0.482 | 0.499 | 0.497 |
-| 5 | pooled | 0.482 | 0.499 | 0.497 |
+| 1 | 0 | 0.508 | 0.517 | 0.521 |
+| 1 | 1 | 0.478 | 0.494 | 0.487 |
+| 1 | 2 | 0.502 | 0.511 | 0.515 |
+| 1 | 3 | 0.501 | 0.507 | 0.524 |
+| 1 | 4 | 0.510 | 0.497 | 0.501 |
+| 1 | mean | 0.499 | 0.505 | 0.509 |
+| 1 | pooled | 0.499 | 0.505 | 0.509 |
+| 5 | 0 | 0.491 | 0.523 | 0.509 |
+| 5 | 1 | 0.471 | 0.516 | 0.503 |
+| 5 | 2 | 0.468 | 0.505 | 0.482 |
+| 5 | 3 | 0.482 | 0.498 | 0.513 |
+| 5 | 4 | 0.493 | 0.494 | 0.489 |
+| 5 | mean | 0.481 | 0.507 | 0.499 |
+| 5 | pooled | 0.481 | 0.507 | 0.499 |
 
 | horizon | fold | news (B6 - B5) | graph (proposed - B6) | monotone |
 |---|---|---|---|---|
-| 1 | 0 | 0.013 | -0.000 | 0 |
-| 1 | 1 | 0.009 | 0.004 | 1 |
-| 1 | 2 | 0.002 | 0.009 | 1 |
-| 1 | 3 | 0.011 | 0.022 | 1 |
-| 1 | 4 | -0.005 | 0.001 | 0 |
-| 1 | mean | 0.006 | 0.007 | 1 |
-| 1 | pooled | 0.006 | 0.007 | 1 |
-| 5 | 0 | 0.028 | -0.003 | 0 |
-| 5 | 1 | 0.030 | -0.019 | 0 |
-| 5 | 2 | 0.029 | -0.017 | 0 |
-| 5 | 3 | 0.009 | 0.030 | 1 |
-| 5 | 4 | -0.010 | -0.002 | 0 |
-| 5 | mean | 0.017 | -0.002 | 0 |
-| 5 | pooled | 0.017 | -0.002 | 0 |
+| 1 | 0 | 0.010 | 0.003 | 1 |
+| 1 | 1 | 0.016 | -0.007 | 0 |
+| 1 | 2 | 0.009 | 0.004 | 1 |
+| 1 | 3 | 0.006 | 0.017 | 1 |
+| 1 | 4 | -0.013 | 0.004 | 0 |
+| 1 | mean | 0.006 | 0.004 | 1 |
+| 1 | pooled | 0.006 | 0.004 | 1 |
+| 5 | 0 | 0.032 | -0.014 | 0 |
+| 5 | 1 | 0.045 | -0.013 | 0 |
+| 5 | 2 | 0.037 | -0.023 | 0 |
+| 5 | 3 | 0.016 | 0.015 | 1 |
+| 5 | 4 | 0.001 | -0.005 | 0 |
+| 5 | mean | 0.026 | -0.008 | 0 |
+| 5 | pooled | 0.026 | -0.008 | 0 |
 
 ## Fold AUC (diagnostic)
 
 | horizon | fold | B5 LSTM price | B6 LSTM + news | proposed GAT + LSTM |
 |---|---|---|---|---|
-| 1 | 0 | 0.526 | 0.529 | 0.534 |
-| 1 | 1 | 0.491 | 0.501 | 0.499 |
-| 1 | 2 | 0.506 | 0.497 | 0.510 |
-| 1 | 3 | 0.499 | 0.488 | 0.489 |
-| 1 | 4 | 0.517 | 0.506 | 0.517 |
-| 1 | mean | 0.508 | 0.504 | 0.510 |
-| 1 | pooled | 0.505 | 0.506 | 0.505 |
-| 5 | 0 | 0.482 | 0.525 | 0.544 |
-| 5 | 1 | 0.478 | 0.513 | 0.499 |
-| 5 | 2 | 0.500 | 0.531 | 0.559 |
-| 5 | 3 | 0.492 | 0.497 | 0.517 |
-| 5 | 4 | 0.519 | 0.504 | 0.509 |
-| 5 | mean | 0.494 | 0.514 | 0.526 |
-| 5 | pooled | 0.500 | 0.500 | 0.495 |
+| 1 | 0 | 0.522 | 0.520 | 0.518 |
+| 1 | 1 | 0.485 | 0.496 | 0.499 |
+| 1 | 2 | 0.503 | 0.495 | 0.498 |
+| 1 | 3 | 0.505 | 0.486 | 0.479 |
+| 1 | 4 | 0.512 | 0.503 | 0.504 |
+| 1 | mean | 0.506 | 0.500 | 0.500 |
+| 1 | pooled | 0.501 | 0.510 | 0.496 |
+| 5 | 0 | 0.492 | 0.516 | 0.491 |
+| 5 | 1 | 0.473 | 0.529 | 0.511 |
+| 5 | 2 | 0.484 | 0.487 | 0.518 |
+| 5 | 3 | 0.509 | 0.499 | 0.514 |
+| 5 | 4 | 0.509 | 0.495 | 0.493 |
+| 5 | mean | 0.494 | 0.505 | 0.505 |
+| 5 | pooled | 0.499 | 0.512 | 0.493 |
 
 | horizon | fold | news (B6 - B5) | graph (proposed - B6) | monotone |
 |---|---|---|---|---|
-| 1 | 0 | 0.002 | 0.005 | 1 |
-| 1 | 1 | 0.010 | -0.002 | 0 |
-| 1 | 2 | -0.009 | 0.013 | 0 |
-| 1 | 3 | -0.010 | 0.000 | 0 |
-| 1 | 4 | -0.011 | 0.012 | 0 |
-| 1 | mean | -0.004 | 0.006 | 0 |
-| 1 | pooled | 0.000 | -0.001 | 0 |
-| 5 | 0 | 0.043 | 0.019 | 1 |
-| 5 | 1 | 0.035 | -0.014 | 0 |
-| 5 | 2 | 0.031 | 0.029 | 1 |
-| 5 | 3 | 0.005 | 0.020 | 1 |
-| 5 | 4 | -0.015 | 0.005 | 0 |
-| 5 | mean | 0.020 | 0.012 | 1 |
-| 5 | pooled | -0.000 | -0.004 | 0 |
+| 1 | 0 | -0.002 | -0.002 | 0 |
+| 1 | 1 | 0.012 | 0.003 | 1 |
+| 1 | 2 | -0.009 | 0.004 | 0 |
+| 1 | 3 | -0.019 | -0.007 | 0 |
+| 1 | 4 | -0.009 | 0.001 | 0 |
+| 1 | mean | -0.006 | -0.000 | 0 |
+| 1 | pooled | 0.009 | -0.014 | 0 |
+| 5 | 0 | 0.024 | -0.025 | 0 |
+| 5 | 1 | 0.056 | -0.018 | 0 |
+| 5 | 2 | 0.002 | 0.031 | 1 |
+| 5 | 3 | -0.010 | 0.014 | 0 |
+| 5 | 4 | -0.014 | -0.001 | 0 |
+| 5 | mean | 0.012 | 0.000 | 1 |
+| 5 | pooled | 0.012 | -0.018 | 0 |
 
 ## Market timing
 
@@ -107,17 +107,17 @@ AUC of each day's mean P(up) for whether most tickers rose that day. Overlapping
 
 | horizon | fold | B5 LSTM price | B6 LSTM + news | proposed GAT + LSTM |
 |---|---|---|---|---|
-| 1 | 0 | 0.564 | 0.574 | 0.600 |
-| 1 | 1 | 0.453 | 0.542 | 0.476 |
-| 1 | 2 | 0.532 | 0.480 | 0.523 |
-| 1 | 3 | 0.456 | 0.456 | 0.463 |
-| 1 | 4 | 0.561 | 0.504 | 0.556 |
-| 1 | mean | 0.513 | 0.511 | 0.524 |
-| 1 | pooled | 0.511 | 0.511 | 0.503 |
-| 5 | 0 | 0.489 | 0.619 | 0.613 |
-| 5 | 1 | 0.464 | 0.585 | 0.457 |
-| 5 | 2 | 0.645 | 0.774 | 0.741 |
-| 5 | 3 | 0.487 | 0.463 | 0.502 |
-| 5 | 4 | 0.646 | 0.609 | 0.606 |
-| 5 | mean | 0.546 | 0.610 | 0.584 |
-| 5 | pooled | 0.512 | 0.533 | 0.503 |
+| 1 | 0 | 0.565 | 0.559 | 0.555 |
+| 1 | 1 | 0.502 | 0.540 | 0.517 |
+| 1 | 2 | 0.523 | 0.422 | 0.436 |
+| 1 | 3 | 0.453 | 0.418 | 0.434 |
+| 1 | 4 | 0.524 | 0.489 | 0.475 |
+| 1 | mean | 0.513 | 0.486 | 0.484 |
+| 1 | pooled | 0.516 | 0.516 | 0.480 |
+| 5 | 0 | 0.538 | 0.467 | 0.486 |
+| 5 | 1 | 0.394 | 0.652 | 0.464 |
+| 5 | 2 | 0.568 | 0.430 | 0.598 |
+| 5 | 3 | 0.555 | 0.537 | 0.528 |
+| 5 | 4 | 0.558 | 0.522 | 0.549 |
+| 5 | mean | 0.522 | 0.522 | 0.525 |
+| 5 | pooled | 0.531 | 0.529 | 0.491 |
