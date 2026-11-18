@@ -1,0 +1,13 @@
+model,horizon,fold,strategy,status,reason,backtest_return,sharpe,max_drawdown,turnover
+buy_and_hold_long_only,1,-1,long_only,unavailable,holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds,NA,NA,NA,NA
+buy_and_hold_long_only,1,0,long_only,available,,0.0930321008255,1.04678832166,0.0974618143928,2.09307914015
+buy_and_hold_long_only,1,1,long_only,unavailable,holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds,NA,NA,NA,NA
+buy_and_hold_long_only,1,2,long_only,unavailable,holdings on 2022-02-14 require prices and membership for ['XLNX']; no zero-return filling or assumed liquidation proceeds,NA,NA,NA,NA
+buy_and_hold_long_only,1,3,long_only,available,,0.0313795438988,0.360261186368,0.202375099619,2.03139574152
+buy_and_hold_long_only,1,4,long_only,available,,0.20143463392,2.14252675702,0.0843663336341,2.20153590162
+buy_and_hold_long_only,5,-1,long_only,unavailable,holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds,NA,NA,NA,NA
+buy_and_hold_long_only,5,0,long_only,available,,0.0930321008255,1.04678832166,0.0974618143928,2.09307914015
+buy_and_hold_long_only,5,1,long_only,unavailable,holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds,NA,NA,NA,NA
+buy_and_hold_long_only,5,2,long_only,unavailable,holdings on 2022-02-14 require prices and membership for ['XLNX']; no zero-return filling or assumed liquidation proceeds,NA,NA,NA,NA
+buy_and_hold_long_only,5,3,long_only,available,,0.0313795438988,0.360261186368,0.202375099619,2.03139574152
+buy_and_hold_long_only,5,4,long_only,available,,0.20143463392,2.14252675702,0.0843663336341,2.20153590162

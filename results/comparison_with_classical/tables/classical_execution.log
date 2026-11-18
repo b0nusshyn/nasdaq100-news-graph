@@ -1,0 +1,1177 @@
+Starting isolated baseline: buy_and_hold
+buy_and_hold: horizon 1, fold 0, 12852 predictions
+buy_and_hold: horizon 1, fold 1, 12837 predictions
+buy_and_hold: horizon 1, fold 2, 12829 predictions
+buy_and_hold: horizon 1, fold 3, 12838 predictions
+buy_and_hold: horizon 1, fold 4, 12726 predictions
+buy_and_hold: horizon 5, fold 0, 12852 predictions
+buy_and_hold: horizon 5, fold 1, 12829 predictions
+buy_and_hold: horizon 5, fold 2, 12825 predictions
+buy_and_hold: horizon 5, fold 3, 12838 predictions
+buy_and_hold: horizon 5, fold 4, 12726 predictions
+Starting isolated baseline: arima
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AZN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CRWD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DDOG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA EBAY: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FTNT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GOOGL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA KDP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LCID: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MRVL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MTCH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MYL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ODFL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA OKTA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ORLY: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PANW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PCAR: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PTON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHPG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TEAM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XEL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ZS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 1, fold 0, 12852 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ABNB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AZN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BMRN: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CELG: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CRWD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CTSH: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DDOG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FTNT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LCID: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ODFL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PANW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTWO: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ZS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 1, fold 1, 12837 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ABNB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA APP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AZN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BIDU: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BIIB: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DDOG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FOX: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FTNT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GEN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HAS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HON: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HSIC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA JBHT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LCID: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MYL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ODFL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PANW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROST: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WYNN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ZS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 1, fold 2, 12829 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ADI: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AEP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALXN: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA APP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CSGP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CTAS: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GEN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GFS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GOOGL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HAS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HSIC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA JBHT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MCHP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MYL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA NTES: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PEP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RIVN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TXN: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA UAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WBD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WTW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WYNN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 1, fold 3, 12838 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA APP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AVGO: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BMRN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CSGP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CTXS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA EXPE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GEN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GFS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HAS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HSIC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA JBHT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA KDP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LBTYA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LBTYK: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MNST: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA NTAP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PAYX: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RIVN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTWO: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA UAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ULTA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WBD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WDC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WTW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WYNN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 1, fold 4, 12726 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AZN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CRWD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DDOG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA EBAY: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FTNT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GOOGL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA KDP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LCID: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MRVL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MTCH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MYL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ODFL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA OKTA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ORLY: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PANW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PCAR: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PTON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHPG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TEAM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XEL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ZS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 5, fold 0, 12852 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ABNB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AZN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BMRN: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CELG: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CRWD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CTSH: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DDOG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FTNT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LCID: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ODFL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PANW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTWO: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ZS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 5, fold 1, 12829 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ABNB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA APP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AZN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BIDU: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BIIB: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DDOG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FOX: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FTNT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GEN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HAS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HON: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HSIC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA JBHT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LCID: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MYL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ODFL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PANW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROST: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WYNN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ZS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 5, fold 2, 12825 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ADI: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AEP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALXN: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA APP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CSGP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CTAS: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GEN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GFS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GOOGL: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HAS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HSIC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA JBHT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MCHP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MYL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA NTES: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PEP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RIVN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TXN: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA UAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WBD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WTW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WYNN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 5, fold 3, 12838 predictions
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ALNY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA APP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AVGO: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA AXON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BKR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA BMRN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CCEP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CSGP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA CTXS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DASH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA DISH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ENPH: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA EXPE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FANG: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA FER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GEN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA GFS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HAS: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HOLX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA HSIC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA INSM: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA JBHT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA KDP: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LBTYA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LBTYK: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LIN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA LITE: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MDB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MNST: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MPWR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA MSTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA NTAP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ON: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/statsmodels/tsa/statespace/mlemodel.py:737: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  mlefit = super().fit(
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PAYX: fit did not converge; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA PLTR: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA QRTEA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RIVN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA RKLB: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ROP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SHOP: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA SMCI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA STX: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TER: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TRI: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA TTWO: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA UAL: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA ULTA: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA VOD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WBD: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WDC: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WMT: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WTW: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA WYNN: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+/Users/nonladapream/nasdaq100-news-graph/src/models/baselines/base.py:58: UserWarning: ARIMA XRAY: insufficient history; using P(up)=0.5
+  model.fit(frame, fit_days, horizon)
+arima: horizon 5, fold 4, 12726 predictions
+Starting isolated baseline: logistic
+logistic: horizon 1, fold 0, 12852 predictions
+logistic: horizon 1, fold 1, 12837 predictions
+logistic: horizon 1, fold 2, 12829 predictions
+logistic: horizon 1, fold 3, 12838 predictions
+logistic: horizon 1, fold 4, 12726 predictions
+logistic: horizon 5, fold 0, 12852 predictions
+logistic: horizon 5, fold 1, 12829 predictions
+logistic: horizon 5, fold 2, 12825 predictions
+logistic: horizon 5, fold 3, 12838 predictions
+logistic: horizon 5, fold 4, 12726 predictions
+Starting isolated baseline: xgboost
+xgboost: horizon 1, fold 0, 12852 predictions
+xgboost: horizon 1, fold 1, 12837 predictions
+xgboost: horizon 1, fold 2, 12829 predictions
+xgboost: horizon 1, fold 3, 12838 predictions
+xgboost: horizon 1, fold 4, 12726 predictions
+xgboost: horizon 5, fold 0, 12852 predictions
+xgboost: horizon 5, fold 1, 12829 predictions
+xgboost: horizon 5, fold 2, 12825 predictions
+xgboost: horizon 5, fold 3, 12838 predictions
+xgboost: horizon 5, fold 4, 12726 predictions
+Wrote /Users/nonladapream/nasdaq100-news-graph/data/predictions/buy_and_hold.parquet and buy_and_hold_run.json
+Wrote /Users/nonladapream/nasdaq100-news-graph/data/predictions/arima.parquet and arima_run.json
+Wrote /Users/nonladapream/nasdaq100-news-graph/data/predictions/logistic.parquet and logistic_run.json
+Wrote /Users/nonladapream/nasdaq100-news-graph/data/predictions/xgboost.parquet and xgboost_run.json
+Buy-and-Hold portfolio evaluation uses buy_and_hold_benchmark (long-only), not ranked long/short.
