@@ -15,11 +15,13 @@ encoder:
 gat:
   heads: 4
   edge_types: [sector, comention, corr]
-train:
-  epochs: 30
-  batch_days: 32           # trading days per optimiser step, batched as one disjoint graph
+train:                     # 3.12 (#58): config T1 of results/tables/tuning_gat_lstm.md, shared by B5, B6, proposed
+  epochs: 40
+  batch_days: 8            # trading days per optimiser step, batched as one disjoint graph (56 steps per epoch)
   lr: 0.001
   weight_decay: 0.0001
   grad_clip: 1.0
   validation_fraction: 0.1     # last 10% of each training fold, after the embargo, for early stopping
-  early_stopping_patience: 5   # epochs without a lower validation loss
+  validate_every_steps: 14     # validation checks per epoch: 4
+  early_stopping_metric: within_day_auc   # the headline; validation loss is mostly market timing
+  early_stopping_patience: 4   # epochs without a higher validation within-day AUC

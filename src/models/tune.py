@@ -80,6 +80,11 @@ def report(runs: pd.DataFrame) -> str:
     from src.graph.comention_report import md
 
     t, winner = summarize(runs)
+    shown = t.reset_index(names="config").astype({"batch_days": int, "hidden": int, "heads": int,
+                                                  "best step (median)": int, "loss-optimal step (median)": int})
+    shown["lr"] = shown["lr"].map(lambda v: f"{v:.0e}")
+    shown["dropout"] = shown["dropout"].map(lambda v: f"{v:.1f}")
+    ranked = t["val within-day AUC (mean)"].sort_values(ascending=False)
     lines = [
         "# Fine-tuning pass, GAT + LSTM (task 3.12, #58)",
         "",
@@ -90,9 +95,12 @@ def report(runs: pd.DataFrame) -> str:
         "with the best validation within-day AUC; `loss-optimal step` is where validation loss bottomed, "
         "logged to measure how far the two criteria disagree.",
         "",
-        md(t.reset_index(names="config"), digits=4),
+        md(shown, index=False, digits=4),
         "",
-        f"**Chosen shared config: {winner}** (val within-day AUC {t.loc[winner, 'val within-day AUC (mean)']:.4f}).",
+        f"**Chosen shared config: {winner}** (val within-day AUC {t.loc[winner, 'val within-day AUC (mean)']:.4f}; "
+        f"runner-up {ranked.index[1]} {ranked.iloc[1]:.4f}, {ranked.iloc[0] - ranked.iloc[1]:+.4f}). Each "
+        "score is the best of many validation checks on the same ~50 days per fold, so it is optimistic, and "
+        "more so for configs that ran more checks; margins this small are within selection noise.",
         "",
         "Each horizon's own best, and how far the shared config sits from it:",
         "",
@@ -110,7 +118,9 @@ def report(runs: pd.DataFrame) -> str:
         f"- median gap {gap['gap'].median():+.0f} steps; |gap| > 1 epoch in "
         f"{(gap['gap'].abs() > gap['steps_per_epoch']).sum()}/{len(gap)} fold-horizons",
         f"- mean val within-day AUC: {gap['best_val_within_day_auc'].mean():.4f} at the AUC optimum vs "
-        f"{gap['val_within_day_auc_at_loss_optimum'].mean():.4f} at the loss optimum",
+        f"{gap['val_within_day_auc_at_loss_optimum'].mean():.4f} at the loss optimum. The first is a maximum "
+        "over the same checks, so it is higher by construction; the step gap is the evidence that the two "
+        "criteria pick different checkpoints, not the AUC difference.",
     ]
     return "\n".join(lines)
 
