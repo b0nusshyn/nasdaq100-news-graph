@@ -1,0 +1,330 @@
+{
+  "metric": "mcc",
+  "contrast": "gat_lstm minus lstm_news; unweighted mean across folds",
+  "primary_test": "exact two-sided fold sign-flip; conditional on joint sign invariance",
+  "secondary_interval": "95% paired whole-fold percentile bootstrap; descriptive, coverage uncertain",
+  "multiplicity": "Holm across horizons 1 and 5",
+  "family_alpha": 0.05,
+  "limitations": [
+    "Five folds: minimum two-sided sign-flip p-value 0.0625; limited power.",
+    "Overlapping training windows and five-day outcomes can violate fold independence/sign invariance.",
+    "MCC is a separate endpoint from headline within-day AUC; no test of that headline is made.",
+    "Threshold provenance, causal features and historical membership require upstream audit."
+  ],
+  "runs": {
+    "gat_lstm": {
+      "model": "gat_lstm",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [],
+      "git_commit": "dd811f1ca50ce748ef542fa5d1e9b8cd2247cd03",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:07:15+00:00"
+    },
+    "lstm_news": {
+      "model": "lstm_news",
+      "config": {
+        "model": "lstm_news",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": []
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [],
+      "git_commit": "dd811f1ca50ce748ef542fa5d1e9b8cd2247cd03",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:09:27+00:00"
+    }
+  },
+  "horizons": [
+    {
+      "horizon": 1,
+      "n_folds": 5,
+      "n_observations": 64082,
+      "folds": [
+        {
+          "fold": 0,
+          "n_observations": 12852,
+          "first_date": "2021-01-08",
+          "last_date": "2021-07-09",
+          "mcc_gat_lstm": 0.025179021703817726,
+          "mcc_lstm_news": 0.029907182084917328,
+          "difference": -0.004728160381099602,
+          "threshold_gat_lstm": 0.5519978433847428,
+          "threshold_lstm_news": 0.5174270808696747
+        },
+        {
+          "fold": 1,
+          "n_observations": 12837,
+          "first_date": "2021-07-12",
+          "last_date": "2022-01-06",
+          "mcc_gat_lstm": -0.005044752886599344,
+          "mcc_lstm_news": -0.013214309765595957,
+          "difference": 0.008169556878996613,
+          "threshold_gat_lstm": 0.5708041960000991,
+          "threshold_lstm_news": 0.5495068937540054
+        },
+        {
+          "fold": 2,
+          "n_observations": 12829,
+          "first_date": "2022-01-07",
+          "last_date": "2022-07-11",
+          "mcc_gat_lstm": 0.005378299673053266,
+          "mcc_lstm_news": -0.0008144805322810483,
+          "difference": 0.006192780205334315,
+          "threshold_gat_lstm": 0.5689095020294189,
+          "threshold_lstm_news": 0.5295380830764771
+        },
+        {
+          "fold": 3,
+          "n_observations": 12838,
+          "first_date": "2022-07-12",
+          "last_date": "2023-01-09",
+          "mcc_gat_lstm": -0.022290300136406045,
+          "mcc_lstm_news": -0.0026023989736455983,
+          "difference": -0.019687901162760448,
+          "threshold_gat_lstm": 0.4650004655122757,
+          "threshold_lstm_news": 0.4209334346652031
+        },
+        {
+          "fold": 4,
+          "n_observations": 12726,
+          "first_date": "2023-01-10",
+          "last_date": "2023-07-12",
+          "mcc_gat_lstm": 0.009016670719917422,
+          "mcc_lstm_news": 0.0024958485152867973,
+          "difference": 0.006520822204630624,
+          "threshold_gat_lstm": 0.3710271441936493,
+          "threshold_lstm_news": 0.5136952567100525
+        }
+      ],
+      "inference": {
+        "mean_difference": -0.0007065804509796998,
+        "ci_low": -0.011124461398076869,
+        "ci_high": 0.007114707674517757,
+        "p_value": 1.0,
+        "sign_assignments": 32,
+        "bootstrap_samples": 3125
+      },
+      "status": "estimable",
+      "p_value_holm": 1.0,
+      "reject_under_sign_flip_assumptions": false,
+      "interpretation": "No rejection at family alpha 0.05; this does not establish equivalence."
+    },
+    {
+      "horizon": 5,
+      "n_folds": 5,
+      "n_observations": 64070,
+      "folds": [
+        {
+          "fold": 0,
+          "n_observations": 12852,
+          "first_date": "2021-01-08",
+          "last_date": "2021-07-09",
+          "mcc_gat_lstm": -0.022249920824099285,
+          "mcc_lstm_news": 0.013152818326833834,
+          "difference": -0.035402739150933116,
+          "threshold_gat_lstm": 0.5421992778778076,
+          "threshold_lstm_news": 0.7909562081098557
+        },
+        {
+          "fold": 1,
+          "n_observations": 12829,
+          "first_date": "2021-07-12",
+          "last_date": "2022-01-06",
+          "mcc_gat_lstm": 0.04339781544831506,
+          "mcc_lstm_news": 0.014243227971008148,
+          "difference": 0.029154587477306912,
+          "threshold_gat_lstm": 0.6296310251951218,
+          "threshold_lstm_news": 0.5238561880588531
+        },
+        {
+          "fold": 2,
+          "n_observations": 12825,
+          "first_date": "2022-01-07",
+          "last_date": "2022-07-11",
+          "mcc_gat_lstm": -0.007208675412270483,
+          "mcc_lstm_news": -0.025135015093864656,
+          "difference": 0.017926339681594173,
+          "threshold_gat_lstm": 0.5233222258090973,
+          "threshold_lstm_news": 0.5061442518234253
+        },
+        {
+          "fold": 3,
+          "n_observations": 12838,
+          "first_date": "2022-07-12",
+          "last_date": "2023-01-09",
+          "mcc_gat_lstm": 0.005368629526376313,
+          "mcc_lstm_news": -0.007835065547396748,
+          "difference": 0.013203695073773062,
+          "threshold_gat_lstm": 0.4738061487674713,
+          "threshold_lstm_news": 0.44920932590961454
+        },
+        {
+          "fold": 4,
+          "n_observations": 12726,
+          "first_date": "2023-01-10",
+          "last_date": "2023-07-12",
+          "mcc_gat_lstm": 0.004262296789631526,
+          "mcc_lstm_news": 0.003727010822159294,
+          "difference": 0.0005352859674722316,
+          "threshold_gat_lstm": 0.4636690866947174,
+          "threshold_lstm_news": 0.4862983274459839
+        }
+      ],
+      "inference": {
+        "mean_difference": 0.005083433809842652,
+        "ci_low": -0.015960165461050647,
+        "ci_high": 0.021473109878315043,
+        "p_value": 0.6875,
+        "sign_assignments": 32,
+        "bootstrap_samples": 3125
+      },
+      "status": "estimable",
+      "p_value_holm": 1.0,
+      "reject_under_sign_flip_assumptions": false,
+      "interpretation": "No rejection at family alpha 0.05; this does not establish equivalence."
+    }
+  ],
+  "inputs": [
+    {
+      "path": "data/predictions/gat_lstm.parquet",
+      "sha256": "f7857f4667d086c7b6a485a51fb79c8978373745fc2ea09096cc9ddd27c0f6d5",
+      "name": "gat_lstm.parquet"
+    },
+    {
+      "path": "data/predictions/lstm_news.parquet",
+      "sha256": "f3cdf52997c37a0a1d1186e6ee37a86c72f8e32de3d8d53958bedd1e97801120",
+      "name": "lstm_news.parquet"
+    },
+    {
+      "path": "data/predictions/gat_lstm_run.json",
+      "sha256": "9e245b1780591d7b021d29e0a395540758a0e95e0719fea686e08b87bb11c296",
+      "name": "gat_lstm_run.json"
+    },
+    {
+      "path": "data/predictions/lstm_news_run.json",
+      "sha256": "567a201fd2fce7a1b5fe72dd9e282fd6bda81067f054a0fe2d851261fd2bbfc5",
+      "name": "lstm_news_run.json"
+    }
+  ],
+  "task": {
+    "id": "4.9",
+    "issue": 44,
+    "result_type": "production"
+  },
+  "generated_at_utc": "2026-11-18T13:08:32+00:00",
+  "provenance": {
+    "configuration_label": "T1",
+    "seed": 42,
+    "source_training_commit": "dd811f1ca50ce748ef542fa5d1e9b8cd2247cd03",
+    "official_run_documentation": [
+      "results/tables/tuning_gat_lstm.md",
+      "results/tables/ablations_3_9.md"
+    ],
+    "analysis_command": ".venv/bin/python -m src.eval.significance",
+    "analysis_source": {
+      "path": "src/eval/significance.py",
+      "sha256": "c50a0fc6cd3402278b8bbc93132b9933583ee1ce3793122499fc1bcf92d96334"
+    },
+    "source_training_input_hashes_recorded": false
+  },
+  "method_details": {
+    "confidence_level": 0.95,
+    "interval_method": "paired whole-fold percentile bootstrap; exhaustive enumeration",
+    "bootstrap_quantile_method": "inverted_cdf",
+    "intervals_are_simultaneous": false,
+    "randomness": "None; all 32 sign assignments and 3125 ordered whole-fold bootstrap samples are enumerated.",
+    "threshold_selection": "Each model uses its own validation-selected threshold from its associated run record.",
+    "interpretation_scope": "MCC for these T1 seed-42 runs; not a test of headline within-day AUC or across-seed stability.",
+    "bootstrap_caution": "Secondary descriptive intervals; small, potentially dependent fold samples can give poor coverage.",
+    "null_caution": "Non-rejection does not establish equivalence or absence of a graph effect."
+  }
+}
