@@ -69,12 +69,17 @@ The examples suggest that the direction of the graph's push does not follow the 
 | 1 day | 64,082 | +0.011 | 49.8% |
 | 5 days | 64,070 | -0.002 | 48.5% |
 
-There is no relation: agreement is at coin-flip level. This fits the other evidence:
-- **News features (3.9):** they add a small within-day AUC gain at 1 day (+0.004 to +0.005, positive in 3 of 3 seeds; `results/tables/ablations_3_9.md`).
-- **Comention edges (3.9):** they add nothing (-0.0009 with news features). These are the edges built from the news.
+There is no relation: agreement is at coin-flip level. Set against the 3.9 ablations at 1 day (`results/tables/ablations_3_9.md`, within-day AUC, three seeds):
+- **News features inside the graph model:** they help, +0.004 to +0.005, positive in 3 of 3 seeds.
+- **News features without a graph:** Baseline 6 minus Baseline 5 is +0.0016, positive in only 1 of 3 seeds.
+- **Comention edges:** they add nothing (-0.0009 with news features). These are the edges built from the news.
 - **Attention (3.10):** close to uniform (`results/attention/summary.md`).
 
-Together: news helps a company's own forecast, but the graph does not pass on the neighbours' headline sentiment in any direction-consistent way.
+News features help most when the graph is present, yet the graph's push does not follow the neighbours' headline sentiment. Whatever the news contributes there, it is not "good news at a neighbour, so up". Two candidates the alignment test cannot see:
+- the 64 embedding components, which carry more than the sentiment score;
+- interactions between news and price inside the LSTM state.
+
+**What the test measures:** it only detects a monotone, same-direction relation.
 
 ## How to read these traces (for the report)
 
