@@ -1,0 +1,810 @@
+{
+  "task": "4.10",
+  "analysis_source": {
+    "path": "src/eval/compare.py",
+    "sha256": "5efe2335af402791c7a09237eb1bc39fa35290dd07900687994fd43a59f6311c"
+  },
+  "complete_baseline_comparison": false,
+  "included_models": [
+    "arima",
+    "buy_and_hold",
+    "gat_lstm",
+    "gat_lstm_no_comention",
+    "gat_lstm_no_comention_no_news",
+    "gat_lstm_no_corr",
+    "gat_lstm_no_deal_arb",
+    "gat_lstm_no_news",
+    "gat_lstm_no_sector",
+    "logistic",
+    "lstm_news",
+    "lstm_price",
+    "xgboost"
+  ],
+  "missing_models": [],
+  "primary_metric": "within_day_auc",
+  "supporting_metric": "mcc",
+  "cost_bps_per_side": 5.0,
+  "long_short_quantile": 0.2,
+  "walk_forward": {
+    "period": {
+      "start": "2019-01-01",
+      "end": "2023-12-31"
+    },
+    "train_days": 504,
+    "test_days": 126,
+    "step_days": 126,
+    "expanding": false,
+    "embargo_days": 5
+  },
+  "sources": [
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/arima.parquet",
+      "sha256": "ff5cb73fcdede3502270282a894565a81ad5a789b8b5b540b2414806baf29100"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/arima_run.json",
+      "sha256": "146ec8f53404dc1a24d61b9e43964eb4383b3974d9f5568db8b8eb21dd645864"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/buy_and_hold.parquet",
+      "sha256": "b222742413f7169d69c63325ec389c18f3e1299162f6fb36eb5fab98b44a7e01"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/buy_and_hold_run.json",
+      "sha256": "6cf7d2257e03ded14feb1816b0c92f57fa89c0d4efcc30dabf6cffc394f754c5"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm.parquet",
+      "sha256": "f7857f4667d086c7b6a485a51fb79c8978373745fc2ea09096cc9ddd27c0f6d5"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_run.json",
+      "sha256": "9e245b1780591d7b021d29e0a395540758a0e95e0719fea686e08b87bb11c296"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_comention.parquet",
+      "sha256": "f7a2afa6650655aa0ff5310b17f8acd9058941d92cb156d589b6e730e302e39d"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_comention_run.json",
+      "sha256": "5d8a0c1743cbdbfffa5e80da18bf729b57434392f9f167aba68e0207313dd6b1"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_comention_no_news.parquet",
+      "sha256": "1acf2eb5e31784e75bfb2621010cc3d7f53e20900533eadb5b4cc756df426b8e"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_comention_no_news_run.json",
+      "sha256": "51534b3c8ae04da8b1200c050afa67422a1f83208f54b5d6ed7083cbb3747035"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_corr.parquet",
+      "sha256": "fc4759d5393b3b3bda8263188335a84c914f6fbd8b785b8053420b8c51e0f1e8"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_corr_run.json",
+      "sha256": "228b58ee597c95ff5f8fb90bb9621d4bf2f1c746d744da6b3ab3b34b949b01a2"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_deal_arb.parquet",
+      "sha256": "72a9e37d32c5d1064294e8c65306eb15ddc92bbadd95b70e8c76d78641856375"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_deal_arb_run.json",
+      "sha256": "061ef4ca33e7e9f5b5391debb61e2168930f21a607b6b2604a97ee02034fe9c4"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_news.parquet",
+      "sha256": "e791a527087056cc2002503a15af7d7c5d168436b8fddbe1e11e5590a7df776b"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_news_run.json",
+      "sha256": "1e6560dd68b0a438b4358300358fbf9c324d7355d647a572c26c15b1b7ac1e37"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_sector.parquet",
+      "sha256": "f9ed9c66bb7c35fc3dec1fe29f8e0274f0cc1f4ecba64910335afb52f804a858"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/gat_lstm_no_sector_run.json",
+      "sha256": "a2677fc6894181284dc4fe76e3e16ca790d87baa97da8754d3f136a3cae7f2d5"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/logistic.parquet",
+      "sha256": "55c437eb5469f1de056701a710b0aa4c9a9ea0847aceabc271b061ac1d53228a"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/logistic_run.json",
+      "sha256": "771048846c72cbdae136c50f39d22c35b7e748573441441096f3fbc2fff197f8"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/lstm_news.parquet",
+      "sha256": "f3cdf52997c37a0a1d1186e6ee37a86c72f8e32de3d8d53958bedd1e97801120"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/lstm_news_run.json",
+      "sha256": "567a201fd2fce7a1b5fe72dd9e282fd6bda81067f054a0fe2d851261fd2bbfc5"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/lstm_price.parquet",
+      "sha256": "245d969a088dc2e92094e1b6069618a195c48af7a16a2ddb0156e6c474a5be71"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/lstm_price_run.json",
+      "sha256": "afa49c690beb2ed09025086afce6f02ed1cf5ca1759a0bae9bd445a3dd92975b"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/xgboost.parquet",
+      "sha256": "c5b837ed7981f5db57b8cb1ae0e0729cc1731f831bf372a64a6d673d018f5658"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/predictions/xgboost_run.json",
+      "sha256": "ffda43240fe8864542d4aa461b8ffbff68fa6983fe038c7a9338ea2fd089d504"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/prices.parquet",
+      "sha256": "fc6d3159a38f7904689c5e4362432e1a56baa2d93ac47a603158cf207af130d6"
+    },
+    {
+      "path": "/Users/nonladapream/nasdaq100-news-graph/data/labels.parquet",
+      "sha256": "e8655d14bbd22c1dd5faa8cca5eed690f41242fe4a3fb1f668e5a1788fe8b16a"
+    }
+  ],
+  "runs": {
+    "arima": {
+      "model": "arima",
+      "config": {
+        "model": "arima",
+        "train": {
+          "validation_fraction": 0.1
+        },
+        "horizons": [
+          1,
+          5
+        ],
+        "walk_forward": {
+          "period": {
+            "start": "2019-01-01",
+            "end": "2023-12-31"
+          },
+          "train_days": 504,
+          "test_days": 126,
+          "step_days": 126,
+          "expanding": false,
+          "embargo_days": 5
+        }
+      },
+      "ablate": [],
+      "git_commit": "954aefc6d6c6fc569348fea71a7924a67fb58204",
+      "git_dirty": true,
+      "written_at_utc": "2026-11-18T14:03:58+00:00"
+    },
+    "buy_and_hold": {
+      "model": "buy_and_hold",
+      "config": {
+        "model": "buy_and_hold",
+        "train": {
+          "validation_fraction": 0.1
+        },
+        "horizons": [
+          1,
+          5
+        ],
+        "walk_forward": {
+          "period": {
+            "start": "2019-01-01",
+            "end": "2023-12-31"
+          },
+          "train_days": 504,
+          "test_days": 126,
+          "step_days": 126,
+          "expanding": false,
+          "embargo_days": 5
+        }
+      },
+      "ablate": [],
+      "git_commit": "954aefc6d6c6fc569348fea71a7924a67fb58204",
+      "git_dirty": true,
+      "written_at_utc": "2026-11-18T14:03:58+00:00"
+    },
+    "gat_lstm": {
+      "model": "gat_lstm",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [],
+      "git_commit": "dd811f1ca50ce748ef542fa5d1e9b8cd2247cd03",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:07:15+00:00"
+    },
+    "gat_lstm_no_comention": {
+      "model": "gat_lstm_no_comention",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [
+        "comention"
+      ],
+      "git_commit": "b5a88ed9a0e58c6ff2e8f878c970aaa6481760b8",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:49:10+00:00"
+    },
+    "gat_lstm_no_comention_no_news": {
+      "model": "gat_lstm_no_comention_no_news",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [
+        "comention",
+        "news"
+      ],
+      "git_commit": "b5a88ed9a0e58c6ff2e8f878c970aaa6481760b8",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T07:03:02+00:00"
+    },
+    "gat_lstm_no_corr": {
+      "model": "gat_lstm_no_corr",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [
+        "corr"
+      ],
+      "git_commit": "b5a88ed9a0e58c6ff2e8f878c970aaa6481760b8",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:52:28+00:00"
+    },
+    "gat_lstm_no_deal_arb": {
+      "model": "gat_lstm_no_deal_arb",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [
+        "deal_arb"
+      ],
+      "git_commit": "b5a88ed9a0e58c6ff2e8f878c970aaa6481760b8",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:56:46+00:00"
+    },
+    "gat_lstm_no_news": {
+      "model": "gat_lstm_no_news",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [
+        "news"
+      ],
+      "git_commit": "b5a88ed9a0e58c6ff2e8f878c970aaa6481760b8",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T07:01:06+00:00"
+    },
+    "gat_lstm_no_sector": {
+      "model": "gat_lstm_no_sector",
+      "config": {
+        "model": "gat_lstm",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": [
+            "sector",
+            "comention",
+            "corr"
+          ]
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [
+        "sector"
+      ],
+      "git_commit": "b5a88ed9a0e58c6ff2e8f878c970aaa6481760b8",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:45:08+00:00"
+    },
+    "logistic": {
+      "model": "logistic",
+      "config": {
+        "model": "logistic",
+        "train": {
+          "validation_fraction": 0.1
+        },
+        "horizons": [
+          1,
+          5
+        ],
+        "walk_forward": {
+          "period": {
+            "start": "2019-01-01",
+            "end": "2023-12-31"
+          },
+          "train_days": 504,
+          "test_days": 126,
+          "step_days": 126,
+          "expanding": false,
+          "embargo_days": 5
+        }
+      },
+      "ablate": [],
+      "git_commit": "954aefc6d6c6fc569348fea71a7924a67fb58204",
+      "git_dirty": true,
+      "written_at_utc": "2026-11-18T14:03:58+00:00"
+    },
+    "lstm_news": {
+      "model": "lstm_news",
+      "config": {
+        "model": "lstm_news",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [
+            "has_news",
+            "sentiment",
+            "confidence"
+          ],
+          "embeddings": true,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": []
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [],
+      "git_commit": "dd811f1ca50ce748ef542fa5d1e9b8cd2247cd03",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:09:27+00:00"
+    },
+    "lstm_price": {
+      "model": "lstm_price",
+      "config": {
+        "model": "lstm_price",
+        "seed": 42,
+        "horizons": [
+          1,
+          5
+        ],
+        "window_days": 20,
+        "features": {
+          "price": [
+            "ret_1d",
+            "volatility_20d",
+            "rsi_14",
+            "macd",
+            "macd_signal",
+            "volume_z_20d"
+          ],
+          "news": [],
+          "embeddings": false,
+          "embedding_dim": 64
+        },
+        "encoder": {
+          "hidden": 64,
+          "layers": 1,
+          "dropout": 0.1
+        },
+        "gat": {
+          "heads": 4,
+          "edge_types": []
+        },
+        "train": {
+          "epochs": 40,
+          "batch_days": 8,
+          "lr": 0.001,
+          "weight_decay": 0.0001,
+          "grad_clip": 1.0,
+          "validation_fraction": 0.1,
+          "validate_every_steps": 14,
+          "early_stopping_metric": "within_day_auc",
+          "early_stopping_patience": 4
+        }
+      },
+      "ablate": [],
+      "git_commit": "dd811f1ca50ce748ef542fa5d1e9b8cd2247cd03",
+      "git_dirty": false,
+      "written_at_utc": "2026-11-18T06:10:56+00:00"
+    },
+    "xgboost": {
+      "model": "xgboost",
+      "config": {
+        "model": "xgboost",
+        "train": {
+          "validation_fraction": 0.1
+        },
+        "horizons": [
+          1,
+          5
+        ],
+        "walk_forward": {
+          "period": {
+            "start": "2019-01-01",
+            "end": "2023-12-31"
+          },
+          "train_days": 504,
+          "test_days": 126,
+          "step_days": 126,
+          "expanding": false,
+          "embargo_days": 5
+        }
+      },
+      "ablate": [],
+      "git_commit": "954aefc6d6c6fc569348fea71a7924a67fb58204",
+      "git_dirty": true,
+      "written_at_utc": "2026-11-18T14:03:58+00:00"
+    }
+  },
+  "significance_artifact": {
+    "path": "/Users/nonladapream/nasdaq100-news-graph/results/tables/significance_mcc.json",
+    "sha256": "4061339600115472529315134757813225d3620ff15b4d13c9f575a5483ad8f2"
+  },
+  "legacy_label_mapping_verified": true,
+  "unavailable_benchmarks": [
+    "Buy-and-Hold h=1, fold=-1: holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds",
+    "Buy-and-Hold h=1, fold=1: holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds",
+    "Buy-and-Hold h=1, fold=2: holdings on 2022-02-14 require prices and membership for ['XLNX']; no zero-return filling or assumed liquidation proceeds",
+    "Buy-and-Hold h=5, fold=-1: holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds",
+    "Buy-and-Hold h=5, fold=1: holdings on 2021-07-21 require prices and membership for ['ALXN']; no zero-return filling or assumed liquidation proceeds",
+    "Buy-and-Hold h=5, fold=2: holdings on 2022-02-14 require prices and membership for ['XLNX']; no zero-return filling or assumed liquidation proceeds"
+  ],
+  "notes": [
+    "Missing predictions are not generated. Available malformed or unmatched artifacts fail validation.",
+    "Main T1 runs and ablations with different commits are labelled separately; no matched-run claim across commits.",
+    "Classification summary is unweighted fold means, not pooled scores; any undefined fold makes its mean NA.",
+    "Within-day AUC excludes single-class dates only for that undefined daily metric; eligible day counts are recorded.",
+    "Portfolio summary and equity use one continuous backtest per model/horizon, not averages of fold portfolios.",
+    "Per-fold long/short diagnostics restart independently; exits may extend beyond the last fold signal.",
+    "5d holds are non-overlapping globally; top/bottom 20%, half capital each side, round-trip cost on each trade.",
+    "Turnover follows shared backtest units: sum of round-trip gross exposure, not a daily average.",
+    "Buy-and-Hold is a separate long-only initial-member basket; removals become cash, no later entrants.",
+    "Long-only fold windows end on the final fold session; the continuous window ends at the strategy's final exit.",
+    "Idealized same-close execution; no slippage, borrow fees, liquidity constraints or delisting recovery assumptions.",
+    "NA denotes unavailable/undefined, never zero. Graphics show observed axis ranges and do not establish significance.",
+    "Training-input hashes are not available in the supplied modelling records; evaluation input hashes are recorded here."
+  ],
+  "graphics_backend": "Rscript (R) version 4.4.2 (2024-10-31)"
+}
