@@ -93,10 +93,13 @@ def _chunks(days: np.ndarray, size: int):
     return [days[i: i + size] for i in range(0, len(days), size)]
 
 
-def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, ablate=(), log=print):
+def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, ablate=(), predict_test=True,
+               log=print):
     """Fit one model on `fold`'s training days and predict its test days.
 
-    Returns (predictions in SCHEMA.md `predictions` shape, info dict with timing and epochs).
+    Returns (predictions in SCHEMA.md `predictions` shape, info dict with timing, epochs and the
+    validation scores). `predict_test=False` (tuning, #58) never touches the test window and
+    returns `None` for the predictions.
     """
     import torch
 
@@ -134,15 +137,41 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
         logits, _ = model(b["x"], b["edge_index"], b["edge_type"], b["edge_weight"])
         return logits
 
-    def val_loss() -> float:
-        model.eval()
-        with torch.no_grad():
-            total = sum(float(loss_fn(run(b)[b["target"]], b["y"][b["target"]])) for b in val_batches)
-        return total / sum(int(b["target"].sum()) for b in val_batches)
+    from src.models.ladder_report import within_day_auc
 
-    best, best_state, stale, history = math.inf, None, 0, []
-    for epoch in range(tr["epochs"]):
+    def validate() -> tuple[float, float]:
+        """Validation (loss, within-day AUC). Loss also rewards each day's overall level (market
+        timing); within-day AUC scores only how the day's tickers are ranked: the headline."""
+        model.eval()
+        total, n, parts = 0.0, 0, []
+        with torch.no_grad():
+            for b in val_batches:
+                logits, y = run(b)[b["target"]], b["y"][b["target"]]
+                total += float(loss_fn(logits, y))
+                n += int(b["target"].sum())
+                parts.append(pd.DataFrame({"date": b["at"][b["target"].numpy()][:, 0],
+                                           "p_up": torch.sigmoid(logits).numpy(), "y_true": y.numpy()}))
         model.train()
+        return total / n, within_day_auc(pd.concat(parts, ignore_index=True))
+
+    # Early stopping (#58): checks every `validate_every_steps` optimiser steps (default once per
+    # epoch) and keeps the checkpoint with the best `early_stopping_metric`; the patience is in
+    # epochs. The other metric's optimum is logged too, to measure how far apart they are.
+    stop_metric = tr.get("early_stopping_metric", "within_day_auc")
+    if stop_metric not in ("within_day_auc", "loss"):
+        raise ValueError(f"early_stopping_metric must be within_day_auc or loss, not {stop_metric!r}")
+    steps_per_epoch = math.ceil(len(fit_idx) / tr["batch_days"])
+    every = min(tr.get("validate_every_steps") or steps_per_epoch, steps_per_epoch)
+    patience = math.ceil(tr["early_stopping_patience"] * steps_per_epoch / every)
+
+    def score(loss: float, wd: float) -> float:  # higher is better; NaN never wins
+        s = wd if stop_metric == "within_day_auc" else -loss
+        return -math.inf if math.isnan(s) else s
+
+    best, best_state, stale, history, step, epoch = -math.inf, None, 0, [], 0, 0
+    model.train()
+    while epoch < tr["epochs"] and (not history or stale < patience):
+        epoch += 1
         for chunk in _chunks(rng.permutation(fit_idx), tr["batch_days"]):
             b = make_batch(chunk, panel, features, graph, horizon)
             loss = loss_fn(run(b)[b["target"]], b["y"][b["target"]]) / b["target"].sum().clamp(min=1)
@@ -151,17 +180,22 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
             if tr.get("grad_clip"):
                 torch.nn.utils.clip_grad_norm_(model.parameters(), tr["grad_clip"])
             opt.step()
-        v = val_loss()
-        history.append(v)
-        if v < best - 1e-6:
-            best, stale = v, 0
-            best_state = {k: t.detach().clone() for k, t in model.state_dict().items()}
-        else:
-            stale += 1
-        log(f"  h={horizon} fold {fold.index} epoch {epoch + 1}: val loss {v:.4f}")
-        if stale >= tr["early_stopping_patience"]:
-            break
+            step += 1
+            if step % every:
+                continue
+            v, wd = validate()
+            history.append({"step": step, "loss": v, "within_day_auc": wd})
+            if best_state is None or score(v, wd) > best + 1e-6:
+                best, stale = score(v, wd), 0
+                best_state = {k: t.detach().clone() for k, t in model.state_dict().items()}
+            else:
+                stale += 1
+            log(f"  h={horizon} fold {fold.index} epoch {epoch} step {step}: val loss {v:.4f}, within-day AUC {wd:.3f}")
+            if stale >= patience:
+                break
     model.load_state_dict(best_state)
+    chosen = max(history, key=lambda r: score(r["loss"], r["within_day_auc"]))
+    loss_opt = min(history, key=lambda r: r["loss"])
 
     model.eval()
 
@@ -181,30 +215,47 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     # The operating threshold is chosen on the validation days, never the test window.
     val = predict(val_idx)
     threshold = choose_threshold(val["y_true"].to_numpy(), val["p_up"].to_numpy())
-    name = model_name(ablate, cfg.get("model", MODEL))
-    preds = predict(test_idx).assign(model=name, horizon=horizon, fold=fold.index)
+    import warnings
+
+    from src.eval.metrics import classification_metrics
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)  # undefined MCC is reported as NaN
+        val_mcc = classification_metrics(val["y_true"].to_numpy(), val["p_up"].to_numpy(), threshold=threshold)["mcc"]
     info = {
         "fold": fold.index, "horizon": horizon, "seconds": time.perf_counter() - start,
-        "epochs": len(history), "best_epoch": int(np.argmin(history)) + 1, "best_val_loss": best,
-        "threshold": threshold, "val_base_rate": float(val["y_true"].mean()),
-        "fit_days": len(fit_idx), "val_days": len(val_idx), "test_rows": len(preds),
+        "stop_metric": stop_metric, "epochs": epoch, "steps": step, "steps_per_epoch": steps_per_epoch,
+        "checks": len(history), "best_step": chosen["step"], "best_epoch": round(chosen["step"] / steps_per_epoch, 2),
+        "best_val_within_day_auc": chosen["within_day_auc"], "val_loss_at_best": chosen["loss"],
+        "best_val_loss": chosen["loss"],  # kept for older run records; same as val_loss_at_best
+        "loss_optimal_step": loss_opt["step"], "val_within_day_auc_at_loss_optimum": loss_opt["within_day_auc"],
+        "min_val_loss": loss_opt["loss"], "threshold": threshold, "val_base_rate": float(val["y_true"].mean()),
+        "val_mcc": val_mcc, "fit_days": len(fit_idx), "val_days": len(val_idx),
         "features": len(features.names), "edges_per_day": len(graph["src"]),
     }
+    if not predict_test:
+        return None, info
+    name = model_name(ablate, cfg.get("model", MODEL))
+    preds = predict(test_idx).assign(model=name, horizon=horizon, fold=fold.index)
+    info["test_rows"] = len(preds)
     return preds, info
 
 
 def fold_report(preds: pd.DataFrame, info: dict) -> dict:
-    """Test metrics for one fold-horizon: AUC (no threshold) first, then accuracy, F1 and MCC at
-    the validation-chosen threshold, with the base rate that always predicting "up" scores."""
+    """Test metrics for one fold-horizon: within-day AUC (the headline, stock selection) and fold
+    AUC (no threshold) first, then accuracy, F1 and MCC at the validation-chosen threshold, with
+    the base rate that always predicting "up" scores."""
     import warnings
 
     from src.eval.metrics import classification_metrics
+    from src.models.ladder_report import within_day_auc
 
     y, p = preds["y_true"].to_numpy(), preds["p_up"].to_numpy()
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)  # undefined MCC is reported as NaN
         m = classification_metrics(y, p, threshold=info["threshold"])
-    return {"auc": m["auc"], "threshold": info["threshold"], "accuracy": m["accuracy"], "base_rate": float(y.mean()),
+    return {"within_day_auc": within_day_auc(preds), "auc": m["auc"], "threshold": info["threshold"],
+            "accuracy": m["accuracy"], "base_rate": float(y.mean()),
             "f1": m["f1"], "mcc": m["mcc"], "share_predicted_up": float((p >= info["threshold"]).mean())}
 
 
@@ -250,7 +301,8 @@ def main() -> None:
             preds, info = train_fold(panel, edges, fold, h, cfg, ablate=tuple(args.ablate))
             info["test"] = m = fold_report(preds, info)
             print(f"WALL CLOCK h={h} fold {fold.index}: {info['seconds'] / 60:.1f} min "
-                  f"({info['epochs']} epochs, best {info['best_epoch']}) | AUC {m['auc']:.3f} | "
+                  f"({info['epochs']} epochs, best {info['best_epoch']}) | within-day AUC {m['within_day_auc']:.3f}, "
+                  f"fold AUC {m['auc']:.3f} | "
                   f"threshold {m['threshold']:.3f} (validation): acc {m['accuracy']:.3f} vs base rate "
                   f"{m['base_rate']:.3f}, MCC {m['mcc']:.3f}, F1 {m['f1']:.3f}, "
                   f"{m['share_predicted_up']:.0%} predicted up | {info['test_rows']} test rows")

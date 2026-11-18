@@ -104,3 +104,11 @@ def test_cross_sectional_section_states_every_model_against_chance():
         for m in LADDER:
             assert any(line.startswith(f"{h}d {LABEL[m]}:") and "above 0.5 in" in line for line in lines)
     assert "## Cross-sectional signal" in build(synthetic(HOLDS))
+
+
+def test_the_preregistered_flag_keeps_its_wording_and_registration_date():
+    # Registered 16 Nov 2026, before the full run. Rewording it after the data came in would be a
+    # post-hoc adjustment: if this test fails, the check itself was edited.
+    text = build(synthetic(FLAT))
+    assert "Propagation takes time: the graph step should be near zero at 1 day and positive at 5 days." in text
+    assert "Registered 16 Nov 2026" in text
