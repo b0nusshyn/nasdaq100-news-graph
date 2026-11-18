@@ -53,23 +53,66 @@ class GATLSTM(nn.Module):
     def has_graph(self) -> bool:
         return bool(self.edge_types)
 
+    def _check(self, edge_type: torch.Tensor) -> None:
+        if ((edge_type < 0) | (edge_type >= len(self.edge_types))).any():
+            raise ValueError(f"edge type index outside this model's edge types {self.edge_types}")
+
+    def _messages(self, h, edge_index, edge_type, edge_weight) -> tuple[list[torch.Tensor], torch.Tensor]:
+        """Each edge type's GAT output [N, hidden], and attention [E, heads] in input edge order."""
+        attention = h.new_zeros(edge_index.shape[1], self.heads)
+        outs = []
+        for t, conv in enumerate(self.convs):
+            mask = edge_type == t
+            out, (_, alpha) = conv(h, edge_index[:, mask], edge_attr=edge_weight[mask].unsqueeze(-1),
+                                   return_attention_weights=True)
+            outs.append(out)
+            attention[mask] = alpha
+        return outs, attention
+
+    def _logits(self, h: torch.Tensor, g: torch.Tensor) -> torch.Tensor:
+        return self.head(torch.cat([h, F.elu(g)], dim=-1)).squeeze(-1)
+
+    @staticmethod
+    def _sum(h: torch.Tensor, outs: list[torch.Tensor]) -> torch.Tensor:
+        g = torch.zeros_like(h)
+        for out in outs:
+            g = g + out
+        return g
+
     def forward(
         self, x: torch.Tensor, edge_index: torch.Tensor, edge_type: torch.Tensor, edge_weight: torch.Tensor
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """x [N, T, F]; edge_index [2, E] (src, dst); edge_type [E] indexes `edge_types`;
         edge_weight [E]. Return (logits [N], attention [E, heads] in input edge order)."""
-        if ((edge_type < 0) | (edge_type >= len(self.edge_types))).any():
-            raise ValueError(f"edge type index outside this model's edge types {self.edge_types}")
+        self._check(edge_type)
         h = self.encoder(x)
-        attention = h.new_zeros(edge_index.shape[1], self.heads)
         if not self.has_graph:
-            return self.head(h).squeeze(-1), attention
-        g = torch.zeros_like(h)
-        for t, conv in enumerate(self.convs):
-            mask = edge_type == t
-            out, (_, alpha) = conv(h, edge_index[:, mask], edge_attr=edge_weight[mask].unsqueeze(-1),
-                                   return_attention_weights=True)
-            g = g + out
-            attention[mask] = alpha
-        logits = self.head(torch.cat([h, F.elu(g)], dim=-1)).squeeze(-1)
-        return logits, attention
+            return self.head(h).squeeze(-1), h.new_zeros(edge_index.shape[1], self.heads)
+        outs, attention = self._messages(h, edge_index, edge_type, edge_weight)
+        return self._logits(h, self._sum(h, outs)), attention
+
+    def explain(
+        self, x: torch.Tensor, edge_index: torch.Tensor, edge_type: torch.Tensor, edge_weight: torch.Tensor
+    ) -> dict[str, torch.Tensor]:
+        """The forward pass plus how much the graph moved each logit (#42).
+
+        Attention is a softmax over a node's incoming edges of one type, so it sums to one whether
+        or not the graph changed the prediction: it says *which* neighbour, not *how much*.
+        - `logits`: identical to `forward`.
+        - `logits_no_graph`: the same model with the graph signal `g` set to zero, i.e. the dense
+          layer sees `[h ; 0]`. This is the model with its GAT branch removed, not Baseline 6
+          (which has its own trained head).
+        - `drop_<type>`: the logit with that edge type's message removed from `g` and the others
+          kept. ELU makes the types non-additive, so these need not sum to the overall change.
+        """
+        self._check(edge_type)
+        if not self.has_graph:
+            raise ValueError("explain needs a model with a graph")
+        h = self.encoder(x)
+        outs, attention = self._messages(h, edge_index, edge_type, edge_weight)
+        g = self._sum(h, outs)
+        res = {"logits": self._logits(h, g), "logits_no_graph": self._logits(h, torch.zeros_like(h)),
+               "attention": attention}
+        for t, name in enumerate(self.edge_types):
+            res[f"drop_{name}"] = self._logits(h, self._sum(h, outs[:t] + outs[t + 1:]))
+        return res
