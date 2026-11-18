@@ -148,6 +148,30 @@ def test_a_fold_trains_and_predicts_exactly_the_shared_row_set(fixture_inputs, t
     assert len(read_predictions("gat_lstm")) == len(preds)
 
 
+def test_early_stopping_checks_within_day_auc_several_times_per_epoch_and_logs_the_loss_optimum(fixture_inputs):
+    # 3.12 (#58): stop on the headline metric (validation within-day AUC), validate more often
+    # than once per epoch, and log where the validation-loss optimum was, to measure divergence.
+    from src.models.train import train_fold
+
+    panel, edges, folds = fixture_inputs
+    cfg = {**SMALL, "train": {**SMALL["train"], "validate_every_steps": 1}}
+    _, info = train_fold(panel, edges, folds[0], 1, cfg, log=lambda *_: None)
+    assert info["stop_metric"] == "within_day_auc"
+    assert info["checks"] == info["steps"] > info["epochs"]  # one check per optimiser step
+    assert 1 <= info["best_step"] <= info["steps"] and 1 <= info["loss_optimal_step"] <= info["steps"]
+    for k in ("best_val_within_day_auc", "val_within_day_auc_at_loss_optimum", "val_loss_at_best", "val_mcc"):
+        assert k in info
+    assert info["best_val_within_day_auc"] >= info["val_within_day_auc_at_loss_optimum"]
+
+
+def test_tuning_can_skip_the_test_window_entirely(fixture_inputs):
+    from src.models.train import train_fold
+
+    panel, edges, folds = fixture_inputs
+    preds, info = train_fold(panel, edges, folds[0], 1, SMALL, predict_test=False, log=lambda *_: None)
+    assert preds is None and "test_rows" not in info
+
+
 def test_ablations_drop_news_features_and_edge_types(fixture_inputs):
     from src.models.train import train_fold
 
@@ -174,18 +198,20 @@ def test_edge_of_a_type_the_model_lacks_is_an_error():
         m(torch.randn(N, T, F), *graph())
 
 
-def test_fold_report_leads_with_auc_and_reports_the_base_rate_beside_accuracy():
+def test_fold_report_leads_with_within_day_auc_and_reports_the_base_rate_beside_accuracy():
     import pandas as pd
 
     from src.models.train import fold_report
 
     # Every probability is above 0.5 but the ranking is perfect: AUC 1, and a threshold chosen
-    # inside the range of predictions gives a real MCC instead of an all-up NaN.
-    preds = pd.DataFrame({"y_true": [0, 0, 1, 1, 1], "p_up": [0.55, 0.56, 0.60, 0.61, 0.62]})
+    # inside the range of predictions gives a real MCC instead of an all-up NaN. One day, so the
+    # within-day AUC (the headline since 18 Nov) is the same ranking.
+    preds = pd.DataFrame({"date": pd.Timestamp("2021-01-04"), "y_true": [0, 0, 1, 1, 1],
+                          "p_up": [0.55, 0.56, 0.60, 0.61, 0.62]})
     at_half = fold_report(preds, {"threshold": 0.5})
     assert at_half["share_predicted_up"] == 1 and at_half["accuracy"] == at_half["base_rate"] == 0.6
     chosen = fold_report(preds, {"threshold": 0.60})
-    assert list(chosen)[0] == "auc" and chosen["auc"] == 1.0
+    assert list(chosen)[:2] == ["within_day_auc", "auc"] and chosen["within_day_auc"] == chosen["auc"] == 1.0
     assert chosen["mcc"] == 1.0 and chosen["accuracy"] == 1.0
 
 
