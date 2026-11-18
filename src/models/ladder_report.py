@@ -9,7 +9,11 @@ explicit **horizon-pattern** flag: propagation takes time, so the graph should a
     python -m src.models.ladder_report --output results/tables
     python -m src.models.ladder_report --seeds 43 44 --classical   # seed spread; baselines 1-4 in memory
 
-AUC is the headline (no threshold). Fold numbers come from one seed unless `--seeds` is given.
+Within-day AUC is the headline: the research question is cross-sectional (does news about one
+firm predict the firms linked to it?), and within-day AUC scores only how a day's tickers are
+ranked against each other. Fold AUC, which also rewards calling whole days up or down, and the
+market-timing AUC are diagnostics. No threshold is involved. Fold numbers come from one seed
+unless `--seeds` is given.
 """
 
 from __future__ import annotations
@@ -103,6 +107,20 @@ def horizon_pattern(s: pd.DataFrame) -> list[str]:
     return lines
 
 
+def cross_sectional(w: pd.DataFrame) -> list[str]:
+    """Every model's within-day AUC against chance (0.5), per horizon: mean over folds, folds
+    above 0.5, and the fold range. A measurement, not a significance test (that is 4.9)."""
+    folds = w[~w.index.get_level_values("fold").isin(["mean", "pooled"])]
+    lines = []
+    for h in sorted(folds.index.get_level_values("horizon").unique()):
+        fh = folds.xs(h, level="horizon")
+        for m in fh.columns:
+            v = fh[m]
+            lines.append(f"{h}d {LABEL.get(m, m)}: mean {v.mean():.3f}, above 0.5 in {(v > 0.5).sum()}/{len(v)} "
+                         f"folds, range {v.min():.3f} to {v.max():.3f}")
+    return lines
+
+
 def _md(df: pd.DataFrame) -> str:
     from src.graph.comention_report import md
 
@@ -174,26 +192,34 @@ def build(preds: dict[str, pd.DataFrame], seed_runs: dict[int, dict] | None = No
         "## Horizon pattern",
         "",
         "Propagation takes time: the graph step should be near zero at 1 day and positive at 5 days. "
-        "Checked on two scores. **Fold AUC** ranks every test row of a fold together, so a model also "
-        "scores by calling whole days up or down (market timing). **Within-day AUC** ranks only the "
-        "tickers of one day, then averages over days: stock selection, what a daily watch list does.",
+        "Checked on two scores. **Within-day AUC** (the headline) ranks only the tickers of one day, then "
+        "averages over days: stock selection, the cross-sectional question the graph is meant to answer. "
+        "**Fold AUC** (a diagnostic) ranks every test row of a fold together, so a model also scores by "
+        "calling whole days up or down (market timing), which the graph has nothing to do with.",
         "",
-        "**Fold AUC**",
+        "**Within-day AUC (headline: stock selection)**",
+        "",
+        *[f"- {line}" for line in horizon_pattern(sw)],
+        "",
+        "**Fold AUC (diagnostic: selection plus timing)**",
         "",
         *[f"- {line}" for line in horizon_pattern(s)],
         "",
-        "**Within-day AUC (stock selection)**",
+        "## Cross-sectional signal",
         "",
-        *[f"- {line}" for line in horizon_pattern(sw)],
+        "Within-day AUC of every model against chance (0.5). If Baseline 6 sits at chance too, news adds no "
+        "cross-sectional signal with or without the graph.",
+        "",
+        *[f"- {line}" for line in cross_sectional(w)],
     ]
     if seed_runs:
         out += ["", "### Across seeds", ""]
         for seed, sp in sorted(seed_runs.items()):
-            out += [f"- seed {seed}: fold AUC {horizon_pattern(steps(auc_table(sp)))[-1][9:]}; within-day AUC "
-                    f"{horizon_pattern(steps(auc_table(sp, 'within_day')))[-1][9:]}"]
+            out += [f"- seed {seed}: within-day AUC {horizon_pattern(steps(auc_table(sp, 'within_day')))[-1][9:]}; "
+                    f"fold AUC {horizon_pattern(steps(auc_table(sp)))[-1][9:]}"]
     out += [
         "", "## Within-day AUC (stock selection)", "", _md(w.rename(columns=LABEL)), "", _md(sw),
-        "", "## Fold AUC", "", _md(t.rename(columns=LABEL)), "", _md(s),
+        "", "## Fold AUC (diagnostic)", "", _md(t.rename(columns=LABEL)), "", _md(s),
         "", "## Market timing", "",
         "AUC of each day's mean P(up) for whether most tickers rose that day. Overlapping 5-day labels give "
         "about 25 independent periods per 126-day fold, so these numbers are noisy.", "",

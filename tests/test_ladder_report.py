@@ -89,3 +89,18 @@ def test_within_day_auc_ignores_market_timing():
                       columns=["date", "ticker", "y_true", "p_up"])
     assert auc(df["y_true"], df["p_up"]) > 0.7 and timing_auc(df) > 0.95
     assert np.isnan(within_day_auc(df)) or within_day_auc(df) == pytest.approx(0.5)
+
+
+def test_within_day_is_the_headline_and_fold_auc_a_diagnostic():
+    text = build(synthetic(HOLDS))
+    assert text.index("Within-day AUC (headline") < text.index("Fold AUC (diagnostic")
+
+
+def test_cross_sectional_section_states_every_model_against_chance():
+    from src.models.ladder_report import LABEL, LADDER, cross_sectional
+
+    lines = cross_sectional(auc_table(synthetic(HOLDS), "within_day"))
+    for h in (1, 5):
+        for m in LADDER:
+            assert any(line.startswith(f"{h}d {LABEL[m]}:") and "above 0.5 in" in line for line in lines)
+    assert "## Cross-sectional signal" in build(synthetic(HOLDS))
