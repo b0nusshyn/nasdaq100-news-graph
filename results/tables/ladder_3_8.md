@@ -18,6 +18,8 @@ Propagation takes time: the graph step should be near zero at 1 day and positive
 - 5d: graph step per fold -0.025, -0.018, +0.031, +0.014, -0.001 (mean +0.000, positive in 2/5); ladder monotone in 1/5 folds
 - VERDICT: horizon pattern DOES NOT HOLD (5d monotone in 1/5 folds, need 4; mean graph step 5d +0.000 vs 1d -0.000)
 
+Registered 16 Nov 2026 (#36), after the fold-0 smoke run suggested the pattern and before the full walk-forward run; fold 0 is therefore not independent of the data that prompted the check. The hypothesis and criteria above are unchanged since registration, and each verdict is recorded as computed.
+
 ## Cross-sectional signal
 
 Within-day AUC of every model against chance (0.5). If Baseline 6 sits at chance too, news adds no cross-sectional signal with or without the graph.

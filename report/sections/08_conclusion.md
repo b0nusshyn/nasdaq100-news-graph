@@ -16,3 +16,10 @@
   fixed ratio of the acquirer, so the correlation reflects a contract term, not the economic
   spillover the research question is about. They last only while the deal is pending (138–282
   shared days in fold 4). The 3.9 ablations rerun the model without them.
+- **Folds are not independent replications.** The walk-forward protocol is a rolling window:
+  504 training days, stepping 126. Adjacent folds share 75% of their training days (folds two
+  apart 50%, three apart 25%; folds 0 and 4 none), so the five fitted models are strongly
+  related. The five 126-day test windows are disjoint half-years, so each fold is scored on
+  new data, but by correlated models. "Above 0.5 in 4 of 5 folds" therefore means
+  *consistent across folds*, not *replicated five times*; for statistics over the training
+  windows themselves, the effective number of independent observations is closer to two.

@@ -205,6 +205,11 @@ def build(preds: dict[str, pd.DataFrame], seed_runs: dict[int, dict] | None = No
         "",
         *[f"- {line}" for line in horizon_pattern(s)],
         "",
+        "Registered 16 Nov 2026 (#36), after the fold-0 smoke run suggested the pattern and before the full "
+        "walk-forward run; fold 0 is therefore not independent of the data that prompted the check. The "
+        "hypothesis and criteria above are unchanged since registration, and each verdict is recorded as "
+        "computed.",
+        "",
         "## Cross-sectional signal",
         "",
         "Within-day AUC of every model against chance (0.5). If Baseline 6 sits at chance too, news adds no "
