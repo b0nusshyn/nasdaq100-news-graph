@@ -317,3 +317,30 @@ def test_an_lstm_baseline_refuses_a_config_with_a_graph(tmp_path):
     path.write_text(yaml.safe_dump(SMALL | {"model": "lstm_news"}), encoding="utf-8")
     with pytest.raises(ValueError, match="not a lstm_news config"):
         LSTMNews(path)
+
+
+def test_deal_arb_ablation_drops_only_the_named_corr_pairs_in_both_directions(fixture_inputs):
+    # 3.9 (#41): the deal-arbitrage pairs lose their corr edges; their sector and comention edges stay.
+    from src.models.train import fold_edges
+
+    panel, edges, _ = fixture_inputs
+    full = fold_edges(edges, panel, 0, TYPES)
+    cut = fold_edges(edges, panel, 0, TYPES, drop_corr_pairs=(("BBB", "AAA"),))
+    a, b, corr = panel.tickers.get_loc("AAA"), panel.tickers.get_loc("BBB"), TYPES.index("corr")
+
+    def pair_edges(g, t):
+        either_way = ((g["src"] == a) & (g["dst"] == b)) | ((g["src"] == b) & (g["dst"] == a))
+        return int((either_way & (g["type"] == t)).sum())
+
+    assert pair_edges(full, corr) > 0 and pair_edges(cut, corr) == 0
+    for t in (TYPES.index("sector"), TYPES.index("comention")):
+        assert pair_edges(cut, t) == pair_edges(full, t)
+    assert len(full["src"]) - len(cut["src"]) == pair_edges(full, corr)
+
+
+def test_deal_arb_is_an_ablation_name_and_its_pairs_are_the_three_from_3_4():
+    from src.models.train import DEAL_ARB, DEAL_ARB_PAIRS, model_name
+
+    assert model_name([DEAL_ARB]) == "gat_lstm_no_deal_arb"
+    assert set(map(frozenset, DEAL_ARB_PAIRS)) == {frozenset(p) for p in (("ADI", "MXIM"), ("AMD", "XLNX"),
+                                                                          ("AZN", "ALXN"))}

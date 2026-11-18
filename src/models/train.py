@@ -27,6 +27,11 @@ import pandas as pd
 
 MODEL = "gat_lstm"
 NEWS = "news"  # --ablate value that drops every news feature, embeddings included
+# --ablate value that drops the `corr` edges of three stock-for-stock acquisitions pending in every
+# fold's training window (3.4, #22): their correlation is a deal term, not economic spillover.
+# Their sector and comention edges stay.
+DEAL_ARB = "deal_arb"
+DEAL_ARB_PAIRS = (("ADI", "MXIM"), ("AMD", "XLNX"), ("AZN", "ALXN"))
 
 
 def model_name(ablate=(), base: str = MODEL) -> str:
@@ -35,14 +40,20 @@ def model_name(ablate=(), base: str = MODEL) -> str:
     return base + "".join(f"_no_{a}" for a in sorted(ablate))
 
 
-def fold_edges(edges: pd.DataFrame, panel, fold: int, edge_types: tuple[str, ...]) -> dict[str, np.ndarray]:
-    """This fold's edges (its own rows plus the shared `sector` rows) as ticker-index arrays."""
+def fold_edges(edges: pd.DataFrame, panel, fold: int, edge_types: tuple[str, ...],
+               drop_corr_pairs=()) -> dict[str, np.ndarray]:
+    """This fold's edges (its own rows plus the shared `sector` rows) as ticker-index arrays,
+    without the `corr` edges between any pair in `drop_corr_pairs` (either direction)."""
     from src.core.schema import ALL_FOLDS
 
     if not edge_types:  # Baseline 6 and the all-edges ablation: no graph, edges not needed
         empty = np.array([], dtype=np.int64)
         return {"src": empty, "dst": empty, "type": empty, "weight": np.array([], dtype=np.float32)}
     e = edges[edges["fold"].isin([fold, ALL_FOLDS]) & edges["edge_type"].isin(edge_types)]
+    if drop_corr_pairs:
+        pairs = {frozenset(p) for p in drop_corr_pairs}
+        hit = [frozenset(sd) in pairs for sd in zip(e["src"], e["dst"], strict=True)]
+        e = e[~((e["edge_type"] == "corr").to_numpy() & np.array(hit, dtype=bool))]
     missing = sorted(set(edge_types) - set(e["edge_type"]))
     if missing:
         raise ValueError(f"edges.parquet has no {missing} edges for fold {fold}: rebuild it (src.graph.build_edges)")
@@ -110,13 +121,14 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     start = time.perf_counter()
     feat, enc, gat, tr = cfg["features"], cfg["encoder"], cfg["gat"], cfg["train"]
     edge_types = tuple(t for t in gat["edge_types"] if t not in ablate)
+    drop_pairs = DEAL_ARB_PAIRS if DEAL_ARB in ablate else ()
     no_news = NEWS in ablate
     features = fit_features(
         panel, fold.train, window=cfg["window_days"], price=tuple(feat["price"]),
         news=() if no_news else tuple(feat["news"]),
         embeddings=bool(feat.get("embeddings", True)) and not no_news, embedding_dim=feat["embedding_dim"],
     )
-    graph = fold_edges(edges, panel, fold.index, edge_types)
+    graph = fold_edges(edges, panel, fold.index, edge_types, drop_corr_pairs=drop_pairs)
     embargo = cfg.get("embargo_days", walk_forward_config()["embargo_days"])
     fit_days, val_days = split_validation(fold.train, tr["validation_fraction"], embargo)
 
@@ -271,7 +283,7 @@ def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--config", type=Path, default=Path("configs/gat_lstm.yaml"))
     p.add_argument("--horizon", type=int, choices=[1, 5], default=None, help="default: both")
-    p.add_argument("--ablate", nargs="*", default=[], help="edge types or 'news' to drop (#41)")
+    p.add_argument("--ablate", nargs="*", default=[], help="edge types, 'news' or 'deal_arb' to drop (#41)")
     p.add_argument("--folds", type=int, nargs="+", default=None,
                    help="train only these folds (smoke run): prints metrics, writes no predictions")
     args = p.parse_args()
@@ -281,9 +293,11 @@ def main() -> None:
     from src.models.panel import load_panel
 
     cfg = load_config(args.config)
-    bad = set(args.ablate) - set(cfg["gat"]["edge_types"]) - {NEWS}
+    bad = set(args.ablate) - set(cfg["gat"]["edge_types"]) - {NEWS, DEAL_ARB}
     if bad:
-        p.error(f"--ablate: unknown {sorted(bad)}; choose from {cfg['gat']['edge_types'] + [NEWS]}")
+        p.error(f"--ablate: unknown {sorted(bad)}; choose from {cfg['gat']['edge_types'] + [NEWS, DEAL_ARB]}")
+    if DEAL_ARB in args.ablate and "corr" in args.ablate:
+        p.error("--ablate: deal_arb drops some corr edges; with corr dropped too it changes nothing")
     t0 = time.perf_counter()
     name = model_name(args.ablate, cfg.get("model", MODEL))
     embeddings = bool(cfg["features"].get("embeddings", True)) and NEWS not in args.ablate
