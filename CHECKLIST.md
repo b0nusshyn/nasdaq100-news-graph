@@ -83,8 +83,8 @@ lands.
 - [ ] **2.6** · **Mon 16 Nov** — Aggregate to (`date`, `ticker`), add `has_news`; write `news_features.parquet` ✱ hand-off · [#24](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/24)
 - [ ] **2.7** · **Tue 17 Nov** — Coverage report: share of ticker-days with news, by year and by sector (feeds the "sparse news" argument) · [#30](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/30)
 - [ ] **2.8** · **Tue 17 Nov** — Spot-check 50 random matches by hand; fix any systematic mismatch (e.g. `META` vs `FB`, `GOOG`/`GOOGL`) · [#31](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/31)
-- [ ] **2.9** · **Wed 18 Nov** — Interpretability tooling: extract GAT attention weights and trace a prediction back to source article + edge type · [#37](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/37)
-- [ ] **2.10** · **Thu 19 Nov** — Produce 2–3 worked interpretability examples (e.g. NVDA article → ARM prediction) as figures in `results/` · [#43](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/43)
+- [x] **2.9** · **Wed 18 Nov** — Interpretability tooling: extract GAT attention weights and trace a prediction back to source article + edge type · [#37](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/37)
+- [x] **2.10** · **Thu 19 Nov** — Produce 2–3 worked interpretability examples (e.g. NVDA article → ARM prediction) as figures in `results/` · [#43](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/43)
 - [ ] **2.11** · **Fri 20 Nov** — Write News encoding & Interpretability sections of the report · [#48](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/48)
 
 ## 3 · Modelling — Shayanis
