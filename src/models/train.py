@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import math
 import time
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -104,22 +105,23 @@ def _chunks(days: np.ndarray, size: int):
     return [days[i: i + size] for i in range(0, len(days), size)]
 
 
-def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, ablate=(), predict_test=True,
-               log=print):
-    """Fit one model on `fold`'s training days and predict its test days.
+@dataclass(frozen=True)
+class Fitted:
+    """A trained fold model and what it needs to score new batches (attention, #42)."""
 
-    Returns (predictions in SCHEMA.md `predictions` shape, info dict with timing, epochs and the
-    validation scores). `predict_test=False` (tuning, #58) never touches the test window and
-    returns `None` for the predictions.
-    """
-    import torch
+    model: object  # GATLSTM, in eval mode, at the early-stopping checkpoint
+    features: object  # FoldFeatures fitted on the fold's training days
+    graph: dict  # fold_edges output the model was trained on
+    test_idx: np.ndarray  # panel day indices of the test window with labelled rows
+    horizon: int
+    batch_days: int
 
-    from src.core.config import walk_forward_config
-    from src.models.gat_lstm import GATLSTM
-    from src.models.panel import choose_threshold, fit_features, split_validation
 
-    start = time.perf_counter()
-    feat, enc, gat, tr = cfg["features"], cfg["encoder"], cfg["gat"], cfg["train"]
+def fold_inputs(panel, edges: pd.DataFrame, fold, cfg: dict, ablate=()):
+    """The edge types, scaled features and graph one fold's model sees: fitted on `fold.train` only."""
+    from src.models.panel import fit_features
+
+    feat, gat = cfg["features"], cfg["gat"]
     edge_types = tuple(t for t in gat["edge_types"] if t not in ablate)
     drop_pairs = DEAL_ARB_PAIRS if DEAL_ARB in ablate else ()
     no_news = NEWS in ablate
@@ -129,6 +131,32 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
         embeddings=bool(feat.get("embeddings", True)) and not no_news, embedding_dim=feat["embedding_dim"],
     )
     graph = fold_edges(edges, panel, fold.index, edge_types, drop_corr_pairs=drop_pairs)
+    return edge_types, features, graph
+
+
+def build_model(n_features: int, edge_types: tuple[str, ...], cfg: dict):
+    from src.models.gat_lstm import GATLSTM
+
+    enc, gat = cfg["encoder"], cfg["gat"]
+    return GATLSTM(n_features, enc["hidden"], gat["heads"], edge_types, layers=enc["layers"], dropout=enc["dropout"])
+
+
+def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, ablate=(), predict_test=True,
+               log=print, return_model=False):
+    """Fit one model on `fold`'s training days and predict its test days.
+
+    Returns (predictions in SCHEMA.md `predictions` shape, info dict with timing, epochs and the
+    validation scores). `predict_test=False` (tuning, #58) never touches the test window and
+    returns `None` for the predictions. `return_model=True` appends a `Fitted`.
+    """
+    import torch
+
+    from src.core.config import walk_forward_config
+    from src.models.panel import choose_threshold, split_validation
+
+    start = time.perf_counter()
+    tr = cfg["train"]
+    edge_types, features, graph = fold_inputs(panel, edges, fold, cfg, ablate)
     embargo = cfg.get("embargo_days", walk_forward_config()["embargo_days"])
     fit_days, val_days = split_validation(fold.train, tr["validation_fraction"], embargo)
 
@@ -140,8 +168,7 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
 
     torch.manual_seed(cfg["seed"])
     rng = np.random.default_rng(cfg["seed"])
-    model = GATLSTM(len(features.names), enc["hidden"], gat["heads"], edge_types,
-                    layers=enc["layers"], dropout=enc["dropout"])
+    model = build_model(len(features.names), edge_types, cfg)
     opt = torch.optim.Adam(model.parameters(), lr=tr["lr"], weight_decay=tr["weight_decay"])
     loss_fn = torch.nn.BCEWithLogitsLoss(reduction="sum")
 
@@ -250,6 +277,8 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     name = model_name(ablate, cfg.get("model", MODEL))
     preds = predict(test_idx).assign(model=name, horizon=horizon, fold=fold.index)
     info["test_rows"] = len(preds)
+    if return_model:
+        return preds, info, Fitted(model, features, graph, test_idx, horizon, tr["batch_days"])
     return preds, info
 
 
