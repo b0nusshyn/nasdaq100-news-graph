@@ -33,11 +33,18 @@ def test_deltas_are_paired_by_seed():
     assert delta_cell(a, b) == "+0.0033 (-0.0100 to +0.0100; > 0 in 2/3 seeds)"
 
 
+def test_fold_seed_count_exposes_a_step_carried_by_one_fold():
+    a, b = pd.Series([0.51, 0.51, 0.51], index=SEEDS), pd.Series([0.50, 0.50, 0.50], index=SEEDS)
+    fold_d = pd.Series([0.05, -0.0025, -0.0025, -0.0025, -0.0025] * 3)
+    assert delta_cell(a, b, fold_d).endswith("> 0 in 3/3 seeds, 3/15 fold-seeds)")
+
+
 def test_report_shows_the_grid_the_ladder_with_seed_range_and_the_noise_floor():
     text = report(fake_log(LEVELS))
     assert "### News: signal vs structure" in text and "| **news features** | 0.509" in text
     assert "seed noise floor: the proposed model's seed range is 0.0020" in text
-    assert "graph step (proposed - B6): +0.0040" in text
+    assert "graph step (proposed - B6): +0.0040" in text and "3/3 seeds, 15/15 fold-seeds" in text
+    assert "Each step by fold, mean over seeds:" in text and "| step | fold 0 |" in text
     assert "| drop corr | 0.507" in text and "Incomplete" not in text
 
 

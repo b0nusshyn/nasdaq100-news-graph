@@ -72,10 +72,17 @@ def cell(row: pd.Series) -> str:
     return f"{row.mean():.3f} ({row.min():.3f} to {row.max():.3f})"
 
 
-def delta_cell(a: pd.Series, b: pd.Series) -> str:
-    """Seed-paired difference a - b: mean, range, and in how many seeds it is positive."""
+def delta_cell(a: pd.Series, b: pd.Series, fold_d: pd.Series | None = None) -> str:
+    """Seed-paired difference a - b: mean, range, and in how many seeds it is positive.
+
+    `fold_d`, the same difference per (seed, fold), adds how many fold-seeds are positive: a
+    seed-level count can be carried by a single fold.
+    """
     d = a - b
-    return f"{d.mean():+.4f} ({d.min():+.4f} to {d.max():+.4f}; > 0 in {(d > 0).sum()}/{len(d)} seeds)"
+    out = f"{d.mean():+.4f} ({d.min():+.4f} to {d.max():+.4f}; > 0 in {(d > 0).sum()}/{len(d)} seeds"
+    if fold_d is not None:
+        out += f", {(fold_d > 0).sum()}/{len(fold_d)} fold-seeds"
+    return out + ")"
 
 
 def report(log: pd.DataFrame) -> str:
@@ -97,6 +104,11 @@ def report(log: pd.DataFrame) -> str:
     for h in sorted(log["horizon"].unique()):
         sh = s.xs(h, level="horizon")
         prop = sh.loc["proposed"]
+        wh = log[log["horizon"] == h].pivot_table(index=["seed", "fold"], columns="variant", values="within_day_auc")
+
+        def step(a: str, b: str, sh=sh, wh=wh) -> str:
+            return delta_cell(sh.loc[a], sh.loc[b], wh[a] - wh[b])
+
         lines += ["", f"## {h} day{'s' if h > 1 else ''}", "", "### Ladder", ""]
         rows = [{"model": v, **{f"seed {sd}": sh.loc[v, sd] for sd in seeds}, "mean (range)": cell(sh.loc[v])}
                 for v in LADDER if v in sh.index]
@@ -104,13 +116,20 @@ def report(log: pd.DataFrame) -> str:
         if {"B5 LSTM price", "B6 LSTM + news", "proposed"} <= set(sh.index):
             lines += [
                 "",
-                f"- news step (B6 - B5): {delta_cell(sh.loc['B6 LSTM + news'], sh.loc['B5 LSTM price'])}",
-                f"- graph step (proposed - B6): {delta_cell(prop, sh.loc['B6 LSTM + news'])}",
+                f"- news step (B6 - B5): {step('B6 LSTM + news', 'B5 LSTM price')}",
+                f"- graph step (proposed - B6): {step('proposed', 'B6 LSTM + news')}",
                 f"- seed noise floor: the proposed model's seed range is {prop.max() - prop.min():.4f}",
             ]
             mono = monotone_folds(log, h)
             lines.append("- ladder monotone (both steps > 0) in " + ", ".join(
                 f"{n}/5 folds at seed {sd}" for sd, n in mono.items()))
+            by_fold = pd.DataFrame({
+                "news step (B6 - B5)": wh["B6 LSTM + news"] - wh["B5 LSTM price"],
+                "graph step (proposed - B6)": wh["proposed"] - wh["B6 LSTM + news"],
+            }).groupby(level="fold").mean().T
+            lines += ["", "Each step by fold, mean over seeds:", "",
+                      md(by_fold.rename(columns=lambda f: f"fold {f}").reset_index(names="step"),
+                         index=False, digits=4)]
         if all(v in sh.index for v in NEWS_GRID.values()):
             g = {k: sh.loc[v] for k, v in NEWS_GRID.items()}
             lines += [
@@ -121,18 +140,22 @@ def report(log: pd.DataFrame) -> str:
                 f"| **news features** | {cell(g[True, True])} (proposed) | {cell(g[True, False])} |",
                 f"| **no news features** | {cell(g[False, True])} | {cell(g[False, False])} |",
                 "",
-                f"- signal only vs structure only: {delta_cell(g[True, False], g[False, True])}",
-                f"- news features, with comention present: {delta_cell(g[True, True], g[False, True])}",
-                f"- news features, without comention: {delta_cell(g[True, False], g[False, False])}",
-                f"- comention edges, with news features: {delta_cell(g[True, True], g[True, False])}",
-                f"- comention edges, without news features: {delta_cell(g[False, True], g[False, False])}",
+                f"- signal only vs structure only: {step(NEWS_GRID[True, False], NEWS_GRID[False, True])}",
+                f"- news features, with comention present: {step(NEWS_GRID[True, True], NEWS_GRID[False, True])}",
+                f"- news features, without comention: {step(NEWS_GRID[True, False], NEWS_GRID[False, False])}",
+                f"- comention edges, with news features: {step(NEWS_GRID[True, True], NEWS_GRID[True, False])}",
+                f"- comention edges, without news features: {step(NEWS_GRID[False, True], NEWS_GRID[False, False])}",
             ]
         present = [v for v in EDGE_ROWS if v in sh.index]
         if present:
             lines += ["", "### Edges", "",
                       "Change from the proposed model, paired by seed. Negative means the dropped edges were helping.",
                       "", "| ablation | within-day AUC | change vs proposed |", "|---|---|---|"]
-            lines += [f"| {v} | {cell(sh.loc[v])} | {delta_cell(sh.loc[v], prop)} |" for v in present]
+            lines += [f"| {v} | {cell(sh.loc[v])} | {step(v, 'proposed')} |" for v in present]
+            if "drop deal-arb corr pairs" in present:
+                d = (wh["drop deal-arb corr pairs"] - wh["proposed"]).abs().max()
+                lines += ["", "The deal-arbitrage pairs are 4 to 6 of each fold's `corr` edges. Dropping them changes "
+                          f"within-day AUC by at most {d:.4f} in any fold-seed: no measurable effect."]
     lines += ["", "## Fold AUC (diagnostic)", "",
               "Mean over folds, `mean (min to max)` across seeds; includes market timing.", "",
               "| variant | " + " | ".join(f"{h}d" for h in sorted(log["horizon"].unique())) + " |",

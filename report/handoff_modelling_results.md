@@ -5,6 +5,7 @@ These are findings from the 3.8 full run and its tuned re-run (3.12). They're fo
 **Sources:**
 - Every number below is test within-day AUC, from `results/tables/ladder_3_8.md` (tuned config T1, seed 42) and `results/tables/tuning_gat_lstm.md`.
 - PRs #92 (untuned run and the orientation check) and #93 (tuning and the re-run).
+- Three seeds and the ablations (3.9): `results/tables/ablations_3_9.md`, summarised in the last section below. The tables above are seed 42, the official prediction set.
 - Significance (4.9) is still pending. Until it lands, read "detectable" as "not distinguishable by eye across folds".
 
 ## The framing the data supports
@@ -64,3 +65,26 @@ Report it unchanged, with its registration date and the verdict. Its wording is 
 ## Fold dependence
 
 This is now in the Limitations of `08_conclusion.md`. Adjacent folds share 75% of their training days, and the test windows are disjoint. Write "consistent across folds", never "replicated five times".
+
+## Three seeds and the ablations (3.9)
+
+Every model at seeds 42, 43 and 44, tuned config T1. Test within-day AUC, mean over folds, as `mean (min to max)` across seeds. Source: `results/tables/ablations_3_9.md`.
+
+| within-day AUC | B5 price | B6 + news | proposed + graph |
+|---|---|---|---|
+| 1 day | 0.500 (0.498 to 0.502) | 0.501 (0.498 to 0.505) | 0.507 (0.504 to 0.509) |
+| 5 days | 0.491 (0.481 to 0.504) | 0.500 (0.494 to 0.507) | 0.499 (0.497 to 0.500) |
+
+**Count steps over all 15 fold-seeds, not over seeds alone.** A seed-level count can be carried by a single fold.
+- **1-day graph step:** +0.005, positive at all 3 seeds but in only 9 of 15 fold-seeds. By fold (mean over seeds) it is −0.002, −0.0045, +0.007, +0.021 and +0.004, so fold 3 carries most of it.
+- **1-day news step (B6 − B5):** +0.002, positive at 1 of 3 seeds and in 9 of 15 fold-seeds. Seed 42's +0.006 was the high end.
+- **Ladder monotone:** in 3/5 folds at seed 42 and 1/5 at seeds 43 and 44 (1 day). In 1/5 at every seed (5 days).
+
+**Signal vs structure.** A 2×2 inside the graph model, with `sector` and `corr` edges in every cell:
+- **News features are the most consistent effect in the table.** Without `comention` they add +0.005 at 1 day: positive at 3/3 seeds, in 11 of 15 fold-seeds and in all 5 folds. With `comention` they add +0.004 (3/3 seeds, 9/15 fold-seeds).
+- **`comention` edges add nothing at 1 day** (−0.001). At 5 days they cost about 0.005 whether or not news features are present: 0/3 seeds positive in both cases.
+- **Graph without news is close to B5** (1 day 0.502 against 0.500).
+
+**Edges.** At 1 day, dropping `sector` or `corr` costs about 0.001 each, inside the seed range. Dropping the deal-arbitrage pairs changes no fold-seed by more than 0.0006.
+
+**Baseline 5 at 5 days depends on the seed.** It is 0.481 at seed 42, 0.504 at seed 43 and 0.489 at seed 44. Fold 1 ranges from 0.464 to 0.550 across seeds. Fold 2 is below chance at every seed (0.465–0.473). The 5-day news step (+0.009, 2/3 seeds) is therefore mostly B5's seed spread, which bears on the two readings above.
