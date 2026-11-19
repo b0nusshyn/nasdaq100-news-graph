@@ -27,8 +27,9 @@ The main audit still covers 2019–2023, while the quality summary includes 2018
 
 ## Other Data tasks
 
-- 1.8: coverage code exists; real FNSPID article_tickers and reviewed historical Investing.com
-  earnings are still absent. No empirical coverage report or historical earnings pull is complete.
+- 1.8: the [NLP coverage hand-off](earnings_coverage_handoff.md) includes the measured annual
+  gaps, 13 reviewed Investing.com events, and 1,737 SEC-derived windows using real matched
+  articles. The SEC-derived run covers 114 of 148 historical ticker symbols.
 - 1.9/1.12: no trained checkpoint, inference interface or attention trace exists in this checkout.
   The data-stage demo is prepared; a complete trained-model demo cannot yet run.
 - 1.10: clean source-copy tests passed, but dependencies were reused. A fresh clone plus clean

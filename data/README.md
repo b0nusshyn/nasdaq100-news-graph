@@ -200,9 +200,11 @@ python -m src.data.coverage --earnings "$NDX_DATA_DIR/raw/investing_earnings.csv
 This adds `raw/earnings_coverage.csv`: candidate gaps from the earnings date through the next
 NASDAQ session, restricted to observed in-index price rows. This wider diagnostic window
 handles unknown announcement times; it is not a model feature or proof an article discusses
-earnings. No historical Investing.com downloader is implemented: the public calendar's current
-view is not a complete 2019–2023 archive. Historical earnings acquisition and actual FNSPID
-coverage findings remain pending. These CSV reports are raw diagnostics outside SCHEMA.md.
+earnings. Events whose next session falls after `--end` are flagged by
+`window_within_range=False` and excluded from candidate gaps. The
+[coverage hand-off](../report/earnings_coverage_handoff.md) includes the reviewed Investing.com
+sample and the findings from NLP's aggregate coverage table. These CSV reports are raw
+diagnostics outside SCHEMA.md.
 
 Run `notebooks/demo.ipynb` from the repo root or notebooks folder for the data-stage demo.
 It does not write artifacts or download data. Model inference and attention tracing remain
