@@ -206,9 +206,10 @@ earnings. Events whose next session falls after `--end` are flagged by
 sample and the findings from NLP's aggregate coverage table. These CSV reports are raw
 diagnostics outside SCHEMA.md.
 
-Run `notebooks/demo.ipynb` from the repo root or notebooks folder for the data-stage demo.
-It does not write artifacts or download data. Model inference and attention tracing remain
-pending the Modelling/NLP implementation, trained checkpoint and agreed inference interface.
+Run all cells in `notebooks/demo.ipynb` with the full setup from the README.
+The notebook loads the checked-in synthetic fixtures, builds price and news features,
+trains the GAT-LSTM on one short fold and displays held-out predictions. It reads the
+fixtures directly and requires no downloaded data or saved model.
 The dataset report draft is `report/sections/02_dataset.md`; measured real-data statistics
 are intentionally pending. A fresh-clone/full-environment reproducibility run (1.10) and
 final trained-model demo (1.12) also remain pending those inputs. CHECKLIST boxes remain
