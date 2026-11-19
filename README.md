@@ -257,34 +257,106 @@ python -m src.eval.compare --output results/
 
 ## Results
 
-Pending. The table below will be completed after the evaluation runs.
+The tables report held-out results. Each classification metric is an unweighted
+mean of the five walk-forward fold scores.
+Within-day AUC, the headline metric, averages daily cross-sectional ROC AUC over dates
+with both classes within each fold. Accuracy, positive-class F1 and MCC use each model's
+validation-selected fold threshold, with a fixed always-up rule for Buy-and-Hold.
+The three neural core models use the official T1 runs at seed 42.
+[Task 4.10 production comparison](results/comparison_with_classical/tables/model_comparison.csv)
 
 **Horizon: 1 day**
 
-| Model | Accuracy | F1 | MCC | AUC | Sharpe (net) |
-|---|---|---|---|---|---|
-| Buy-and-hold | — | — | — | — | — |
-| ARIMA | — | — | — | — | — |
-| Logistic regression | — | — | — | — | — |
-| XGBoost | — | — | — | — | — |
-| LSTM (price only) | — | — | — | — | — |
-| LSTM + news, no graph | — | — | — | — | — |
-| **Proposed (GAT + LSTM)** | — | — | — | — | — |
+| Model | Accuracy | F1 | MCC | Within-day AUC | Net Sharpe |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Buy-and-Hold | 0.5057 | 0.6716 | N/A | 0.5000 | N/A |
+| ARIMA | 0.4925 | 0.4719 | 0.0026 | 0.5005 | -2.7774 |
+| Logistic Regression | 0.4999 | 0.5065 | 0.0095 | 0.5057 | -2.2162 |
+| XGBoost | 0.5054 | 0.6034 | 0.0132 | 0.5036 | -2.5100 |
+| LSTM Price Only | 0.4930 | 0.4334 | 0.0010 | 0.4995 | -2.6899 |
+| LSTM + News, No Graph | 0.5032 | 0.4962 | 0.0032 | 0.5051 | -2.4323 |
+| **Proposed GAT-LSTM** | 0.4994 | 0.3934 | 0.0024 | 0.5094 | -1.7502 |
 
 **Horizon: 5 days**
 
-| Model | Accuracy | F1 | MCC | AUC | Sharpe (net) |
-|---|---|---|---|---|---|
-| Buy-and-hold | — | — | — | — | — |
-| ARIMA | — | — | — | — | — |
-| Logistic regression | — | — | — | — | — |
-| XGBoost | — | — | — | — | — |
-| LSTM (price only) | — | — | — | — | — |
-| LSTM + news, no graph | — | — | — | — | — |
-| **Proposed (GAT + LSTM)** | — | — | — | — | — |
+| Model | Accuracy | F1 | MCC | Within-day AUC | Net Sharpe |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Buy-and-Hold | 0.5213 | 0.6844 | N/A | 0.5000 | N/A |
+| ARIMA | 0.5114 | 0.5273 | 0.0121 | 0.5027 | -1.2366 |
+| Logistic Regression | 0.5033 | 0.4378 | -0.0044 | 0.4904 | -0.9561 |
+| XGBoost | 0.5082 | 0.5204 | 0.0093 | 0.4988 | -0.8439 |
+| LSTM Price Only | 0.5023 | 0.6145 | -0.0096 | 0.4811 | -1.3398 |
+| LSTM + News, No Graph | 0.4986 | 0.4853 | -0.0004 | 0.5072 | -0.9806 |
+| **Proposed GAT-LSTM** | 0.5040 | 0.5575 | 0.0047 | 0.4992 | -0.5506 |
 
-An ablation study will report the contribution of each edge type and of the news features
-independently.
+GAT-LSTM had the highest within-day AUC among the seven core models at 1 day,
+followed by Logistic Regression and Baseline 6. At 5 days, Baseline 6 led,
+followed by ARIMA. GAT-LSTM scored higher than Baseline 6 at 1 day (0.5094 vs
+0.5051) and lower at 5 days (0.4992 vs 0.5072). These are descriptive rankings.
+The [Task 4.9 paired fold MCC analysis](results/tables/significance_mcc.json)
+found no statistically significant difference at either horizon (Holm-adjusted
+*p* = 1.0000 for both). Inference covers MCC at seed 42 and leaves AUC
+significance and model equivalence unestablished.
+
+Net Sharpe is annualized from one continuous, cost-adjusted backtest per
+model and horizon. The strategies rank stocks by predicted probability,
+long the top 20% and short the bottom 20%, with half the capital on each side
+and non-overlapping holding periods. The simulation assumes idealized same-close
+execution and charges 5 bps per side. It omits slippage, borrow fees, liquidity
+constraints and delisting recovery. Buy-and-Hold's constant up calls make MCC
+undefined. Its Sharpe is unavailable because unresolved ALXN and XLNX
+corporate-action valuations prevent completion of the separate long-only
+initial-member basket.
+
+[Task 4.13](results/tables/tuning_baselines.md) selected T1 for both LSTM
+baselines using retrospective validation within-day AUC. Its validation scores
+are separate from the held-out metrics above.
+
+### Ablation
+
+The Task 4.10 seed-42 predictions cover the same eligible stock-date rows and
+labels in all five folds for every variant (64,082 at 1 day and 64,070 at 5 days).
+The [comparison manifest](results/comparison_with_classical/tables/comparison_manifest.json)
+records training commit `b5a88ed9` for all six ablations and `dd811f1c` for
+the three official T1 core neural models. Comparisons with the full model are
+descriptive across those training commits. The final column uses
+[Task 3.9](results/tables/ablations_3_9.md) and shows the mean and min–max
+range across seeds 42, 43 and 44 of the five-fold mean within-day AUC.
+
+Dropping news removes `has_news`, sentiment, confidence and embeddings. Dropping
+an edge type removes that type only. The deal-arbitrage variant removes the
+ADI–MXIM, AMD–XLNX and AZN–ALXN pairs from `corr`. The combined variant drops
+news features and `comention` edges while retaining `sector` and `corr`.
+
+**Horizon: 1 day**
+
+| Variant | Within-day AUC (seed 42) | Fold ROC AUC (seed 42) | MCC (seed 42) | Within-day AUC across seeds, mean (range) |
+| --- | ---: | ---: | ---: | ---: |
+| Proposed (full model) (`gat_lstm`) | 0.50942 | 0.4996 | 0.0024 | 0.50651 (0.50357–0.50942) |
+| Drop news features (`gat_lstm_no_news`) | 0.50299 | 0.4990 | 0.0024 | 0.50238 (0.49833–0.50582) |
+| Drop sector (`gat_lstm_no_sector`) | 0.50728 | 0.5041 | 0.0086 | 0.50521 (0.50383–0.50728) |
+| Drop corr (`gat_lstm_no_corr`) | 0.50726 | 0.5011 | 0.0048 | 0.50544 (0.50395–0.50726) |
+| Drop comention (`gat_lstm_no_comention`) | 0.51109 | 0.5084 | 0.0154 | 0.50739 (0.50343–0.51109) |
+| Drop deal-arb corr pairs (`gat_lstm_no_deal_arb`) | 0.50941 | 0.4995 | 0.0003 | 0.50650 (0.50356–0.50941) |
+| Drop news features and comention (`gat_lstm_no_comention_no_news`) | 0.50159 | 0.5005 | 0.0112 | 0.50244 (0.50142–0.50433) |
+
+**Horizon: 5 days**
+
+| Variant | Within-day AUC (seed 42) | Fold ROC AUC (seed 42) | MCC (seed 42) | Within-day AUC across seeds, mean (range) |
+| --- | ---: | ---: | ---: | ---: |
+| Proposed (full model) (`gat_lstm`) | 0.49918 | 0.5054 | 0.0047 | 0.49875 (0.49711–0.49996) |
+| Drop news features (`gat_lstm_no_news`) | 0.49018 | 0.4931 | 0.0052 | 0.49525 (0.49013–0.50545) |
+| Drop sector (`gat_lstm_no_sector`) | 0.49719 | 0.5024 | -0.0088 | 0.49961 (0.49719–0.50138) |
+| Drop corr (`gat_lstm_no_corr`) | 0.50094 | 0.5090 | 0.0164 | 0.50100 (0.49832–0.50374) |
+| Drop comention (`gat_lstm_no_comention`) | 0.50525 | 0.5086 | 0.0161 | 0.50351 (0.50103–0.50525) |
+| Drop deal-arb corr pairs (`gat_lstm_no_deal_arb`) | 0.49918 | 0.5054 | 0.0043 | 0.49863 (0.49689–0.49982) |
+| Drop news features and comention (`gat_lstm_no_comention_no_news`) | 0.49634 | 0.5046 | 0.0147 | 0.50000 (0.49549–0.50818) |
+
+Fold ROC AUC is the mean of ROC AUC computed over all observations within
+each fold. At 5 days, dropping co-mention edges gave the highest mean within-day
+AUC across seeds among the graph variants. Removing the deal-arbitrage pairs
+barely changed mean within-day AUC at either horizon. The seed ranges describe
+run-to-run variation.
 
 ---
 
