@@ -177,13 +177,19 @@ propagation hypothesis is not supported, and that is the result we report.
 
 ## Setup
 
-Requires Python 3.10+.
+Requires Python 3.10+. CI uses Python 3.11. On macOS with Homebrew,
+install the OpenMP runtime required by XGBoost before running the full suite:
 
 ```bash
-git clone https://github.com/<org>/<repo>.git
-cd <repo>
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+brew install libomp
+```
+
+```bash
+git clone https://github.com/b0nusshyn/nasdaq100-news-graph.git
+cd nasdaq100-news-graph
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
 PyTorch Geometric must match your CUDA and PyTorch versions. If installation fails locally,
@@ -202,8 +208,17 @@ pytest -rs    # -rs lists the tests skipped for a missing heavy dependency
 ```
 
 Tests that need torch, scikit-learn, statsmodels, xgboost or transformers skip on the light set.
-CI's full job installs `requirements.txt` and runs `NDX_NO_SKIPS=1 pytest`, where any skip fails
-the run. Use the same before trusting a green run locally.
+The figure integration tests also need `Rscript` on PATH and working R PNG graphics with Cairo.
+Install R (for example, `brew install r` on macOS or `r-base-core` on Ubuntu) and check its
+graphics support before running the full suite with the same no-skip setting as CI:
+
+```bash
+Rscript --vanilla -e 'stopifnot(capabilities("png"), capabilities("cairo")); f <- tempfile(fileext=".png"); png(f, type="cairo"); plot(1:3); dev.off(); stopifnot(file.exists(f))'
+NDX_NO_SKIPS=1 pytest -rs
+```
+
+The no-skip run allows skips only for tests marked `real_data` when private
+team artifacts are unavailable.
 
 ### Data location
 

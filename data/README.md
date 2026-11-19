@@ -211,9 +211,15 @@ The notebook loads the checked-in synthetic fixtures, builds price and news feat
 trains the GAT-LSTM on one short fold and displays held-out predictions. It reads the
 fixtures directly and requires no downloaded data or saved model.
 The dataset report draft is `report/sections/02_dataset.md`; measured real-data statistics
-are intentionally pending. A fresh-clone/full-environment reproducibility run (1.10) and
-final trained-model demo (1.12) also remain pending those inputs. CHECKLIST boxes remain
-unticked until changes are pushed to main and usable by the next owner, per repo convention.
+are intentionally pending. The final trained-model demo (1.12) requires the shared real
+artifacts. CHECKLIST boxes remain unticked until changes are pushed to main and usable by
+the next owner, per repo convention.
+
+Task 1.10 was verified from a fresh GitHub clone at `4ed2ad2` with a new virtual
+environment on macOS arm64 (Python 3.14.0, R 4.6.2). The documented Setup installed
+`requirements.txt`. Dependency validation, the GAT forward smoke check, the R/Cairo PNG
+check, and `ruff check .` passed. `NDX_NO_SKIPS=1 pytest -rs` reported 788 passed and
+two permitted skips for tests requiring private team artifacts.
 
 ## Download audit and recovery (15 November 2026)
 
