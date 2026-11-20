@@ -72,7 +72,7 @@ leaking into the feature day.
 
 ## FinBERT encoding
 
-Each article is encoded once with FinBERT (`ProsusAI/finbert`) from its **headline**: every
+Each article is encoded once with FinBERT (Araci, 2019; `ProsusAI/finbert`) from its **headline**: every
 article has one while 23% have no body, FinBERT is trained on short financial sentences, and
 a single text type keeps features comparable across articles. For each article we keep the
 sentiment score *p*<sub>pos</sub> − *p*<sub>neg</sub> ∈ [−1, 1], the confidence (largest class
@@ -147,3 +147,11 @@ receive a signal from related companies that have it.
   them, so their share of the news effect is unknown.
 - Articles are averaged with equal weight. A story syndicated under several URLs
   therefore counts several times against a story published once.
+
+## References
+
+- Araci, D. (2019). FinBERT: Financial sentiment analysis with pre-trained language models.
+  arXiv:1908.10063.
+- Dong, Z., Fan, X., & Peng, Z. (2024). FNSPID: A comprehensive financial news dataset in time
+  series. In *Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data
+  Mining (KDD '24)*. arXiv:2402.06698.

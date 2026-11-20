@@ -34,7 +34,7 @@ agree with Modelling's own `src_news_days`.
 
 ## Reading attention and contribution
 
-- **Attention is per edge type.** The model has one graph-attention layer per edge type (sector,
+- **Attention is per edge type.** The model has one graph-attention (GAT; Veličković et al., 2018) layer per edge type (sector,
   co-mention, correlation) and sums their outputs. Attention is a softmax over a company's
   incoming edges of one type, so it ranks neighbours within a type, sums to 1 per type, and
   can't be compared across types.
@@ -161,3 +161,9 @@ channels.
   what a model trained without the graph would predict. That comparison is Baseline 6
   (Section 6).
 - **Direction only:** the alignment test checks sentiment direction only (see above).
+
+## References
+
+- Veličković, P., Cucurull, G., Casanova, A., Romero, A., Liò, P., & Bengio, Y. (2018). Graph
+  attention networks. In *International Conference on Learning Representations (ICLR)*.
+  arXiv:1710.10903.
