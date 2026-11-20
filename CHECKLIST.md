@@ -69,9 +69,9 @@ lands.
 - [ ] **1.7** · **Tue 17 Nov** — Bias tests: assert no ticker appears before it joined the index; assert no label uses future prices beyond its horizon · [#26](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/26)
 - [ ] **1.8** · **Tue 17 Nov** — Investing.com earnings-date pull; report FNSPID coverage gaps to NLP · [#27](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/27)
 - [ ] **1.9** · **Wed 18 Nov** — ⚑ **Required submission item.** Demo, first runnable version: `notebooks/demo.ipynb` end-to-end on a small slice (load → features → model → prediction), as soon as the model trains end to end (3.6) · [#34](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/34)
-- [ ] **1.10** · **Thu 19 Nov** — Reproducibility run: fresh clone, follow `README.md` Setup exactly, fix anything that breaks · [#40](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/40)
+- [x] **1.10** · **Thu 19 Nov** — Reproducibility run: fresh clone, follow `README.md` Setup exactly, fix anything that breaks · [#40](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/40)
 - [ ] **1.12** · **Thu 19 Nov** — ⚑ **Required submission item.** Demo polished by the feature freeze: runs top to bottom on the real data, uses the final model, shows one attention trace (2.10); no edits after this except fixes · [#60](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/60)
-- [ ] **1.11** · **Fri 20 Nov** — Write Dataset & bias-handling section of the report · [#46](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/46)
+- [x] **1.11** · **Fri 20 Nov** — Write Dataset & bias-handling section of the report · [#46](https://github.com/b0nusshyn/nasdaq100-news-graph/issues/46)
 
 ## 2 · NLP — Kornchawal
 
