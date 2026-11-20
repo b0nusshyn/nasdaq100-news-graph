@@ -206,14 +206,17 @@ earnings. Events whose next session falls after `--end` are flagged by
 sample and the findings from NLP's aggregate coverage table. These CSV reports are raw
 diagnostics outside SCHEMA.md.
 
-Run all cells in `notebooks/demo.ipynb` with the full setup from the README.
-The notebook loads the checked-in synthetic fixtures, builds price and news features,
-trains the GAT-LSTM on one short fold and displays held-out predictions. It reads the
-fixtures directly and requires no downloaded data or saved model.
-The dataset report draft is `report/sections/02_dataset.md`; measured real-data statistics
-are intentionally pending. The final trained-model demo (1.12) requires the shared real
-artifacts. CHECKLIST boxes remain unticked until changes are pushed to main and usable by
-the next owner, per repo convention.
+Run all cells in `notebooks/demo.ipynb` with the full setup from the README and
+`NDX_DATA_DIR` pointing at the shared real artifacts (about 1.5 minutes on a laptop CPU).
+The notebook loads the real panel and graph, shows the walk-forward folds and one fold's
+features and edges, and retrains the final model (tuned config T1, seed 42) on fold 4. It
+asserts that the retrained model reproduces the official `predictions/gat_lstm.parquet`
+exactly, scores the test window, traces the SGEN worked example (2.10) through attention to
+its neighbours' news, and ends with the B5 → B6 → proposed within-day AUC ladder. Headlines
+appear in the trace only when NLP's raw article files are in `<data>/raw/`. The synthetic
+fixtures are not enough for this demo. The dataset report is `report/sections/02_dataset.md`.
+CHECKLIST boxes remain unticked until changes are pushed to main and usable by the next owner,
+per repo convention.
 
 Task 1.10 was verified from a fresh GitHub clone at `4ed2ad2` with a new virtual
 environment on macOS arm64 (Python 3.14.0, R 4.6.2). The documented Setup installed
