@@ -165,7 +165,8 @@ propagation hypothesis is not supported, and that is the result we report.
 ├── tests/
 │   └── fixtures/          # Synthetic copy of every Parquet artifact
 ├── notebooks/
-│   └── demo.ipynb         # End-to-end run
+│   ├── demo.ipynb         # End-to-end run
+│   └── project_story.ipynb  # The project's findings, read from results/ (runs without the data)
 ├── results/               # Tables and figures
 ├── report/                # Report, one Markdown file per section
 ├── SCHEMA.md              # Data contract
