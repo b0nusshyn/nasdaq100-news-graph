@@ -1,0 +1,7 @@
+# Restricted developmental comparison
+
+Frozen after inspecting availability and 2023 overlaps, before constructing 2024–2025 targets or fitting. The full 101-security evaluation protocol remains unchanged and blocked. This supplement is developmental only. Select the 30 securities with highest 2023 median close times volume from the original frozen 2023-12-29 cohort, using only original 2023 observations. Require all 30 files and bars for every session through 2025-12-31. Membership stays fixed at the anchor date. Large/liquid selection and archive availability limit generalization.
+
+Use the pinned archive alone for warm-up, features and adjusted-close targets. OHLC equals provider quote times adj_close/close, with provider share volume unchanged. Preserve original labels separately. Train on 252 sessions, five unused sessions, calibrate on 50 sessions, then five unused sessions before assessment. Assess July 15 through December 20 in 2024 and 2025 on actual sessions. No label ends in a later year. Never construct 2026 labels.
+
+Freeze the market-direction study stock logistic (C=.25), boosted relative regressor (90 rounds and unchanged settings), and shared Price Only LSTM reference. Calibrate one score with standardized L2 logistic C=1 and classify at .5. Nominal selective coverage is predeclared 20%, using calibration confidence quantiles only. Count and publish twelve fits total, two horizons and two windows, seed 42.

@@ -1,0 +1,10 @@
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+start w0_h5_s42_worst_half
+done w0_h5_s42_worst_half 0.5359018371841034
+start w0_h5_s43_worst_half
+done w0_h5_s43_worst_half 0.5404153105195911
+start w1_h5_s42_worst_half
+done w1_h5_s42_worst_half 0.5035063082085297
+start w1_h5_s43_worst_half
+done w1_h5_s43_worst_half 0.5011659866954675

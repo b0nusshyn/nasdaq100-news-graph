@@ -187,3 +187,30 @@ def test_threshold_falls_back_to_one_half_when_mcc_is_undefined():
 
     assert choose_threshold(np.array([1, 1, 1]), np.array([0.2, 0.6, 0.7])) == 0.5
     assert choose_threshold(np.array([0, 1, 0]), np.array([0.6, 0.6, 0.6])) == 0.5
+
+
+def test_lag_on_sessions_uses_next_session_and_drops_unavailable_last_row():
+    import pandas as pd
+
+    from src.models.panel import lag_on_sessions
+
+    days = pd.to_datetime(["2021-07-01", "2021-07-02", "2021-07-06"])
+    rows = pd.DataFrame({"date": days, "value": [1, 2, 3]})
+    actual = lag_on_sessions(rows, days, 1)
+    assert actual.date.tolist() == days[1:].tolist()
+    assert actual.value.tolist() == [1, 2]
+
+
+
+def test_optional_price_features_keep_legacy_values_and_fit_on_requested_dates():
+    from src.models.price_features import EXTENDED_PRICE
+
+    inputs = tables()
+    reference = build_panel(**inputs)
+    extended = build_panel(**inputs, extended_price=True)
+    np.testing.assert_array_equal(extended.price[:, :, :len(reference.price_names)], reference.price)
+    dates = extended.days[25:40]
+    fit = fit_features(extended, dates, window=5, price=EXTENDED_PRICE, news=(), embeddings=False)
+    raw = extended.price[25:40, :, -len(EXTENDED_PRICE):][extended.in_index[25:40]]
+    np.testing.assert_allclose(fit.stats["price"]["mean"], np.nanmean(raw, axis=0))
+    assert tuple(fit.names[:-1]) == EXTENDED_PRICE

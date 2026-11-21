@@ -1,0 +1,9 @@
+{'mean_daily_spearman_log_abs_macd_vs_log_close': 0.6619797990120246, 'days': 753}
+done w0_h5_s42_original: wdAUC 0.5438 acc 0.5548 maj 0.5116 mcc 0.1114 delta 0.0
+done w0_h5_s42_macd_norm: wdAUC 0.5323 acc 0.5466 maj 0.5116 mcc 0.0927 delta n/a
+done w1_h5_s42_original: wdAUC 0.5035 acc 0.5222 maj 0.5293 mcc -0.0226 delta 0.0
+done w1_h5_s42_macd_norm: wdAUC 0.5066 acc 0.5293 maj 0.5293 mcc 0.0043 delta n/a
+done w0_h5_s43_original: wdAUC 0.5404 acc 0.5436 maj 0.5116 mcc 0.0846 delta 0.0
+done w0_h5_s43_macd_norm: wdAUC 0.5341 acc 0.5464 maj 0.5116 mcc 0.0918 delta n/a
+done w1_h5_s43_original: wdAUC 0.4363 acc 0.4882 maj 0.5293 mcc -0.0702 delta 0.0
+done w1_h5_s43_macd_norm: wdAUC 0.5019 acc 0.5297 maj 0.5293 mcc 0.0094 delta n/a

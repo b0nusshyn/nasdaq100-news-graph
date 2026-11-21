@@ -1,0 +1,26 @@
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+start w0_h5_s42_persistent
+done w0_h5_s42_persistent 0.5377188803242695
+start w0_h1_s42_persistent
+done w0_h1_s42_persistent 0.5155740217647842
+start w0_h1_s42_sparse
+done w0_h1_s42_sparse 0.5136513200681032
+start w0_h5_s42_sparse
+done w0_h5_s42_sparse 0.5401316528012303
+start w1_h1_s42_persistent
+done w1_h1_s42_persistent 0.5109371465516643
+start w1_h1_s42_sparse
+done w1_h1_s42_sparse 0.49590865232120823
+start w1_h5_s42_persistent
+done w1_h5_s42_persistent 0.5108180747266543
+start w1_h5_s42_sparse
+done w1_h5_s42_sparse 0.5208342287351767
+start w0_h1_s43_persistent
+done w0_h1_s43_persistent 0.512539778069319
+start w0_h5_s43_persistent
+done w0_h5_s43_persistent 0.5333275826348044
+start w1_h1_s43_persistent
+done w1_h1_s43_persistent 0.4987001806718949
+start w1_h5_s43_persistent
+done w1_h5_s43_persistent 0.44264206912376336

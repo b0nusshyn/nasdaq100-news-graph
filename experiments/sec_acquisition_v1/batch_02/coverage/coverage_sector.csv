@@ -1,0 +1,19 @@
+year,sector,rows,tickers,issuer_rows,event_rows,fundamental_rows,provenance_rows
+2022,Communication Services,1503,14,234,223,42,223
+2022,Consumer Discretionary,1764,16,117,0,0,0
+2022,Consumer Staples,819,7,351,234,53,234
+2022,Energy,18,2,0,0,0,0
+2022,Health Care,1521,13,234,117,0,117
+2022,Industrials,936,8,117,0,0,0
+2022,Information Technology,4887,44,161,158,0,158
+2022,Real Estate,9,1,0,0,0,0
+2022,Utilities,468,4,0,0,0,0
+2023,Communication Services,1065,11,424,424,100,424
+2023,Consumer Discretionary,1584,16,106,0,0,0
+2023,Consumer Staples,745,8,318,212,48,212
+2023,Energy,212,2,0,0,0,0
+2023,Health Care,1471,14,212,106,28,106
+2023,Industrials,848,8,106,0,0,0
+2023,Information Technology,4246,44,321,212,102,212
+2023,Real Estate,106,1,0,0,0,0
+2023,Utilities,424,4,0,0,0,0

@@ -1,0 +1,87 @@
+{
+  "gate": {
+    "2022": {
+      "rows": 11925,
+      "fund_row_share": 0.929559748427673,
+      "event_row_share": 0.9570649895178197,
+      "fund_tickers": 102,
+      "fund_sectors": 9,
+      "pass": true
+    },
+    "2023": {
+      "rows": 10701,
+      "fund_row_share": 0.9419680403700589,
+      "event_row_share": 0.95878889823381,
+      "fund_tickers": 103,
+      "fund_sectors": 9,
+      "pass": true
+    }
+  },
+  "arms": {
+    "original": [],
+    "event": [
+      "sec_has_event",
+      "sec_recency",
+      "sec_filing_window",
+      "sec_is_annual"
+    ],
+    "fund": [
+      "sec_has_fund",
+      "sec_rev_growth",
+      "sec_op_margin",
+      "sec_op_margin_chg",
+      "sec_net_margin_chg",
+      "sec_eps_chg"
+    ],
+    "both": [
+      "sec_has_event",
+      "sec_recency",
+      "sec_filing_window",
+      "sec_is_annual",
+      "sec_has_fund",
+      "sec_rev_growth",
+      "sec_op_margin",
+      "sec_op_margin_chg",
+      "sec_net_margin_chg",
+      "sec_eps_chg"
+    ]
+  },
+  "clip": {
+    "sec_rev_growth": [
+      -0.9,
+      2.0
+    ],
+    "sec_op_margin": [
+      -1.0,
+      1.0
+    ],
+    "sec_op_margin_chg": [
+      -0.5,
+      0.5
+    ],
+    "sec_net_margin_chg": [
+      -0.5,
+      0.5
+    ],
+    "sec_eps_chg": [
+      -1.0,
+      1.0
+    ]
+  },
+  "ranges": [
+    [
+      "2022-07-18",
+      "2022-12-30"
+    ],
+    [
+      "2023-07-24",
+      "2023-12-20"
+    ]
+  ],
+  "seeds": [
+    42,
+    43
+  ],
+  "store_sha256": "4c904167bf2f571bf4f8ce2ef150d10d774695fb6f9ae6caca60a4385766f4ce",
+  "code_sha256": "220052ed839ea27f53c96652a7236b7b2382545bf02426878ede9fdacce76e72"
+}

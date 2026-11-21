@@ -1,0 +1,3 @@
+# Fit-only age weighting follow-up
+
+The 2022 learning curve shows poor performance on the longer 75% history at both seeds. If the completed curve fails to establish a stable gain from more data, test a fixed recency hypothesis against the 100% model: keep every eligible fit row and the same full-fit graph, scaler, validation, architecture and labels, but apply exponential BCE weights with a one-trading-year (252-session) half-life. This predeclared schedule is independent of outer performance. Only historical trading-date age within the fit partition enters the weights. All four five-day period/seed cells or none. Do not tune the half-life. This comparison isolates age weighting of gradients, not the effect of graph or normalization age.

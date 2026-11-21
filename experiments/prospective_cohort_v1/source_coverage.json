@@ -1,0 +1,272 @@
+[
+  {
+    "ticker": "TSLA",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "NVDA",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "AAPL",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "MSFT",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "AMZN",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "AMD",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "META",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "GOOGL",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "GOOG",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "NFLX",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "AVGO",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "ADBE",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "INTC",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "PYPL",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "COST",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "MU",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "QCOM",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "CSCO",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "PANW",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "BKNG",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "PDD",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "PEP",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "TXN",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "AMAT",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "CMCSA",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "INTU",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "TMUS",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "LRCX",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "ABNB",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  },
+  {
+    "ticker": "ASML",
+    "first_expected": "2026-08-26",
+    "latest": "2026-11-19",
+    "rows_in_61": 61,
+    "missing": [],
+    "invalid_or_nonpositive": 0,
+    "stable_identity_verified": false
+  }
+]

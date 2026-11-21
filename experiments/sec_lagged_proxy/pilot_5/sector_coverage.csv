@@ -1,0 +1,19 @@
+period,sector,rows,issuers_mapped,filing_rows,financial_rows
+2022,Communication Services,1503,117,0,0
+2022,Consumer Discretionary,1764,0,0,0
+2022,Consumer Staples,819,0,0,0
+2022,Energy,18,0,0,0
+2022,Health Care,1521,0,0,0
+2022,Industrials,936,0,0,0
+2022,Information Technology,4887,44,38,0
+2022,Real Estate,9,0,0,0
+2022,Utilities,468,0,0,0
+2023,Communication Services,1065,318,0,0
+2023,Consumer Discretionary,1584,0,0,0
+2023,Consumer Staples,745,0,0,0
+2023,Energy,212,0,0,0
+2023,Health Care,1471,0,0,0
+2023,Industrials,848,0,0,0
+2023,Information Technology,4246,256,35,35
+2023,Real Estate,106,0,0,0
+2023,Utilities,424,0,0,0

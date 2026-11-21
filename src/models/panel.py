@@ -40,6 +40,7 @@ import pandas as pd
 from src.core.schema import EMB_COLS
 from src.data.indicators import FEATURES as INDICATORS
 from src.data.indicators import compute_indicators
+from src.models.price_features import EXTENDED_PRICE, compute_extended_price
 
 NEWS_SCALARS = ("has_news", "sentiment", "confidence")
 FULL_WINDOW = "has_full_window"
@@ -57,6 +58,8 @@ class Panel:
     news: np.ndarray  # [D, K, 3] has_news, sentiment, confidence; 0 where no news
     emb_at: np.ndarray  # [M, 2] (day, ticker) of each row with news
     emb: np.ndarray | None  # [M, 768] float32 FinBERT embedding of those rows, or None
+
+    price_names: tuple[str, ...] = INDICATORS
 
     def day_index(self, dates) -> np.ndarray:
         idx = self.days.get_indexer(pd.DatetimeIndex(dates))
@@ -80,7 +83,8 @@ class Panel:
 
 
 def build_panel(
-    prices: pd.DataFrame, labels: pd.DataFrame, news_features: pd.DataFrame, *, embeddings: bool = True
+    prices: pd.DataFrame, labels: pd.DataFrame, news_features: pd.DataFrame, *,
+    embeddings: bool = True, extended_price: bool = False,
 ) -> Panel:
     """Assemble the panel from SCHEMA.md tables. `news_features` needs the `emb_*` columns only
     when `embeddings` is true."""
@@ -94,9 +98,12 @@ def build_panel(
         return d[keep], k[keep], keep
 
     ind = compute_indicators(prices)
-    price = np.full((*shape, len(INDICATORS)), np.nan)
+    price_names = INDICATORS + EXTENDED_PRICE if extended_price else INDICATORS
+    if extended_price:
+        ind = ind.join(compute_extended_price(prices))
+    price = np.full((*shape, len(price_names)), np.nan)
     d, k, keep = at(ind)
-    price[d, k] = ind.loc[keep, list(INDICATORS)].to_numpy(float)
+    price[d, k] = ind.loc[keep, list(price_names)].to_numpy(float)
 
     in_index = np.zeros(shape, dtype=bool)
     d, k, keep = at(prices)
@@ -113,16 +120,29 @@ def build_panel(
     d, k, keep = at(covered)
     news[d, k] = covered.loc[keep, list(NEWS_SCALARS)].to_numpy(float)
     emb = covered.loc[keep, list(EMB_COLS)].to_numpy(np.float32) if embeddings else None
-    return Panel(days, tickers, price, in_index, y, news, np.stack([d, k], axis=1), emb)
+    return Panel(days, tickers, price, in_index, y, news, np.stack([d, k], axis=1), emb, price_names)
 
 
-def load_panel(*, embeddings: bool = True) -> Panel:
+def lag_on_sessions(frame: pd.DataFrame, calendar: pd.DatetimeIndex, sessions: int) -> pd.DataFrame:
+    """Make observations available after a nonnegative lag on the panel calendar."""
+    if isinstance(sessions, bool) or not isinstance(sessions, int) or sessions < 0:
+        raise ValueError("news_lag_sessions must be a nonnegative integer")
+    if sessions == 0:
+        return frame
+    availability = pd.Series(calendar[sessions:], index=calendar[:-sessions])
+    return frame.loc[frame.date.isin(availability.index)].assign(date=lambda rows: rows.date.map(availability))
+
+
+def load_panel(*, embeddings: bool = True, news_lag_sessions: int = 0, extended_price: bool = False) -> Panel:
     """`build_panel` on the artifacts in the data directory (`NDX_DATA_DIR`)."""
     from src.core.io import read_table
 
     news_cols = None if embeddings else ["date", "ticker", *NEWS_SCALARS]
-    return build_panel(read_table("prices"), read_table("labels"), read_table("news_features", columns=news_cols),
-                       embeddings=embeddings)
+    prices = read_table("prices")
+    news = read_table("news_features", columns=news_cols)
+    calendar = pd.DatetimeIndex(sorted(prices.date.unique()))
+    return build_panel(prices, read_table("labels"), lag_on_sessions(news, calendar, news_lag_sessions),
+                       embeddings=embeddings, extended_price=extended_price)
 
 
 @dataclass(frozen=True)
@@ -161,7 +181,7 @@ def fit_features(
     embedding_dim: int = 64,
 ) -> FoldFeatures:
     """Scale every feature with statistics from the in-index rows on `train_dates` only."""
-    unknown = (set(price) - set(INDICATORS)) | (set(news) - set(NEWS_SCALARS))
+    unknown = (set(price) - set(panel.price_names)) | (set(news) - set(NEWS_SCALARS))
     if unknown:
         raise ValueError(f"unknown features: {sorted(unknown)}")
     on = np.zeros(len(panel.days), dtype=bool)
@@ -169,7 +189,7 @@ def fit_features(
     train = on[:, None] & panel.in_index  # [D, K]
     parts, names, stats = [], [], {}
 
-    cols = [INDICATORS.index(c) for c in price]
+    cols = [panel.price_names.index(c) for c in price]
     raw = panel.price[:, :, cols]
     if price:
         vals = raw[train]

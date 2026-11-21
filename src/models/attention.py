@@ -63,7 +63,7 @@ def explain_days(fitted, panel, day_idx: np.ndarray) -> tuple[pd.DataFrame, pd.D
     with torch.no_grad():
         for chunk in _chunks(day_idx, fitted.batch_days):
             b = make_batch(chunk, panel, fitted.features, fitted.graph, fitted.horizon)
-            out = model.explain(b["x"], b["edge_index"], b["edge_type"], b["edge_weight"])
+            out = model.explain(b["x"], b["edge_index"], b["edge_type"], b["edge_weight"], node_day=b["node_day"])
             target = b["target"].numpy()
             at = b["at"]  # (day, ticker) of every node
             logit, base = out["logits"].numpy(), out["logits_no_graph"].numpy()

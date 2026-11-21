@@ -1,0 +1,74 @@
+{
+  "w0_h5_s42_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h5_s42_persistent.parquet",
+    "prediction_sha256": "64d27d35653d1dc7f6b4a79e542c5b8e6b4e3a3b24af3011cd4cc07f1baa3ba6",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h5_s42_persistent.pt",
+    "checkpoint_sha256": "035fdbd6f85c5f0891c25be5d56914ee42bcc4370d54e3dcc563c842b24c9126"
+  },
+  "w0_h1_s42_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h1_s42_persistent.parquet",
+    "prediction_sha256": "4a132e8405ecb42dd6ed3dee693bd17cb5d8ac66796e20db969b2430f7b15616",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h1_s42_persistent.pt",
+    "checkpoint_sha256": "3d41230af6397d27db68ffe4c59b5ddcd88b1e16d90c1e516712894549dd27f2"
+  },
+  "w0_h1_s42_sparse": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h1_s42_sparse.parquet",
+    "prediction_sha256": "dc2bcc8c1f041156b1bb081245c8f1d4b75865927dd865861db4f842b4f22c60",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h1_s42_sparse.pt",
+    "checkpoint_sha256": "e0fae6649cb03f20adab53b163ed9f7818c2a5297c8b56c38f769cba1d0d9c66"
+  },
+  "w0_h5_s42_sparse": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h5_s42_sparse.parquet",
+    "prediction_sha256": "ff6121e7e1983ca757102107d3d35fd9ed12d3d3cb47ab62192042f202ce942e",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h5_s42_sparse.pt",
+    "checkpoint_sha256": "995a1e8a6723e74af54cc635e73a1d6084a23dc871252024e7177a6b76a41c60"
+  },
+  "w1_h1_s42_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h1_s42_persistent.parquet",
+    "prediction_sha256": "7270f7cbe41779124d9187f9c1e1462e46ebac6915ac9ef522324b46b317040a",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h1_s42_persistent.pt",
+    "checkpoint_sha256": "408611c14349afbe158b07d757452060783e316c905142de0ba43212e029f712"
+  },
+  "w1_h1_s42_sparse": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h1_s42_sparse.parquet",
+    "prediction_sha256": "2200e9a6be3d739caadb1d528d1bda547928143784742fec53780d67e597e5ef",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h1_s42_sparse.pt",
+    "checkpoint_sha256": "da1fa59a68b0d9411f725f47cf5b1817622d1d4f2335b5f21ebe396f436c59ab"
+  },
+  "w1_h5_s42_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h5_s42_persistent.parquet",
+    "prediction_sha256": "602b691194653ed16eec3f9b24bc79a0824ac28d358d4b16c1baa97c8fdf3049",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h5_s42_persistent.pt",
+    "checkpoint_sha256": "a2009521e41deba891fc3e747de05378638aa34610dc8c25e2dd0639daf93d35"
+  },
+  "w1_h5_s42_sparse": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h5_s42_sparse.parquet",
+    "prediction_sha256": "544aaf10abc000863f044027ccbd22e5b7894231a48b4c5b09fb782d38b9a99a",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h5_s42_sparse.pt",
+    "checkpoint_sha256": "53ce5930c76a17ec0e53f551035d6b3e1bdc56b5746a267578db05703666fc3a"
+  },
+  "w0_h1_s43_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h1_s43_persistent.parquet",
+    "prediction_sha256": "3c897d0ebbf6a1459b3730c8885412dc57941d3b38ee78c59b814f1e46f2eafe",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h1_s43_persistent.pt",
+    "checkpoint_sha256": "5872c66c9aed3f5c6c58aefd2e94e13aec653c37f4afa2166879d136538b295a"
+  },
+  "w0_h5_s43_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h5_s43_persistent.parquet",
+    "prediction_sha256": "5cfe8f92a0e92d2db90b4c6044c115e5431cb73389fcbe16739e1276404b2de8",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w0_h5_s43_persistent.pt",
+    "checkpoint_sha256": "6f7846e83334f24f14c7fdac91066217cd6dde76115208b8d3a56f84bc668b8c"
+  },
+  "w1_h1_s43_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h1_s43_persistent.parquet",
+    "prediction_sha256": "503536d2b0ea7dc52d9c5265f2ff01242919f746396a07ab4e60137518e1e1c3",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h1_s43_persistent.pt",
+    "checkpoint_sha256": "b98fb5316d058a2584b91e489c1563dface607bc7fc56206ff1697ad3a770f0f"
+  },
+  "w1_h5_s43_persistent": {
+    "predictions": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h5_s43_persistent.parquet",
+    "prediction_sha256": "f2c999cfe3ae934cf7e3534a2e7e1ab478882e35f58dadd78607c55c939fbb33",
+    "checkpoint": "/Users/nonladapream/nasdaq100-news-graph/experiments/persistent_graph_v1/runs/w1_h5_s43_persistent.pt",
+    "checkpoint_sha256": "b19b7c79dd5d3f111e0355943cbf21f4c9f1099821fbd82346aa81c2596d8aa4"
+  }
+}

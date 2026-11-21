@@ -154,7 +154,7 @@ def test_early_stopping_checks_within_day_auc_several_times_per_epoch_and_logs_t
     from src.models.train import train_fold
 
     panel, edges, folds = fixture_inputs
-    cfg = {**SMALL, "train": {**SMALL["train"], "validate_every_steps": 1}}
+    cfg = {**SMALL, "train": {**SMALL["train"], "validate_every_steps": 1, "record_history": True}}
     _, info = train_fold(panel, edges, folds[0], 1, cfg, log=lambda *_: None)
     assert info["stop_metric"] == "within_day_auc"
     assert info["checks"] == info["steps"] > info["epochs"]  # one check per optimiser step
@@ -162,14 +162,82 @@ def test_early_stopping_checks_within_day_auc_several_times_per_epoch_and_logs_t
     for k in ("best_val_within_day_auc", "val_within_day_auc_at_loss_optimum", "val_loss_at_best", "val_mcc"):
         assert k in info
     assert info["best_val_within_day_auc"] >= info["val_within_day_auc_at_loss_optimum"]
+    assert len(info["history"]) == info["checks"]
+    assert all("train_probe_loss" in check and "train_probe_within_day_auc" in check for check in info["history"])
 
 
-def test_tuning_can_skip_the_test_window_entirely(fixture_inputs):
+def test_tuning_can_skip_the_test_window_entirely(fixture_inputs, monkeypatch):
     from src.models.train import train_fold
 
     panel, edges, folds = fixture_inputs
+    original = type(panel).row_mask
+
+    def no_test_rows(self, dates, horizon):
+        assert not dates.isin(folds[0].test).any()
+        return original(self, dates, horizon)
+
+    monkeypatch.setattr(type(panel), "row_mask", no_test_rows)
     preds, info = train_fold(panel, edges, folds[0], 1, SMALL, predict_test=False, log=lambda *_: None)
     assert preds is None and "test_rows" not in info
+
+
+def test_weight_fit_preprocessing_excludes_validation_rows(fixture_inputs):
+    from copy import deepcopy
+
+    from src.models.train import fold_inputs, training_partitions
+
+    panel, _, folds = fixture_inputs
+    fold = folds[0]
+    cfg = {**SMALL, "gat": {**SMALL["gat"], "edge_types": []},
+           "train": {**SMALL["train"], "preprocessing_scope": "weight_fit"}}
+    fit, _ = training_partitions(fold, cfg)
+    last_fit = panel.days.get_loc(fit[-1])
+    changed = deepcopy(panel)
+    changed.price[last_fit + 1:] += 1000
+    changed.news[last_fit + 1:] *= 1000
+    changed.emb[changed.emb_at[:, 0] > last_fit] *= 1000
+    _, before, _ = fold_inputs(panel, None, fold, cfg)
+    _, after, _ = fold_inputs(changed, None, fold, cfg)
+    np.testing.assert_array_equal(before.x[:last_fit + 1], after.x[:last_fit + 1])
+    assert not np.array_equal(before.x[last_fit + 1:], after.x[last_fit + 1:])
+
+
+def test_weight_fit_rebuilds_learned_edges_with_only_fit_dates(fixture_inputs, monkeypatch):
+    from src.graph import build_edges
+    from src.models.train import GraphSources, fold_inputs, training_partitions
+
+    panel, edges, folds = fixture_inputs
+    cfg = {**SMALL, "gat": {**SMALL["gat"], "edge_types": ["corr", "comention"]},
+           "train": {**SMALL["train"], "preprocessing_scope": "weight_fit"}}
+    fold = folds[0]
+    fit, _ = training_partitions(fold, cfg)
+    calls = []
+
+    def build(source, partitions):
+        assert len(partitions) == 1
+        assert partitions[0].train.equals(fit)
+        calls.append(source)
+        return edges[edges["edge_type"] == ("corr" if len(calls) == 1 else "comention")]
+
+    monkeypatch.setattr(build_edges, "corr_edges", build)
+    monkeypatch.setattr(build_edges, "comention_edges", build)
+    with pytest.raises(ValueError, match="GraphSources"):
+        fold_inputs(panel, edges, fold, cfg)
+    _, _, graph = fold_inputs(panel, GraphSources(prices=edges, article_tickers=edges), fold, cfg)
+    assert len(calls) == 2
+    assert set(graph["type"]) == {0, 1}
+
+
+def test_checkpoint_metadata_uses_saved_state_when_auc_improvement_is_below_tolerance(fixture_inputs, monkeypatch):
+    from src.models import ladder_report
+    from src.models.train import train_fold
+
+    panel, edges, folds = fixture_inputs
+    values = iter([0.60, 0.6000005, 0.58])
+    monkeypatch.setattr(ladder_report, "within_day_auc", lambda _: next(values))
+    _, info = train_fold(panel, edges, folds[0], 1, SMALL, predict_test=False, log=lambda *_: None)
+    assert info["best_step"] == info["steps_per_epoch"]
+    assert info["best_val_within_day_auc"] == 0.60
 
 
 def test_ablations_drop_news_features_and_edge_types(fixture_inputs):
@@ -215,11 +283,13 @@ def test_fold_report_leads_with_within_day_auc_and_reports_the_base_rate_beside_
     assert chosen["mcc"] == 1.0 and chosen["accuracy"] == 1.0
 
 
-def test_run_record_stores_each_fold_threshold_beside_the_predictions(tmp_path):
+def test_run_record_stores_each_fold_threshold_beside_the_predictions(tmp_path, monkeypatch):
     import json
 
+    from src.graph import build_edges
     from src.models.train import write_run_record
 
+    monkeypatch.setattr(build_edges, "_code_version", lambda: {"git_commit": "test"})
     out = write_run_record(tmp_path / "gat_lstm_no_news.parquet", {"seed": 0}, ["news"],
                            [{"fold": 0, "horizon": 1, "threshold": 0.53}])
     record = json.loads(out.read_text())

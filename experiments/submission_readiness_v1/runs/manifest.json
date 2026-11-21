@@ -1,0 +1,63 @@
+{
+  "alpha": 50,
+  "stock": [
+    "stock_return",
+    "stock_5",
+    "risk_adj_momentum",
+    "relative_20",
+    "vol_20",
+    "beta_20",
+    "range_5",
+    "volume_relative",
+    "trend_distance",
+    "relative_reversal_5",
+    "rank_5",
+    "rank_vol"
+  ],
+  "market": [
+    "market_1",
+    "market_5",
+    "market_20",
+    "market_vol",
+    "breadth",
+    "dispersion"
+  ],
+  "cohort": [
+    "TSLA",
+    "NVDA",
+    "AAPL",
+    "MSFT",
+    "AMZN",
+    "AMD",
+    "META",
+    "GOOGL",
+    "GOOG",
+    "NFLX",
+    "AVGO",
+    "ADBE",
+    "INTC",
+    "PYPL",
+    "COST",
+    "MU",
+    "QCOM",
+    "CSCO",
+    "PANW",
+    "BKNG",
+    "PDD",
+    "PEP",
+    "TXN",
+    "AMAT",
+    "CMCSA",
+    "INTU",
+    "TMUS",
+    "LRCX",
+    "ABNB",
+    "ASML"
+  ],
+  "inputs_sha256": {
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/submission_readiness_v1/decompose.py": "8d1382b4ca46ce3fc8f069414b957f72e978765eea66b7d8346ea70dd1d86ab5",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/submission_readiness_v1/protocol.md": "91dd5928ce955accc34b3271267820b059a34f6447ca276a4ceea40a5e6deebc",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/offline_rank_v1/runs/ledger.jsonl": "e2d8010177e2f2f17412429875b18c9c8cc0142e587e2b3f021e0185c83978c4",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/external_raw_panel.parquet": "32c8178bee3d667dcca0a52b5dc89ddeb7c2d2d7f88237eb548ece3407cf26c6"
+  }
+}

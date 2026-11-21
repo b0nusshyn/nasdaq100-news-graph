@@ -1,0 +1,7 @@
+# Persistent graph experiment
+
+The 2022 fallback was replayed before editing. All 11,925 scores and 1,492 reconstructed edges matched. The exact fallback reference, split, graph and hashes are in [historical replay](../historical_demo_v1/development_replay.json). Run the two unchanged historical replay commands documented there. Initial hypothesis and replication are fixed in [protocol](protocol.md).
+
+The initial 2022 5d feasibility run completed at 0.5377 AUC. The matched validation and assessment paths ran without model changes. The second hypothesis was fixed equal-weight averaging of two existing original-attention checkpoints to address seed variance. Its saved-score replay completed without fitting and trailed seed 42 in all four AUC comparisons. Full graph persistence results and replay will follow below.
+
+Completed all 12 planned fits and four no-fit ensemble runs. All new checkpoint scores replayed within 1e-7. Persistence improved 2023 1d AUC slightly versus original across both seeds, but the gains did not reproduce in 2022 and neither 5d performance nor full-population accuracy justified a replacement. Sparse 5d gains were limited to one window. The ensemble lowered ranking in every matched comparison. The verified fallback remains the best 5d AUC/MCC and the demonstration choice. [Report](report.md) · [Best model registry](best_model_registry.json) · [All runs](tables.md). Stop rather than further optimize these windows. Next research needs independently timed features or a qualified unused assessment. No notebook work or 2026 scoring.

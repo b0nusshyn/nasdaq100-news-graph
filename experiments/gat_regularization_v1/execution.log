@@ -1,0 +1,34 @@
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+start w0_h5_s42_dropedge
+done w0_h5_s42_dropedge 0.541241316317132
+start w0_h1_s42_small
+done w0_h1_s42_small 0.5118389524380291
+start w0_h1_s42_dropedge
+done w0_h1_s42_dropedge 0.5138019691585443
+start w0_h5_s42_small
+done w0_h5_s42_small 0.5475532184165435
+start w1_h1_s42_small
+done w1_h1_s42_small 0.4973233009552577
+start w1_h1_s42_dropedge
+done w1_h1_s42_dropedge 0.5039831265784014
+start w1_h5_s42_small
+done w1_h5_s42_small 0.4999323473340043
+start w1_h5_s42_dropedge
+done w1_h5_s42_dropedge 0.5028365127546586
+start w0_h1_s43_small
+done w0_h1_s43_small 0.5141191034986567
+start w0_h1_s43_dropedge
+done w0_h1_s43_dropedge 0.5136645940367309
+start w0_h5_s43_small
+done w0_h5_s43_small 0.529582682187015
+start w0_h5_s43_dropedge
+done w0_h5_s43_dropedge 0.5429513602174724
+start w1_h1_s43_small
+done w1_h1_s43_small 0.5070719583868005
+start w1_h1_s43_dropedge
+done w1_h1_s43_dropedge 0.4928018547493008
+start w1_h5_s43_small
+done w1_h5_s43_small 0.4611498202860385
+start w1_h5_s43_dropedge
+done w1_h5_s43_dropedge 0.43718816950209355

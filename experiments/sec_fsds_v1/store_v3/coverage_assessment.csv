@@ -1,0 +1,3 @@
+year,rows,tickers,sec_has_issuer_rows,sec_has_issuer_pct,sec_has_issuer_tickers,sec_has_issuer_sectors,sec_has_issuer_dates,sec_has_event_rows,sec_has_event_pct,sec_has_event_tickers,sec_has_event_sectors,sec_has_event_dates,sec_has_fund_rows,sec_has_fund_pct,sec_has_fund_tickers,sec_has_fund_sectors,sec_has_fund_dates
+2022,11925,109,11691,98.04,106,9,117,11413,95.71,105,9,117,11085,92.96,102,9,117
+2023,10701,108,10489,98.02,105,9,106,10260,95.88,105,9,106,10080,94.2,103,9,106

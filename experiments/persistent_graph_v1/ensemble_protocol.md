@@ -1,0 +1,3 @@
+# Seed-averaging feasibility check
+
+The original GAT has large seed sensitivity, especially at 5d in 2023. Use only existing matched original-attention price-plus-correlation checkpoints 42 and 43. Independently center each member's score on its own earlier validation-selected cutoff and average with fixed equal weights. Classify at zero. This only shifts the daily ranking by the sum of two constants for a fold. Do not fit weights or choose members by assessment. Report both seeds and both windows on full populations and use paired date blocks versus seed 42. This is a secondary developmental calibration and variance check and does not change the graph experiment or select a deployment model.

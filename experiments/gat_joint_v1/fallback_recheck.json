@@ -1,0 +1,57 @@
+{
+  "mode": "checkpoint_inference",
+  "run": "w0_h5_s42_original",
+  "seed": 42,
+  "split": {
+    "fit": [
+      "2021-04-21",
+      "2022-04-19",
+      252
+    ],
+    "validation": [
+      "2022-04-27",
+      "2022-07-08",
+      50
+    ],
+    "assessment": [
+      "2022-07-18",
+      "2022-12-30",
+      117
+    ]
+  },
+  "features": [
+    "ret_1d",
+    "volatility_20d",
+    "rsi_14",
+    "macd",
+    "macd_signal",
+    "volume_z_20d",
+    "has_full_window"
+  ],
+  "graph_rows": 1492,
+  "graph_rebuild_exact": true,
+  "checkpoint_step": 160,
+  "threshold": 0.4202089816331863,
+  "metrics": {
+    "within_day_auc": 0.5438356674216742,
+    "auc": 0.540886745507402,
+    "threshold": 0.4202089816331863,
+    "accuracy": 0.5548008385744235,
+    "base_rate": 0.48838574423480086,
+    "f1": 0.5638708617432022,
+    "mcc": 0.11137160864722019,
+    "share_predicted_up": 0.5324109014675052,
+    "majority": 0.5116142557651991,
+    "rows": 11925,
+    "dates": 117
+  },
+  "max_probability_delta": 0.0,
+  "sha256": {
+    "experiments/gat_edge_weight_v1/runs/w0_h5_s42_original.pt": "708066a4bbec82a53f78ad35ffee8fb61c894efa715f58cb315ca79aaf749d1e",
+    "experiments/gat_edge_weight_v1/runs/w0_h5_s42_original.parquet": "7c9f050dff9933e2210415105e132984d2901bb571c4c01ec8572645e5ca4b16",
+    "experiments/gat_edge_weight_v1/runs/graph_0.parquet": "3cf6d964fa8c67d6a2baf6ccd638b21e821a00783da38d54c5a8d5a88ca790cb",
+    "data/prices.parquet": "fc6d3159a38f7904689c5e4362432e1a56baa2d93ac47a603158cf207af130d6",
+    "data/labels.parquet": "e8655d14bbd22c1dd5faa8cca5eed690f41242fe4a3fb1f668e5a1788fe8b16a",
+    "data/membership.parquet": "a2655bd3878cb6bd53d76c6db22eadf2d936a77642fc47f278f9cb93de232678"
+  }
+}

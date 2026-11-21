@@ -1,0 +1,802 @@
+{
+  "revision": "2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea",
+  "cohort_asof": "2023-12-29",
+  "cohort": [
+    "AAPL",
+    "ABNB",
+    "ADBE",
+    "ADI",
+    "ADP",
+    "ADSK",
+    "AEP",
+    "AMAT",
+    "AMD",
+    "AMGN",
+    "AMZN",
+    "ANSS",
+    "ASML",
+    "AVGO",
+    "AZN",
+    "BIIB",
+    "BKNG",
+    "BKR",
+    "CCEP",
+    "CDNS",
+    "CDW",
+    "CEG",
+    "CHTR",
+    "CMCSA",
+    "COST",
+    "CPRT",
+    "CRWD",
+    "CSCO",
+    "CSGP",
+    "CSX",
+    "CTAS",
+    "CTSH",
+    "DASH",
+    "DDOG",
+    "DLTR",
+    "DXCM",
+    "EA",
+    "EXC",
+    "FANG",
+    "FAST",
+    "FTNT",
+    "GEHC",
+    "GFS",
+    "GILD",
+    "GOOG",
+    "GOOGL",
+    "HON",
+    "IDXX",
+    "ILMN",
+    "INTC",
+    "INTU",
+    "ISRG",
+    "KDP",
+    "KHC",
+    "KLAC",
+    "LRCX",
+    "LULU",
+    "MAR",
+    "MCHP",
+    "MDB",
+    "MDLZ",
+    "MELI",
+    "META",
+    "MNST",
+    "MRNA",
+    "MRVL",
+    "MSFT",
+    "MU",
+    "NFLX",
+    "NVDA",
+    "NXPI",
+    "ODFL",
+    "ON",
+    "ORLY",
+    "PANW",
+    "PAYX",
+    "PCAR",
+    "PDD",
+    "PEP",
+    "PYPL",
+    "QCOM",
+    "REGN",
+    "ROP",
+    "ROST",
+    "SBUX",
+    "SIRI",
+    "SNPS",
+    "SPLK",
+    "TEAM",
+    "TMUS",
+    "TSLA",
+    "TTD",
+    "TTWO",
+    "TXN",
+    "VRSK",
+    "VRTX",
+    "WBA",
+    "WBD",
+    "WDAY",
+    "XEL",
+    "ZS"
+  ],
+  "archive_missing_symbols": [
+    "ANSS",
+    "EA",
+    "SPLK",
+    "WBA"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/README.md",
+      "bytes": 566,
+      "sha256": "0b4a4e3f9ae4b9e7fee7fa851f7ef433f1422ce980995290c77a8bf27460aa81",
+      "retrieval_record_utc": "2026-11-20T16:47:09.699570+00:00"
+    },
+    {
+      "path": "data/daily/AAPL.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AAPL.parquet",
+      "bytes": 87962,
+      "sha256": "d46a882706f75bacf0aff68af6db59109650ea00b97e1b445b006e9c058efa9a",
+      "retrieval_record_utc": "2026-11-20T16:47:10.323953+00:00"
+    },
+    {
+      "path": "data/daily/ABNB.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ABNB.parquet",
+      "bytes": 72290,
+      "sha256": "e5eac263330dc75b8e0af56cd00c424bb1e6f6d035779a8c71ea4049961dc5bd",
+      "retrieval_record_utc": "2026-11-20T16:47:09.699935+00:00"
+    },
+    {
+      "path": "data/daily/ADBE.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ADBE.parquet",
+      "bytes": 86943,
+      "sha256": "f56e68df6f06a303b67b9dd962be774fdad567ed3bfc9831fdfb16e9ca076d08",
+      "retrieval_record_utc": "2026-11-20T16:47:09.699872+00:00"
+    },
+    {
+      "path": "data/daily/ADI.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ADI.parquet",
+      "bytes": 85939,
+      "sha256": "b942ca134cd1343547da4b4ac78ce44375078854c707bd896437abcc722c0a9d",
+      "retrieval_record_utc": "2026-11-20T16:47:10.370768+00:00"
+    },
+    {
+      "path": "data/daily/ADP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ADP.parquet",
+      "bytes": 85260,
+      "sha256": "8d67a066ce3dc8842ef37c09ca5df4d858f117f5c3cb8dbd3073b2335cb786c3",
+      "retrieval_record_utc": "2026-11-20T16:47:10.809268+00:00"
+    },
+    {
+      "path": "data/daily/ADSK.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ADSK.parquet",
+      "bytes": 84894,
+      "sha256": "f481d10339db797cc32433085cb4f0bedcec87352d0f9cbd72c0f00be7ddd421",
+      "retrieval_record_utc": "2026-11-20T16:47:10.322290+00:00"
+    },
+    {
+      "path": "data/daily/AEP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AEP.parquet",
+      "bytes": 80272,
+      "sha256": "249e8d75527903d3e72cfa183c43fd39c0e748fd4006efdfa63135dc6f0d0b0c",
+      "retrieval_record_utc": "2026-11-20T16:47:10.972593+00:00"
+    },
+    {
+      "path": "data/daily/AMAT.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AMAT.parquet",
+      "bytes": 87257,
+      "sha256": "799185dff9ca9f2cc771dac659c040e30e4a4c105f4111b2eb59c61d96f89772",
+      "retrieval_record_utc": "2026-11-20T16:47:11.012968+00:00"
+    },
+    {
+      "path": "data/daily/AMD.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AMD.parquet",
+      "bytes": 87701,
+      "sha256": "06c7449073680d445531698b353eb64451a1b30af4aa0de6b9dbcbe4d7415f11",
+      "retrieval_record_utc": "2026-11-20T16:47:11.022893+00:00"
+    },
+    {
+      "path": "data/daily/AMGN.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AMGN.parquet",
+      "bytes": 84737,
+      "sha256": "eccd3e48978e027c989075694f509a88d9a810f8074a38c57191d7284b2ac2cb",
+      "retrieval_record_utc": "2026-11-20T16:47:11.470546+00:00"
+    },
+    {
+      "path": "data/daily/AMZN.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AMZN.parquet",
+      "bytes": 87933,
+      "sha256": "c94769fd59c728e0cdc913769b14609d4eaaed422aa88c1ae53bee0a0ffcaba9",
+      "retrieval_record_utc": "2026-11-20T16:47:11.542831+00:00"
+    },
+    {
+      "path": "data/daily/ASML.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ASML.parquet",
+      "bytes": 87662,
+      "sha256": "a64759429b5b90360836cda14a0195c8e7568b4bbdf633fcc05cd4d64346a622",
+      "retrieval_record_utc": "2026-11-20T16:47:11.571334+00:00"
+    },
+    {
+      "path": "data/daily/AVGO.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AVGO.parquet",
+      "bytes": 88958,
+      "sha256": "a4b49f20449d17e37c0c42d1a7a8a2f57e09bf016c9e2257690bb20f6245b7fe",
+      "retrieval_record_utc": "2026-11-20T16:47:11.592372+00:00"
+    },
+    {
+      "path": "data/daily/AZN.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/AZN.parquet",
+      "bytes": 80956,
+      "sha256": "ea768d71a4b0fa46334a258c709025b2788d8425e5bf6f0d60e133a4842ed4b7",
+      "retrieval_record_utc": "2026-11-20T16:47:12.915721+00:00"
+    },
+    {
+      "path": "data/daily/BIIB.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/BIIB.parquet",
+      "bytes": 85135,
+      "sha256": "a5663aade58fee96640a8fc4414d895bf4b931847b2efa3d19fefd4710c03e73",
+      "retrieval_record_utc": "2026-11-20T16:47:12.128655+00:00"
+    },
+    {
+      "path": "data/daily/BKNG.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/BKNG.parquet",
+      "bytes": 87068,
+      "sha256": "56389bc77fb09d711a445484aaf42a2fffe8bdff40ce3daf7ef0482f869e3bd6",
+      "retrieval_record_utc": "2026-11-20T16:47:12.156400+00:00"
+    },
+    {
+      "path": "data/daily/BKR.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/BKR.parquet",
+      "bytes": 80659,
+      "sha256": "69c704e068466843dae9718f0eac6790bc6f881982f5f42a4d66641e0f990122",
+      "retrieval_record_utc": "2026-11-20T16:47:12.951484+00:00"
+    },
+    {
+      "path": "data/daily/CCEP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CCEP.parquet",
+      "bytes": 82117,
+      "sha256": "fb593dbc5a10be2a66ad428d3f9268d12a278e4bd31f363f66c53eba43de5802",
+      "retrieval_record_utc": "2026-11-20T16:47:12.679704+00:00"
+    },
+    {
+      "path": "data/daily/CDNS.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CDNS.parquet",
+      "bytes": 85861,
+      "sha256": "0ba2baea35639ecf4a4653ab2913d89d96d86152062acf2c812e3e387183aedf",
+      "retrieval_record_utc": "2026-11-20T16:47:12.725616+00:00"
+    },
+    {
+      "path": "data/daily/CDW.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CDW.parquet",
+      "bytes": 84831,
+      "sha256": "3547bbf5278bed86db742a0f9e1c60d2b141433122e37d5efd19cd8de1b33aac",
+      "retrieval_record_utc": "2026-11-20T16:47:13.262909+00:00"
+    },
+    {
+      "path": "data/daily/CEG.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CEG.parquet",
+      "bytes": 61947,
+      "sha256": "8268f179e74b3f8047dd86231cfe11d98c338ae32ee965c07c1d471d6f8005cd",
+      "retrieval_record_utc": "2026-11-20T16:47:14.075048+00:00"
+    },
+    {
+      "path": "data/daily/CHTR.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CHTR.parquet",
+      "bytes": 86967,
+      "sha256": "1341609134be826b6bc5c1b03217077b8a66da90efbb913deb4cac3714b8470a",
+      "retrieval_record_utc": "2026-11-20T16:47:13.579625+00:00"
+    },
+    {
+      "path": "data/daily/CMCSA.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CMCSA.parquet",
+      "bytes": 79858,
+      "sha256": "de49f09bc0b313f9a437c1d4699f7a80ec6b1b3928dcca24b3dd07c8b08ac7e6",
+      "retrieval_record_utc": "2026-11-20T16:47:13.586389+00:00"
+    },
+    {
+      "path": "data/daily/COST.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/COST.parquet",
+      "bytes": 86414,
+      "sha256": "8972cab6b8fde6cb27a303ba21ead1015f0de74a1cdc8d5f3cd5ab8abfa7b05f",
+      "retrieval_record_utc": "2026-11-20T16:47:13.998256+00:00"
+    },
+    {
+      "path": "data/daily/CPRT.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CPRT.parquet",
+      "bytes": 83115,
+      "sha256": "65ba7768d67791d8299446f812731ccba6e929ce5d1b300bbace4ca8d0dbe793",
+      "retrieval_record_utc": "2026-11-20T16:47:14.158106+00:00"
+    },
+    {
+      "path": "data/daily/CRWD.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CRWD.parquet",
+      "bytes": 87953,
+      "sha256": "bbc86750a9c577e28f7389638c4a99154ce5b5e0a85ea086793d287ae39b2434",
+      "retrieval_record_utc": "2026-11-20T16:47:14.185178+00:00"
+    },
+    {
+      "path": "data/daily/CSCO.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CSCO.parquet",
+      "bytes": 80176,
+      "sha256": "38b89248b96ab9119a220ee06e8696c2a005faf487cc48fca5d3d78cb7dcf773",
+      "retrieval_record_utc": "2026-11-20T16:47:14.692365+00:00"
+    },
+    {
+      "path": "data/daily/CSGP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CSGP.parquet",
+      "bytes": 81863,
+      "sha256": "0729f698d456c032b6dcbc5961457d0ac7bf5996e66eb30b71ec3c9160cbe718",
+      "retrieval_record_utc": "2026-11-20T16:47:15.000350+00:00"
+    },
+    {
+      "path": "data/daily/CSX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CSX.parquet",
+      "bytes": 76026,
+      "sha256": "f5bb0a8b2a9d6da6b0ed94ea15fc8932438c2ca13df7780eab4f5d773e78d7d6",
+      "retrieval_record_utc": "2026-11-20T16:47:14.732609+00:00"
+    },
+    {
+      "path": "data/daily/CTAS.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CTAS.parquet",
+      "bytes": 86072,
+      "sha256": "faf06cb07fc968707783fbf344a8d5d6799f9dd1d771b85bf332aec1faa658a2",
+      "retrieval_record_utc": "2026-11-20T16:47:14.765293+00:00"
+    },
+    {
+      "path": "data/daily/CTSH.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/CTSH.parquet",
+      "bytes": 79058,
+      "sha256": "3112cfc4a3c4f5d74f5c26a52823c3a9c9241422a095881f8c7b24bb1d0793c0",
+      "retrieval_record_utc": "2026-11-20T16:47:15.239326+00:00"
+    },
+    {
+      "path": "data/daily/DASH.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/DASH.parquet",
+      "bytes": 74662,
+      "sha256": "a312b7d0b337485c266760616b03d48d390dd6c5d66aafffc38ab3bc858786ef",
+      "retrieval_record_utc": "2026-11-20T16:47:15.258040+00:00"
+    },
+    {
+      "path": "data/daily/DDOG.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/DDOG.parquet",
+      "bytes": 85580,
+      "sha256": "85a4ede4c9ca3054dcbae7a8962ef814373072c8041401996a57f61258bc5add",
+      "retrieval_record_utc": "2026-11-20T16:47:15.319282+00:00"
+    },
+    {
+      "path": "data/daily/DLTR.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/DLTR.parquet",
+      "bytes": 83582,
+      "sha256": "200f93887676a7b35b33b02f0f12ac09a72c27db87808e34c5c7b0426802b047",
+      "retrieval_record_utc": "2026-11-20T16:47:15.669757+00:00"
+    },
+    {
+      "path": "data/daily/DXCM.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/DXCM.parquet",
+      "bytes": 84758,
+      "sha256": "f676ce1f1c909995455ca8c2b0ead718a617dc3c1bb1dff3f4e7efe725937f05",
+      "retrieval_record_utc": "2026-11-20T16:47:15.830397+00:00"
+    },
+    {
+      "path": "data/daily/EXC.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/EXC.parquet",
+      "bytes": 77470,
+      "sha256": "0840e7543423ca0d6d5b7e69460bbbc8b672e59cf94f6d64cf3a10deefb7e00d",
+      "retrieval_record_utc": "2026-11-20T16:47:15.808642+00:00"
+    },
+    {
+      "path": "data/daily/FANG.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/FANG.parquet",
+      "bytes": 85296,
+      "sha256": "a659502b2d39c2270e9e7764c7b3142584fefe287c7502853b8c9e612ca3328b",
+      "retrieval_record_utc": "2026-11-20T16:47:15.878863+00:00"
+    },
+    {
+      "path": "data/daily/FAST.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/FAST.parquet",
+      "bytes": 81943,
+      "sha256": "c43eb20a558415c34a3fb9b7fca9a16a0074e8188aaa30475d6654e62337417a",
+      "retrieval_record_utc": "2026-11-20T16:47:16.831380+00:00"
+    },
+    {
+      "path": "data/daily/FTNT.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/FTNT.parquet",
+      "bytes": 85424,
+      "sha256": "05e4993418fbb8437668818d2c241c2098aa2e89a35fd3c47c59f4ae5e5ffc38",
+      "retrieval_record_utc": "2026-11-20T16:47:16.367863+00:00"
+    },
+    {
+      "path": "data/daily/GEHC.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/GEHC.parquet",
+      "bytes": 47611,
+      "sha256": "580b64409cf3735894208b8f9b2e6b34825b3ffec08c3cf3b2827b74cfabf735",
+      "retrieval_record_utc": "2026-11-20T16:47:16.369756+00:00"
+    },
+    {
+      "path": "data/daily/GFS.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/GFS.parquet",
+      "bytes": 60888,
+      "sha256": "fc1b325b0630346d8e289ad01f3fdd0aa95dfda16aca0569e3525826048decd3",
+      "retrieval_record_utc": "2026-11-20T16:47:17.213981+00:00"
+    },
+    {
+      "path": "data/daily/GILD.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/GILD.parquet",
+      "bytes": 82221,
+      "sha256": "9182259bd8f73138ba35498c20f2e7e94af041f9c24b38fcb91d81c9723a5477",
+      "retrieval_record_utc": "2026-11-20T16:47:16.938917+00:00"
+    },
+    {
+      "path": "data/daily/GOOG.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/GOOG.parquet",
+      "bytes": 88536,
+      "sha256": "dd6b6c1090d0e4dc1f9b09a8be191c6c429308497a37fe1242712a5882d80644",
+      "retrieval_record_utc": "2026-11-20T16:47:16.943343+00:00"
+    },
+    {
+      "path": "data/daily/GOOGL.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/GOOGL.parquet",
+      "bytes": 88376,
+      "sha256": "5356d7f1be78a1143379ea7608b04a178876f3775de2487c5a4725c97f22b71b",
+      "retrieval_record_utc": "2026-11-20T16:47:17.413106+00:00"
+    },
+    {
+      "path": "data/daily/HON.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/HON.parquet",
+      "bytes": 84532,
+      "sha256": "b6cfc3be31afbefe0fa57c827ad7d3788ed8e1a63a6bd856c2585991367a1a14",
+      "retrieval_record_utc": "2026-11-20T16:47:18.198389+00:00"
+    },
+    {
+      "path": "data/daily/IDXX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/IDXX.parquet",
+      "bytes": 85694,
+      "sha256": "546036e63032ae160d492189e6a5adf9b61b8dbde7c88e8dca55fd6122b5814d",
+      "retrieval_record_utc": "2026-11-20T16:47:17.656340+00:00"
+    },
+    {
+      "path": "data/daily/ILMN.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ILMN.parquet",
+      "bytes": 87234,
+      "sha256": "24a8b090d2016cbb249a968f52f2bd85be75a829fa672d8a0272a8148c0a4e33",
+      "retrieval_record_utc": "2026-11-20T16:47:17.854592+00:00"
+    },
+    {
+      "path": "data/daily/INTC.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/INTC.parquet",
+      "bytes": 83217,
+      "sha256": "075a7d87c2e7124fb30e598b48cfc708fab3f345689cf9a9dfc3914a396924ae",
+      "retrieval_record_utc": "2026-11-20T16:47:18.088103+00:00"
+    },
+    {
+      "path": "data/daily/INTU.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/INTU.parquet",
+      "bytes": 86984,
+      "sha256": "7ae6861e0878e7830a43fd3d07ba41a488ab38b8ea3017b1054bc881b4c8e041",
+      "retrieval_record_utc": "2026-11-20T16:47:19.296328+00:00"
+    },
+    {
+      "path": "data/daily/ISRG.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ISRG.parquet",
+      "bytes": 86984,
+      "sha256": "9df74501fa3782e3da036839b2822da9eaf472ace170af878da297550d51ac6c",
+      "retrieval_record_utc": "2026-11-20T16:47:19.045320+00:00"
+    },
+    {
+      "path": "data/daily/KDP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/KDP.parquet",
+      "bytes": 68873,
+      "sha256": "a9fe9100d9ad43b597074eb3f7332960adfd88e4a89f90e91c0b28d4ec2125a1",
+      "retrieval_record_utc": "2026-11-20T16:47:18.687387+00:00"
+    },
+    {
+      "path": "data/daily/KHC.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/KHC.parquet",
+      "bytes": 77096,
+      "sha256": "c7faf78ac7b8755bc0272faa3e76302112f72e798d2d116a8995ca5590d792f0",
+      "retrieval_record_utc": "2026-11-20T16:47:19.324663+00:00"
+    },
+    {
+      "path": "data/daily/KLAC.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/KLAC.parquet",
+      "bytes": 88215,
+      "sha256": "075c845270f05a7e5e3fc65dacb61ea3dc2307a6f1470eee7eefc15206a21033",
+      "retrieval_record_utc": "2026-11-20T16:47:19.350025+00:00"
+    },
+    {
+      "path": "data/daily/LRCX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/LRCX.parquet",
+      "bytes": 88530,
+      "sha256": "033e710f55862d9e4d467568324eba33ea370cc09047e28910a465589107bea8",
+      "retrieval_record_utc": "2026-11-20T16:47:19.762456+00:00"
+    },
+    {
+      "path": "data/daily/LULU.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/LULU.parquet",
+      "bytes": 86322,
+      "sha256": "7b51d0f414dff3e6ce76139ddb7d56f2a9692543fdf2b935da9a923d7a19f44c",
+      "retrieval_record_utc": "2026-11-20T16:47:19.927456+00:00"
+    },
+    {
+      "path": "data/daily/MAR.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MAR.parquet",
+      "bytes": 86125,
+      "sha256": "3b41550e457935a0cf3e928a5860421336e49591c4970b312a5e5a905ad1f808",
+      "retrieval_record_utc": "2026-11-20T16:47:19.915527+00:00"
+    },
+    {
+      "path": "data/daily/MCHP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MCHP.parquet",
+      "bytes": 82898,
+      "sha256": "7c3292b074c1265dd82cdb8ac87c3e103eb7453140aa11ebeca319eddf2044b4",
+      "retrieval_record_utc": "2026-11-20T16:47:19.926054+00:00"
+    },
+    {
+      "path": "data/daily/MDB.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MDB.parquet",
+      "bytes": 86979,
+      "sha256": "a7f813f59fbe51192a757486c09eb7a580091ee3b41790bb6a7d00248ffba5c4",
+      "retrieval_record_utc": "2026-11-20T16:47:21.269955+00:00"
+    },
+    {
+      "path": "data/daily/MDLZ.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MDLZ.parquet",
+      "bytes": 75395,
+      "sha256": "91f71b5e85fb738e29619d0f3928d4fb4c8c9be1c009297f075223d870e21a24",
+      "retrieval_record_utc": "2026-11-20T16:47:20.485055+00:00"
+    },
+    {
+      "path": "data/daily/MELI.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MELI.parquet",
+      "bytes": 86016,
+      "sha256": "a53331cc0f8132f836d4954bbd870f74f101a7f01170847044a3b64df7c0b325",
+      "retrieval_record_utc": "2026-11-20T16:47:20.490866+00:00"
+    },
+    {
+      "path": "data/daily/META.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/META.parquet",
+      "bytes": 88518,
+      "sha256": "d2405fe523d257c07cd75822f422cbc1741e4d5075f94dbac8033f1c1d5a70ea",
+      "retrieval_record_utc": "2026-11-20T16:47:20.439317+00:00"
+    },
+    {
+      "path": "data/daily/MNST.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MNST.parquet",
+      "bytes": 82196,
+      "sha256": "bce37524e0d084570b29674b68a7d68a54fe1a6c2228e1b73267270349ec0898",
+      "retrieval_record_utc": "2026-11-20T16:47:20.987151+00:00"
+    },
+    {
+      "path": "data/daily/MRNA.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MRNA.parquet",
+      "bytes": 87326,
+      "sha256": "12f8168a3f4099e04870719ce407caa59633d199e1f4e62c7c99b37c24b3ab6e",
+      "retrieval_record_utc": "2026-11-20T16:47:21.049307+00:00"
+    },
+    {
+      "path": "data/daily/MRVL.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MRVL.parquet",
+      "bytes": 85444,
+      "sha256": "33c0e1b09d8a6e580ee0b7ea7c6749b26900bec9b1820dac9a7a0cc7f5dcbc8f",
+      "retrieval_record_utc": "2026-11-20T16:47:21.076431+00:00"
+    },
+    {
+      "path": "data/daily/MSFT.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MSFT.parquet",
+      "bytes": 87871,
+      "sha256": "1a89f48339befa20313c7dc4d0ec7ecadf72d5da1ac3e36b28f9c18bf3891905",
+      "retrieval_record_utc": "2026-11-20T16:47:22.550396+00:00"
+    },
+    {
+      "path": "data/daily/MU.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/MU.parquet",
+      "bytes": 86672,
+      "sha256": "c1f9fffc2fd5f1973fcc6b361c0b77b92e570b1b83bc727eca5d9ea0776456f0",
+      "retrieval_record_utc": "2026-11-20T16:47:21.596752+00:00"
+    },
+    {
+      "path": "data/daily/NFLX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/NFLX.parquet",
+      "bytes": 89284,
+      "sha256": "841bea07f3be49b411d05863d90f8672efd411b5cfbe7b28644fcc688608a878",
+      "retrieval_record_utc": "2026-11-20T16:47:21.662749+00:00"
+    },
+    {
+      "path": "data/daily/NVDA.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/NVDA.parquet",
+      "bytes": 90071,
+      "sha256": "e2c5200ee6b400be3b1ccc7c6647323ced6972d9a83b0918e13a6a36e3a96a6f",
+      "retrieval_record_utc": "2026-11-20T16:47:22.061470+00:00"
+    },
+    {
+      "path": "data/daily/NXPI.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/NXPI.parquet",
+      "bytes": 85948,
+      "sha256": "039ed64c4f8965ecf1a9351b760fb19cd48f53dca5b83d2fae56f55a993e698f",
+      "retrieval_record_utc": "2026-11-20T16:47:22.634368+00:00"
+    },
+    {
+      "path": "data/daily/ODFL.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ODFL.parquet",
+      "bytes": 86350,
+      "sha256": "b4d8f145fa25d98cdd6aad52b7a36c15c5c48eeeb08b538d49ad9252042cb034",
+      "retrieval_record_utc": "2026-11-20T16:47:24.053170+00:00"
+    },
+    {
+      "path": "data/daily/ON.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ON.parquet",
+      "bytes": 83617,
+      "sha256": "3be79cc0d661de236a76e56e35287ea4ccf8a02d328f1d93c3f3e27816758350",
+      "retrieval_record_utc": "2026-11-20T16:47:23.648390+00:00"
+    },
+    {
+      "path": "data/daily/ORLY.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ORLY.parquet",
+      "bytes": 86477,
+      "sha256": "09fb92bf7ba57f71fc5e83ed63e512c263cd1f49105ae792ae9f78a14e70fbac",
+      "retrieval_record_utc": "2026-11-20T16:47:23.630120+00:00"
+    },
+    {
+      "path": "data/daily/PANW.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/PANW.parquet",
+      "bytes": 87302,
+      "sha256": "1a1ef13398c87c2c8695861a3fcb1dc9c4b39f84e139c323031c391bb5c2f782",
+      "retrieval_record_utc": "2026-11-20T16:47:24.505855+00:00"
+    },
+    {
+      "path": "data/daily/PAYX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/PAYX.parquet",
+      "bytes": 82671,
+      "sha256": "c4bd949a35f76168c2c294149bb43df4f315855f2d8a44ad06b3f3702ccdd0fd",
+      "retrieval_record_utc": "2026-11-20T16:47:25.015663+00:00"
+    },
+    {
+      "path": "data/daily/PCAR.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/PCAR.parquet",
+      "bytes": 83886,
+      "sha256": "bef92c96f1ef7859c4fb23eef513f76e8ec18452ec0bf3eba6646b69e54bc777",
+      "retrieval_record_utc": "2026-11-20T16:47:24.505775+00:00"
+    },
+    {
+      "path": "data/daily/PDD.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/PDD.parquet",
+      "bytes": 85350,
+      "sha256": "c3f2d470fda9014c7f268145ed563f94f7712e7f5ceace13c49d8acbb2c64617",
+      "retrieval_record_utc": "2026-11-20T16:47:25.010138+00:00"
+    },
+    {
+      "path": "data/daily/PEP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/PEP.parquet",
+      "bytes": 81832,
+      "sha256": "07c003bc3f7bf814da80e809d10fe3c7cc3932317487e21cac5bbed6acf36a0c",
+      "retrieval_record_utc": "2026-11-20T16:47:25.547061+00:00"
+    },
+    {
+      "path": "data/daily/PYPL.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/PYPL.parquet",
+      "bytes": 85772,
+      "sha256": "170a0cc680c34334c2fbbc40164ab76b9db344c314c03094c89bbdfc16689e89",
+      "retrieval_record_utc": "2026-11-20T16:47:25.197638+00:00"
+    },
+    {
+      "path": "data/daily/QCOM.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/QCOM.parquet",
+      "bytes": 85293,
+      "sha256": "19863b440053f13d68caecd80d96b54f9e8c1af5f6441c5d37c47cd2ea4bf4d3",
+      "retrieval_record_utc": "2026-11-20T16:47:25.722148+00:00"
+    },
+    {
+      "path": "data/daily/REGN.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/REGN.parquet",
+      "bytes": 86060,
+      "sha256": "e8e6d2a2e4de06c52edca4bcadf1ac63ad702e236fe12a6a400249694badfcb0",
+      "retrieval_record_utc": "2026-11-20T16:47:25.747849+00:00"
+    },
+    {
+      "path": "data/daily/ROP.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ROP.parquet",
+      "bytes": 85085,
+      "sha256": "c3bbb2ff5c269cbb2915e7c23f3ccb530680b6b0d5e8b891e5ff4dde8a112dc5",
+      "retrieval_record_utc": "2026-11-20T16:47:26.149163+00:00"
+    },
+    {
+      "path": "data/daily/ROST.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ROST.parquet",
+      "bytes": 84558,
+      "sha256": "ecf51b624971af7854cb5bcc4528c03c9cc2f57c2653844a0327632da42004aa",
+      "retrieval_record_utc": "2026-11-20T16:47:26.292621+00:00"
+    },
+    {
+      "path": "data/daily/SBUX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/SBUX.parquet",
+      "bytes": 81206,
+      "sha256": "6d554a02f58787f6784860be70e21eb56c768b39fdd85233987d9e42a45a1e08",
+      "retrieval_record_utc": "2026-11-20T16:47:26.369749+00:00"
+    },
+    {
+      "path": "data/daily/SIRI.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/SIRI.parquet",
+      "bytes": 62738,
+      "sha256": "a089130ea05e0e772e3e6e325c3642e827c92781f2813ae5fc8ecd5ffa0df754",
+      "retrieval_record_utc": "2026-11-20T16:47:27.334666+00:00"
+    },
+    {
+      "path": "data/daily/SNPS.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/SNPS.parquet",
+      "bytes": 86551,
+      "sha256": "c2b52d1dfdf8b6c5f96be27390798f64961d438d22bf92447f54fe26498c5771",
+      "retrieval_record_utc": "2026-11-20T16:47:26.746028+00:00"
+    },
+    {
+      "path": "data/daily/TEAM.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/TEAM.parquet",
+      "bytes": 86253,
+      "sha256": "4f6b8563f014844ce65cd1c435f524a05bf302cfd041c27f69a89b60e768a035",
+      "retrieval_record_utc": "2026-11-20T16:47:27.680904+00:00"
+    },
+    {
+      "path": "data/daily/TMUS.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/TMUS.parquet",
+      "bytes": 84979,
+      "sha256": "7a39a9afda0df234112093d4fc893875e83807773be46da8b99a296aeee24925",
+      "retrieval_record_utc": "2026-11-20T16:47:27.088354+00:00"
+    },
+    {
+      "path": "data/daily/TSLA.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/TSLA.parquet",
+      "bytes": 89355,
+      "sha256": "525799c44fea4762fc0dbd11e2e80d177e6310938abb9ba066e46c16e26c62a8",
+      "retrieval_record_utc": "2026-11-20T16:47:27.289540+00:00"
+    },
+    {
+      "path": "data/daily/TTD.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/TTD.parquet",
+      "bytes": 86266,
+      "sha256": "3f0ab859fa700359aefb8c430c102ecde83df1b9d5f6878d79c5531649927735",
+      "retrieval_record_utc": "2026-11-20T16:47:28.724392+00:00"
+    },
+    {
+      "path": "data/daily/TTWO.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/TTWO.parquet",
+      "bytes": 84704,
+      "sha256": "fde864a810df012aa0f00e1a8fd6aa93d7c05f0fdc5e2cc1cb3970cd32de1c59",
+      "retrieval_record_utc": "2026-11-20T16:47:27.842850+00:00"
+    },
+    {
+      "path": "data/daily/TXN.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/TXN.parquet",
+      "bytes": 84434,
+      "sha256": "cbf8d35e66d2cb56c6487c844c5b280642983dbc993e91f0863e017bbf3ff33b",
+      "retrieval_record_utc": "2026-11-20T16:47:27.911811+00:00"
+    },
+    {
+      "path": "data/daily/VRSK.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/VRSK.parquet",
+      "bytes": 84583,
+      "sha256": "f7b759ba6f7a9469c343ef3744560df8bbef84ec403303dd51207c91caab63d5",
+      "retrieval_record_utc": "2026-11-20T16:47:28.351214+00:00"
+    },
+    {
+      "path": "data/daily/VRTX.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/VRTX.parquet",
+      "bytes": 85595,
+      "sha256": "14524b1a796413af63a078d2f07671fb7e8ac751d3838d95854ef904a1936aa7",
+      "retrieval_record_utc": "2026-11-20T16:47:28.439595+00:00"
+    },
+    {
+      "path": "data/daily/WBD.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/WBD.parquet",
+      "bytes": 74308,
+      "sha256": "d53ca06faaa6c9623e99e92865748dbb79d65bf0bf71bfcb42761b842588bb45",
+      "retrieval_record_utc": "2026-11-20T16:47:29.183469+00:00"
+    },
+    {
+      "path": "data/daily/WDAY.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/WDAY.parquet",
+      "bytes": 85349,
+      "sha256": "69c6b03c152982918b1a3ed0435d0feaf0ff1c6f27cde9d46b08b1e23f5863ff",
+      "retrieval_record_utc": "2026-11-20T16:47:28.933472+00:00"
+    },
+    {
+      "path": "data/daily/XEL.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/XEL.parquet",
+      "bytes": 76099,
+      "sha256": "3adf23c61e659e1a18a0f6e0931ee757ad1f54805d266b5920a6fcafe87e0a4b",
+      "retrieval_record_utc": "2026-11-20T16:47:28.964363+00:00"
+    },
+    {
+      "path": "data/daily/ZS.parquet",
+      "url": "https://huggingface.co/datasets/AmirTrader/YahooFinance/resolve/2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea/data/daily/ZS.parquet",
+      "bytes": 86267,
+      "sha256": "96cad209950da6670f135e6bfbe686403604a7a56e6317ac987ba22877501877",
+      "retrieval_record_utc": "2026-11-20T16:47:30.498108+00:00"
+    }
+  ],
+  "total_bytes": 8078161
+}

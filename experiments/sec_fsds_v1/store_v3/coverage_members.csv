@@ -1,0 +1,6 @@
+year,rows,tickers,sec_has_issuer_rows,sec_has_issuer_pct,sec_has_issuer_tickers,sec_has_issuer_sectors,sec_has_issuer_dates,sec_has_event_rows,sec_has_event_pct,sec_has_event_tickers,sec_has_event_sectors,sec_has_event_dates,sec_has_fund_rows,sec_has_fund_pct,sec_has_fund_tickers,sec_has_fund_sectors,sec_has_fund_dates
+2019,25956,112,24632,94.9,107,9,252,24200,93.23,107,9,252,23655,91.13,103,9,252
+2020,26051,115,23291,89.41,112,9,253,22834,87.65,112,9,253,22424,86.08,107,9,253
+2021,25695,110,24492,95.32,106,7,252,24149,93.98,106,7,252,23540,91.61,102,7,252
+2022,25567,111,25049,97.97,108,9,251,24475,95.73,107,9,251,23819,93.16,104,9,251
+2023,25250,111,24750,98.02,108,9,250,24274,96.13,108,9,250,23893,94.63,106,9,250

@@ -68,12 +68,13 @@ def test_fixture_labels_match_labels_recomputed_from_fixture_prices():
 def test_real_labels_and_predictions_are_oriented():
     if not (table_path("prices").exists() and table_path("labels").exists()):
         pytest.skip("prices/labels not in the data directory (gitignored; on the team Drive)")
-    from src.core.io import read_predictions, read_table
+    from src.core.io import read_predictions
     from src.core.paths import predictions_path
+    from src.eval.run_baselines import load_inputs
     from src.models.ladder_report import CLASSICAL, LADDER
 
-    labels = read_table("labels")
-    m = assert_labels_match_prices(read_table("prices"), labels)
+    prices, labels, _ = load_inputs(include_news=False, legacy_labels=True)
+    m = assert_labels_match_prices(prices, labels)
     assert_oracle_scores_one(m)
     for name in (*CLASSICAL, *LADDER):
         if not predictions_path(name).exists():

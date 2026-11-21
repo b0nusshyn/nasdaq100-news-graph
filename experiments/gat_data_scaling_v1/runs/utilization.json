@@ -1,0 +1,18 @@
+{
+  "0": {
+    "prior_fit_days": 252,
+    "prior_fit_rows": 25654,
+    "full_fit_rows": 85194,
+    "unused_fit_rows": 59540,
+    "validation_rows": 5100,
+    "assessment_rows": 11925
+  },
+  "1": {
+    "prior_fit_days": 252,
+    "prior_fit_rows": 25617,
+    "full_fit_rows": 111117,
+    "unused_fit_rows": 85500,
+    "validation_rows": 5050,
+    "assessment_rows": 10701
+  }
+}

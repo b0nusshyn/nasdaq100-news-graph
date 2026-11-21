@@ -1,0 +1,14 @@
+{
+  "checked_utc_date": "2026-11-20",
+  "local_prices_max_session": "2023-12-29",
+  "downloads_copy_max_session": "2023-12-29",
+  "membership_latest_start": "2026-10-09",
+  "frozen_fixed_cohort_as_of": "2023-12-29",
+  "fixed_cohort_size": 101,
+  "provider": "Yahoo Finance public chart endpoint",
+  "probe": "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?period1=1704067200&period2=1767225600&interval=1d&events=div%2Csplits",
+  "probe_scope": "AAPL, 2024 through 2025, credentials-free feasibility",
+  "outcome": "HTTP 429, no accepted source bars, no raw data artifact",
+  "accepted_download_bytes": 0,
+  "independent_2026_scored": false
+}

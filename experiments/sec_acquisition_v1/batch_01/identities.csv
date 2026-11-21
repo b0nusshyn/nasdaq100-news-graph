@@ -1,0 +1,6 @@
+ticker,cik,start,end,identity_basis
+PEP,0000077476,2019-02-15,2023-12-31,https://www.sec.gov/Archives/edgar/data/77476/000007747619000017/R1.htm
+COST,0000909832,2019-10-11,2023-12-31,https://www.sec.gov/Archives/edgar/data/909832/000090983219000019/R1.htm
+CMCSA,0001166691,2020-01-30,2023-12-31,https://www.sec.gov/Archives/edgar/data/1166691/000116669120000008/cmcsa-12312019x10k.htm
+GILD,0000882095,2020-02-25,2023-12-31,https://www.sec.gov/Archives/edgar/data/882095/000088209520000006/a2019form10-k.htm
+MSFT,0000789019,2019-08-01,2023-12-31,https://www.sec.gov/Archives/edgar/data/789019/000156459019027952/msft-10k_20190630.htm

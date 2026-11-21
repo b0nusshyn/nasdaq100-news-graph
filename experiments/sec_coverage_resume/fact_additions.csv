@@ -1,0 +1,5 @@
+cik,accession,start,end,unit,scope,revenue,operating_income,net_income,source
+0000077476,0000077476-23-000058,2023-06-18,2023-09-09,USD_millions,consolidated_us_gaap,23453,4015,3116,https://www.sec.gov/Archives/edgar/data/77476/000007747623000058/R2.htm
+0000077476,0000077476-23-000058,2022-06-12,2022-09-03,USD_millions,consolidated_us_gaap,21971,3353,2724,https://www.sec.gov/Archives/edgar/data/77476/000007747623000058/R2.htm
+0000077476,0000077476-22-000052,2022-06-12,2022-09-03,USD_millions,consolidated_us_gaap,21971,3353,2724,https://www.sec.gov/Archives/edgar/data/77476/000007747622000052/R2.htm
+0000077476,0000077476-22-000052,2021-06-13,2021-09-04,USD_millions,consolidated_us_gaap,20189,3159,2243,https://www.sec.gov/Archives/edgar/data/77476/000007747622000052/R2.htm
