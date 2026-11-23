@@ -1,0 +1,88 @@
+{
+  "config": {
+    "model": "gat_lstm",
+    "seed": 42,
+    "horizons": [
+      1,
+      5
+    ],
+    "window_days": 20,
+    "features": {
+      "price": [
+        "ret_1d",
+        "volatility_20d",
+        "rsi_14",
+        "macd",
+        "macd_signal",
+        "volume_z_20d"
+      ],
+      "news": [],
+      "embeddings": false,
+      "embedding_dim": 64
+    },
+    "encoder": {
+      "hidden": 64,
+      "layers": 1,
+      "dropout": 0.1
+    },
+    "gat": {
+      "heads": 4,
+      "edge_types": [
+        "sector",
+        "comention",
+        "corr"
+      ]
+    },
+    "train": {
+      "epochs": 12,
+      "batch_days": 8,
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "grad_clip": 1.0,
+      "validation_fraction": 0.16286644951140064,
+      "validate_every_steps": null,
+      "early_stopping_metric": "within_day_auc",
+      "early_stopping_patience": 4,
+      "preprocessing_scope": "weight_fit",
+      "record_history": true
+    },
+    "embargo_days": 5
+  },
+  "arms": [
+    "price",
+    "original",
+    "signed",
+    "centered"
+  ],
+  "ranges": [
+    [
+      "2022-07-18",
+      "2022-12-30"
+    ],
+    [
+      "2023-07-24",
+      "2023-12-20"
+    ]
+  ],
+  "torch": "2.15.0",
+  "threads": 2,
+  "max_fits": 24,
+  "source_hashes": {
+    "/Users/nonladapream/nasdaq100-news-graph/data/prices.parquet": "fc6d3159a38f7904689c5e4362432e1a56baa2d93ac47a603158cf207af130d6",
+    "/Users/nonladapream/nasdaq100-news-graph/data/labels.parquet": "e8655d14bbd22c1dd5faa8cca5eed690f41242fe4a3fb1f668e5a1788fe8b16a",
+    "/Users/nonladapream/nasdaq100-news-graph/data/membership.parquet": "a2655bd3878cb6bd53d76c6db22eadf2d936a77642fc47f278f9cb93de232678",
+    "configs/gat_lstm.yaml": "5a968a28739a4720ae1e8b19c6fcb52dae79eb50f4e378234a9ea93e48808984",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/study.py": "826f69d49767934d6307f5abd67d9b28b1ea5655259a1497859d55f933a00045",
+    "src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/models/ablations.py": "7ef74f391b77cf36f6251c0a92ea2dd80e41856754a43b710250672a6b7df252",
+    "src/models/attention.py": "651860f5d7e25e5bb6b45a1d354a06c14c60d8d9c45bd8f7d57de04dfbc89eb3",
+    "src/models/encoder.py": "03caa2e092b3de8b3992fc8722185738ab41534c21db5335e5400c6fc814bd2c",
+    "src/models/gat_lstm.py": "b35acaf9cbea71f02da53d7f7c2d8db9f4da2d7074ba32639177e2d55e03cce5",
+    "src/models/ladder_report.py": "baf8a69df1b9ff92fbae3b74bca6ef425d84e4c8e541886b0e2539cb06c29836",
+    "src/models/panel.py": "d16169d7dbf8e845396737cb78c1056224585fd69bcfdd429806fde1b04048c1",
+    "src/models/price_features.py": "56c8d1e4d337b597a2647c730790219fdaea452fa696a113e84f27379a78011e",
+    "src/models/train.py": "3d40bc1c77fb04cbb770612db882e1222789a467bf0275ffb0c46336f1c8592a",
+    "src/models/tune.py": "2dad4b5be28fa9fef580c8ecaca409694018e1b4e9970b55e0d0c7eae1e13765",
+    "src/graph/build_edges.py": "fb28f7bef9c0a0d176f850e070fa3ac18bf84a91725348b31f0d00f67f8f2f5f"
+  }
+}

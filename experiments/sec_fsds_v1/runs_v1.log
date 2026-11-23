@@ -1,0 +1,18 @@
+  "pass": true
+  "pass": true
+done w0_h5_s42_original: wdAUC 0.5438 acc 0.5548 maj 0.5116 mcc 0.1114
+done w0_h5_s42_event: wdAUC 0.5326 acc 0.4811 maj 0.5116 mcc -0.0369
+done w0_h5_s42_fund: wdAUC 0.5331 acc 0.5461 maj 0.5116 mcc 0.0904
+done w0_h5_s42_both: wdAUC 0.5001 acc 0.4861 maj 0.5116 mcc -0.0399
+done w1_h5_s42_original: wdAUC 0.5035 acc 0.5222 maj 0.5293 mcc -0.0226
+done w1_h5_s42_event: wdAUC 0.4856 acc 0.4726 maj 0.5293 mcc -0.0721
+done w1_h5_s42_fund: wdAUC 0.4757 acc 0.4748 maj 0.5293 mcc -0.0251
+done w1_h5_s42_both: wdAUC 0.5007 acc 0.4740 maj 0.5293 mcc -0.0505
+done w0_h5_s43_original: wdAUC 0.5404 acc 0.5436 maj 0.5116 mcc 0.0846
+done w0_h5_s43_event: wdAUC 0.5325 acc 0.4970 maj 0.5116 mcc -0.0154
+done w0_h5_s43_fund: wdAUC 0.5238 acc 0.5093 maj 0.5116 mcc 0.0086
+done w0_h5_s43_both: wdAUC 0.5107 acc 0.4881 maj 0.5116 mcc -0.0335
+done w1_h5_s43_original: wdAUC 0.4363 acc 0.4882 maj 0.5293 mcc -0.0702
+done w1_h5_s43_event: wdAUC 0.5010 acc 0.4823 maj 0.5293 mcc -0.0343
+done w1_h5_s43_fund: wdAUC 0.4468 acc 0.4536 maj 0.5293 mcc -0.0997
+done w1_h5_s43_both: wdAUC 0.4996 acc 0.5050 maj 0.5293 mcc -0.0188

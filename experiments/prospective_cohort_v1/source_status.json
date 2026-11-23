@@ -1,0 +1,10 @@
+{
+  "status": "blocked",
+  "archive": "AmirTrader/YahooFinance",
+  "revision": "2f8763bb9ed0c09fca6e871c8d660bdd8e4ce0ea",
+  "public_card_updated_utc": "2026-11-20T08:00:00Z",
+  "last_local_bar_for_all_30": "2026-11-19",
+  "blockers": ["No verified reliable post-close release schedule before the next open",
+    "No security-level identity and corporate-action mapping with dated adjustment evidence",
+    "No verified equivalent data feed for complete same-vintage observation and settlement"]
+}

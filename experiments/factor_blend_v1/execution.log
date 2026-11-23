@@ -1,0 +1,14 @@
+w0_factor                    wdAUC 0.5344 acc 0.5173 maj 0.5116 mcc 0.0383
+w0_h5_s42_blend_original     wdAUC 0.5404 acc 0.5613 maj 0.5116 mcc 0.1243
+w0_h5_s42_blend_macd_norm    wdAUC 0.5367 acc 0.5526 maj 0.5116 mcc 0.1043
+w0_h5_s43_blend_original     wdAUC 0.5397 acc 0.5400 maj 0.5116 mcc 0.0773
+w0_h5_s43_blend_macd_norm    wdAUC 0.5382 acc 0.5485 maj 0.5116 mcc 0.0955
+w1_factor                    wdAUC 0.5246 acc 0.5147 maj 0.5293 mcc 0.0159
+w1_h5_s42_blend_original     wdAUC 0.5160 acc 0.5237 maj 0.5293 mcc -0.0246
+w1_h5_s42_blend_macd_norm    wdAUC 0.5181 acc 0.5284 maj 0.5293 mcc -0.0066
+w1_h5_s43_blend_original     wdAUC 0.4669 acc 0.4833 maj 0.5293 mcc -0.0867
+w1_h5_s43_blend_macd_norm    wdAUC 0.5151 acc 0.5286 maj 0.5293 mcc -0.0023
+w0_h5_s42_input              wdAUC 0.5271 acc 0.5277 maj 0.5116 mcc 0.0527
+w1_h5_s42_input              wdAUC 0.4508 acc 0.4517 maj 0.5293 mcc -0.0790
+w0_h5_s43_input              wdAUC 0.5451 acc 0.5340 maj 0.5116 mcc 0.0649
+w1_h5_s43_input              wdAUC 0.4299 acc 0.4597 maj 0.5293 mcc -0.0993

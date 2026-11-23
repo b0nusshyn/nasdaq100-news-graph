@@ -1,0 +1,86 @@
+"""Train binary GAT with mild fit-only return-magnitude weighting."""
+import json
+import shutil
+from copy import deepcopy
+from functools import partial
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import torch
+from torch.nn import functional as F
+
+from experiments.gat_joint_v1.study import OLD, SMALL, data, emit, parts, records, score
+from experiments.gat_joint_v1.trainer import train_fold
+from src.models.train import GraphSources
+from src.nlp.rebuild_timed_news import file_hash
+
+ROOT = Path(__file__).parent
+
+
+def fit_weights(panel, labels, fit, h):
+    eligible = panel.rows(fit, h)[["date", "ticker"]]
+    col = f"fwd_ret_{h}d"
+    f = eligible.merge(labels.loc[labels.date.isin(fit), ["date", "ticker", col]],
+                       on=["date", "ticker"], how="left", validate="one_to_one")
+    if not np.isfinite(f[col].to_numpy(dtype=float)).all():
+        raise ValueError("missing known forward return on a labelled weight-fit row")
+    pct = f[col].abs().groupby(f.date).rank(pct=True)
+    weights = np.full(panel.in_index.shape, np.nan, dtype=np.float32)
+    weights[panel.day_index(f.date), panel.tickers.get_indexer(f.ticker)] = .75 + .50*pct
+    return weights
+
+
+def weighted(logits, batch, weights):
+    use = batch["target"]
+    at = batch["at"][use.numpy()]
+    w = torch.as_tensor(weights[at[:, 0], at[:, 1]], dtype=logits.dtype, device=logits.device)
+    if not bool(torch.isfinite(w).all()):
+        raise ValueError("training consumes a row outside the fit-weight map")
+    loss = F.binary_cross_entropy_with_logits(logits[use], batch["y"][use], reduction="none")
+    return (loss*w).sum() / w.sum().clamp_min(1)
+
+
+def main():
+    torch.set_num_threads(2)
+    torch.set_num_interop_threads(1)
+    prices, labels, panel = data()
+    out = ROOT / "runs"
+    out.mkdir()
+    prior = records(OLD / "ledger.jsonl")
+    src = [Path(__file__), ROOT / "protocol.md", ROOT.parent / "gat_joint_v1/trainer.py",
+           ROOT.parent / "gat_joint_v1/study.py", OLD / "ledger.jsonl", SMALL / "ledger.jsonl",
+           *[Path(f"data/{x}.parquet") for x in ("prices", "labels", "membership")],
+           Path("src/models/train.py"), Path("src/models/gat_lstm.py"), Path("src/graph/build_edges.py")]
+    (out / "manifest.json").write_text(json.dumps({str(p): file_hash(p) for p in src}, indent=2))
+    with (out / "selected.jsonl").open("x") as log:
+        for w, h, seed in [(0, 5, 42), (1, 5, 42), (0, 1, 42), (1, 1, 42),
+                           (0, 5, 43), (1, 5, 43), (0, 1, 43), (1, 1, 43)]:
+            if shutil.disk_usage(ROOT).free < 2.1*1024**3:
+                raise OSError("disk safety margin")
+            ref = prior[f"w{w}_h{h}_s{seed}_original"]
+            fold, fit, val = parts(panel, ref)
+            cfg = deepcopy(ref["config"])
+            cfg["model"] = "magnitude_weighted_bce"
+            weights = fit_weights(panel, labels, fit, h)
+            name = f"w{w}_h{h}_s{seed}_magnitude"
+            print("start", name, flush=True)
+            _, info, state = train_fold(panel, GraphSources(prices=prices), fold, h, cfg,
+                                        objective=partial(weighted, weights=weights), predict_test=False,
+                                        return_model=True, log=lambda *_: None)
+            p, m = score(panel, state, fold.test, h, info)
+            for folder, key in [(OLD, ref["id"]), (SMALL, f"w{w}_h{h}_s{seed}_small")]:
+                b = pd.read_parquet(folder / f"{key}.parquet")
+                pd.testing.assert_frame_equal(p[["date", "ticker", "y_true"]], b[["date", "ticker", "y_true"]])
+            ck, pf = out / f"{name}.pt", out / f"{name}_assessment.parquet"
+            torch.save(state.model.state_dict(), ck)
+            p.to_parquet(pf, index=False, compression="zstd")
+            emit(log, dict(id=name, config=cfg, seed=seed, ranges=ref["dates"], assessment=m,
+                           fit=score(panel, state, fit, h, info)[1], validation_metrics=score(panel, state, val, h, info)[1],
+                           prediction=str(pf), prediction_sha256=file_hash(pf),
+                           files={str(ck): file_hash(ck)}, **info))
+            print("done", name, m["within_day_auc"], flush=True)
+
+
+if __name__ == "__main__":
+    main()

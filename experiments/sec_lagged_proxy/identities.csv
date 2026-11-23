@@ -1,0 +1,8 @@
+ticker,cik,start,end,identity_basis
+AAPL,0000320193,2022-10-28,2023-12-31,https://www.sec.gov/Archives/edgar/data/320193/000032019322000108/aapl-20220924.htm
+MSFT,0000789019,2023-10-24,2023-12-31,https://www.sec.gov/Archives/edgar/data/789019/000095017023054855/msft-20230930.htm
+ASML,0000937966,2023-02-15,2023-12-31,https://www.sec.gov/Archives/edgar/data/937966/000093796623000014/asml-20221231.htm
+META,0001326801,2022-06-09,2023-12-31,https://www.sec.gov/Archives/edgar/data/1326801/000132680123000013/meta-20221231.htm
+GOOG,0001652044,2023-02-03,2023-12-31,https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/goog-20221231.htm
+GOOGL,0001652044,2023-02-03,2023-12-31,https://www.sec.gov/Archives/edgar/data/1652044/000165204423000016/goog-20221231.htm
+SPLK,0001353283,2023-03-23,2023-12-31,https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2024-132

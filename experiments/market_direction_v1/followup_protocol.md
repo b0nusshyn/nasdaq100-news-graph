@@ -1,0 +1,3 @@
+# Prespecified follow-up after the initial 20 fits
+
+The relative-return regressor led both initial 1-day assessment windows on within-day AUC. Test one change, 45 instead of 90 boosting rounds, with every other setting identical. Run that small variant on the two original windows and a third historical assessment from 2023-01-17 to 2023-06-30. Run the 90-round relative regressor, stock logistic, and Price Only LSTM on the third window as matched controls. All six follow-up fits are 1-day at seed 42, for 26 fits total. Report all runs. The third period was part of the historical research archive and is retrospective. No independent assessment.

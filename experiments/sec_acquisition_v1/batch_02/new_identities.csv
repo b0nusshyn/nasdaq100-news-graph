@@ -1,0 +1,5 @@
+ticker,cik,start,end,identity_basis
+CSX,0000277948,2020-02-12,2023-12-31,https://www.sec.gov/Archives/edgar/data/277948/000027794820000008/csx-12312019x10k.htm
+SBUX,0000829224,2019-11-15,2023-12-31,https://www.sec.gov/Archives/edgar/data/829224/000082922419000051/sbux-9292019x10xk.htm
+AMGN,0000318154,2020-02-12,2023-12-31,https://www.sec.gov/Archives/edgar/data/318154/000031815420000017/R1.htm
+WBA,0001618921,2019-10-28,2023-12-31,https://www.sec.gov/Archives/edgar/data/1618921/000161892119000069/R1.htm

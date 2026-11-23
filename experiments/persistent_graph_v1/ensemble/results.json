@@ -1,0 +1,206 @@
+[
+  {
+    "id": "w0_h1_ensemble",
+    "metrics": {
+      "accuracy": 0.499874213836478,
+      "majority": 0.5187421383647799,
+      "mcc": 0.023254199922525493,
+      "balanced": 0.5098540048528717,
+      "precision": 0.48768203219095585,
+      "recall": 0.7760933960620318,
+      "f1": 0.5989779451317913,
+      "positive_calls": 9133,
+      "negative_calls": 2792,
+      "within_day_auc": 0.5134419787914328
+    },
+    "paired_auc_vs_seed42": "-0.0003 [-0.0038, +0.0028]",
+    "sources": [
+      "w0_h1_s42_original",
+      "w0_h1_s43_original"
+    ],
+    "thresholds": [
+      0.4705177563428879,
+      0.4919171157479286
+    ],
+    "weights": [
+      0.5,
+      0.5
+    ],
+    "ranges": {
+      "fit": [
+        "2021-04-21",
+        "2022-04-19",
+        252
+      ],
+      "validation": [
+        "2022-04-27",
+        "2022-07-08",
+        50
+      ],
+      "assessment": [
+        "2022-07-18",
+        "2022-12-30",
+        117
+      ]
+    },
+    "hashes": {
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h1_s42_original.parquet": "2d65523b13d7cf67bdd4295143588ef660e825e4351072474f5c2ffad95edfc0",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h1_s43_original.parquet": "3c710c359347afffd8c1f83538c3c875bd6386997258c87741281d71611ae07a",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h1_s42_original.pt": "ed3aa17f1192335965350b90a81c30dabc88e45189c8f3a08bb70da0263cd7d4",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h1_s43_original.pt": "c2af45db84d0cfd0763982847bdd0dab635cbbebae35bc05c90d1df4985bfa74"
+    }
+  },
+  {
+    "id": "w0_h5_ensemble",
+    "metrics": {
+      "accuracy": 0.5513626834381551,
+      "majority": 0.5116142557651991,
+      "mcc": 0.10177271495836497,
+      "balanced": 0.5508437355342576,
+      "precision": 0.5417106652587117,
+      "recall": 0.5285027472527473,
+      "f1": 0.5350252042412654,
+      "positive_calls": 5682,
+      "negative_calls": 6243,
+      "within_day_auc": 0.5434523289383958
+    },
+    "paired_auc_vs_seed42": "-0.0004 [-0.0058, +0.0052]",
+    "sources": [
+      "w0_h5_s42_original",
+      "w0_h5_s43_original"
+    ],
+    "thresholds": [
+      0.4202089816331863,
+      0.5009213000535965
+    ],
+    "weights": [
+      0.5,
+      0.5
+    ],
+    "ranges": {
+      "fit": [
+        "2021-04-21",
+        "2022-04-19",
+        252
+      ],
+      "validation": [
+        "2022-04-27",
+        "2022-07-08",
+        50
+      ],
+      "assessment": [
+        "2022-07-18",
+        "2022-12-30",
+        117
+      ]
+    },
+    "hashes": {
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h5_s42_original.parquet": "7c9f050dff9933e2210415105e132984d2901bb571c4c01ec8572645e5ca4b16",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h5_s43_original.parquet": "6ed3e07c1d7e96a061d63aac20aab3f232bf5da5f69b6ea7ab54c04a5661f1fc",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h5_s42_original.pt": "708066a4bbec82a53f78ad35ffee8fb61c894efa715f58cb315ca79aaf749d1e",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w0_h5_s43_original.pt": "62ac57bb30d342776fb4d8d3be2016601fe7df10b0606070b1f9cee71fee93b3"
+    }
+  },
+  {
+    "id": "w1_h1_ensemble",
+    "metrics": {
+      "accuracy": 0.5119103222793088,
+      "majority": 0.5205978514712751,
+      "mcc": -0.005625730644490217,
+      "balanced": 0.4979318292082735,
+      "precision": 0.5193677649154052,
+      "recall": 0.8372510317602727,
+      "f1": 0.6410661537404685,
+      "positive_calls": 8984,
+      "negative_calls": 1721,
+      "within_day_auc": 0.49969821005571907
+    },
+    "paired_auc_vs_seed42": "-0.0040 [-0.0091, +0.0013]",
+    "sources": [
+      "w1_h1_s42_original",
+      "w1_h1_s43_original"
+    ],
+    "thresholds": [
+      0.47139676809310915,
+      0.5007581686973572
+    ],
+    "weights": [
+      0.5,
+      0.5
+    ],
+    "ranges": {
+      "fit": [
+        "2022-04-25",
+        "2023-04-25",
+        252
+      ],
+      "validation": [
+        "2023-05-03",
+        "2023-07-14",
+        50
+      ],
+      "assessment": [
+        "2023-07-24",
+        "2023-12-20",
+        106
+      ]
+    },
+    "hashes": {
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h1_s42_original.parquet": "da5ddd5f388a019a529f2f784ff7c0d4b903529c6be3c92027080f31264f2693",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h1_s43_original.parquet": "40214b2d3cb3d34db2892717909f86e004ebc08ae8d714f3714861ecf112024b",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h1_s42_original.pt": "4319496758f7d66d888853164e1c7fa3bef88a16146a1ad9463f0ccc3a71490e",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h1_s43_original.pt": "c1c46aeeec75e2ce9082b950cc50e26669d50329bf7c2503ce3d45ab44c991f4"
+    }
+  },
+  {
+    "id": "w1_h5_ensemble",
+    "metrics": {
+      "accuracy": 0.5017288103915521,
+      "majority": 0.529296327446033,
+      "mcc": -0.05309194586979169,
+      "balanced": 0.48107894588519534,
+      "precision": 0.5182217343578486,
+      "recall": 0.8335098870056498,
+      "f1": 0.6390957086774063,
+      "positive_calls": 9110,
+      "negative_calls": 1591,
+      "within_day_auc": 0.43977102272029023
+    },
+    "paired_auc_vs_seed42": "-0.0637 [-0.1151, -0.0200]",
+    "sources": [
+      "w1_h5_s42_original",
+      "w1_h5_s43_original"
+    ],
+    "thresholds": [
+      0.48273561149835587,
+      0.4728259789943695
+    ],
+    "weights": [
+      0.5,
+      0.5
+    ],
+    "ranges": {
+      "fit": [
+        "2022-04-25",
+        "2023-04-25",
+        252
+      ],
+      "validation": [
+        "2023-05-03",
+        "2023-07-14",
+        50
+      ],
+      "assessment": [
+        "2023-07-24",
+        "2023-12-20",
+        106
+      ]
+    },
+    "hashes": {
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h5_s42_original.parquet": "9bfd65d4ee85d39500c85616e91656b6aa9863bff2b03466213ff73565c9df30",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h5_s43_original.parquet": "14a70b03f12ced392ea7a2f516484d4cc8f602fc9c91f905e43ce8c4eb2d9c87",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h5_s42_original.pt": "4c0f51e6a981cc2f7e2afbbbb39edd907345db16c42318136bee1aa77b9c8c16",
+      "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/w1_h5_s43_original.pt": "b0231e20d79c3f62819361d403fbacd4e7ad8bc8fd8d3eae2f36a3a2ecf663e0"
+    }
+  }
+]

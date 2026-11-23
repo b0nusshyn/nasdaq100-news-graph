@@ -97,6 +97,7 @@ def make_batch(days: np.ndarray, panel, features, graph: dict, horizon: int):
         "edge_weight": torch.from_numpy(np.concatenate(weight)),
         "y": torch.from_numpy(np.nan_to_num(y)).float(),
         "target": torch.from_numpy(~np.isnan(y)),
+        "node_day": torch.from_numpy(np.concatenate(at)[:, 0].copy()),
         "at": np.concatenate(at),
     }
 
@@ -117,16 +118,57 @@ class Fitted:
     batch_days: int
 
 
-def fold_inputs(panel, edges: pd.DataFrame, fold, cfg: dict, ablate=()):
-    """The edge types, scaled features and graph one fold's model sees: fitted on `fold.train` only."""
+@dataclass(frozen=True)
+class GraphSources:
+    """Aligned source observations for rebuilding learned edges on the weight-fit partition."""
+
+    prices: pd.DataFrame | None = None
+    article_tickers: pd.DataFrame | None = None
+
+
+def training_partitions(fold, cfg):
+    from src.core.config import walk_forward_config
+    from src.models.panel import split_validation
+
+    embargo = cfg["embargo_days"] if "embargo_days" in cfg else walk_forward_config()["embargo_days"]
+    if embargo < 5:
+        raise ValueError("The model requires an internal embargo of at least five trading sessions")
+    return split_validation(fold.train, cfg["train"]["validation_fraction"], embargo)
+
+
+def fold_inputs(panel, edges: pd.DataFrame | GraphSources | None, fold, cfg: dict, ablate=()):
+    """Prepare outer-training inputs for legacy runs or weight-fit-only inputs for new runs."""
+    from src.eval.splitter import Fold
     from src.models.panel import fit_features
 
     feat, gat = cfg["features"], cfg["gat"]
     edge_types = tuple(t for t in gat["edge_types"] if t not in ablate)
+    scope = cfg["train"].get("preprocessing_scope", "outer_train")
+    if scope not in ("outer_train", "weight_fit"):
+        raise ValueError("preprocessing_scope must be outer_train or weight_fit")
+    fit_dates = fold.train
+    if scope == "weight_fit":
+        fit_dates, _ = training_partitions(fold, cfg)
+        if edge_types:
+            from src.graph.build_edges import comention_edges, corr_edges
+
+            if not isinstance(edges, GraphSources) or set(edge_types) - {"corr", "comention"}:
+                raise ValueError("weight_fit graphs require raw GraphSources and corr/comention edges only")
+            fit_fold = Fold(fold.index, fit_dates, fold.test)
+            built = []
+            if "corr" in edge_types:
+                if edges.prices is None:
+                    raise ValueError("weight_fit correlation edges require prices")
+                built.append(corr_edges(edges.prices, [fit_fold]))
+            if "comention" in edge_types:
+                if edges.article_tickers is None:
+                    raise ValueError("weight_fit co-mention edges require aligned article links")
+                built.append(comention_edges(edges.article_tickers, [fit_fold]))
+            edges = pd.concat(built, ignore_index=True)
     drop_pairs = DEAL_ARB_PAIRS if DEAL_ARB in ablate else ()
     no_news = NEWS in ablate
     features = fit_features(
-        panel, fold.train, window=cfg["window_days"], price=tuple(feat["price"]),
+        panel, fit_dates, window=cfg["window_days"], price=tuple(feat["price"]),
         news=() if no_news else tuple(feat["news"]),
         embeddings=bool(feat.get("embeddings", True)) and not no_news, embedding_dim=feat["embedding_dim"],
     )
@@ -138,10 +180,13 @@ def build_model(n_features: int, edge_types: tuple[str, ...], cfg: dict):
     from src.models.gat_lstm import GATLSTM
 
     enc, gat = cfg["encoder"], cfg["gat"]
-    return GATLSTM(n_features, enc["hidden"], gat["heads"], edge_types, layers=enc["layers"], dropout=enc["dropout"])
+    return GATLSTM(n_features, enc["hidden"], gat["heads"], edge_types, layers=enc["layers"],
+                   dropout=enc["dropout"], signed_messages=gat.get("signed_messages", False),
+                   center_graph_inputs=gat.get("center_graph_inputs", False))
 
 
-def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, ablate=(), predict_test=True,
+def train_fold(panel, edges: pd.DataFrame | GraphSources | None, fold, horizon: int, cfg: dict, *,
+               ablate=(), predict_test=True,
                log=print, return_model=False):
     """Fit one model on `fold`'s training days and predict its test days.
 
@@ -151,20 +196,24 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     """
     import torch
 
-    from src.core.config import walk_forward_config
-    from src.models.panel import choose_threshold, split_validation
+    from src.models.panel import choose_threshold
 
     start = time.perf_counter()
     tr = cfg["train"]
     edge_types, features, graph = fold_inputs(panel, edges, fold, cfg, ablate)
-    embargo = cfg.get("embargo_days", walk_forward_config()["embargo_days"])
-    fit_days, val_days = split_validation(fold.train, tr["validation_fraction"], embargo)
+    fit_days, val_days = training_partitions(fold, cfg)
 
     def days_with_rows(dates) -> np.ndarray:
         return np.flatnonzero(panel.row_mask(dates, horizon).any(axis=1))
 
-    fit_idx, val_idx, test_idx = days_with_rows(fit_days), days_with_rows(val_days), days_with_rows(fold.test)
+    fit_idx, val_idx = days_with_rows(fit_days), days_with_rows(val_days)
+    if not len(fit_idx) or not len(val_idx):
+        raise ValueError("Both training and validation require eligible labelled rows")
     val_batches = [make_batch(c, panel, features, graph, horizon) for c in _chunks(val_idx, tr["batch_days"])]
+    probe_batches = [
+        make_batch(c, panel, features, graph, horizon)
+        for c in _chunks(fit_idx[::5], tr["batch_days"])
+    ] if tr.get("record_history") else []
 
     torch.manual_seed(cfg["seed"])
     rng = np.random.default_rng(cfg["seed"])
@@ -173,18 +222,18 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
     loss_fn = torch.nn.BCEWithLogitsLoss(reduction="sum")
 
     def run(b):
-        logits, _ = model(b["x"], b["edge_index"], b["edge_type"], b["edge_weight"])
+        logits, _ = model(b["x"], b["edge_index"], b["edge_type"], b["edge_weight"], node_day=b["node_day"])
         return logits
 
     from src.models.ladder_report import within_day_auc
 
-    def validate() -> tuple[float, float]:
+    def validate(batches) -> tuple[float, float]:
         """Validation (loss, within-day AUC). Loss also rewards each day's overall level (market
         timing); within-day AUC scores only how the day's tickers are ranked: the headline."""
         model.eval()
         total, n, parts = 0.0, 0, []
         with torch.no_grad():
-            for b in val_batches:
+            for b in batches:
                 logits, y = run(b)[b["target"]], b["y"][b["target"]]
                 total += float(loss_fn(logits, y))
                 n += int(b["target"].sum())
@@ -207,7 +256,7 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
         s = wd if stop_metric == "within_day_auc" else -loss
         return -math.inf if math.isnan(s) else s
 
-    best, best_state, stale, history, step, epoch = -math.inf, None, 0, [], 0, 0
+    best, best_state, chosen, stale, history, step, epoch = -math.inf, None, None, 0, [], 0, 0
     model.train()
     while epoch < tr["epochs"] and (not history or stale < patience):
         epoch += 1
@@ -222,18 +271,23 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
             step += 1
             if step % every:
                 continue
-            v, wd = validate()
-            history.append({"step": step, "loss": v, "within_day_auc": wd})
+            v, wd = validate(val_batches)
+            check = {"step": step, "loss": v, "within_day_auc": wd}
+            if probe_batches:
+                check["train_probe_loss"], check["train_probe_within_day_auc"] = validate(probe_batches)
+            history.append(check)
             if best_state is None or score(v, wd) > best + 1e-6:
                 best, stale = score(v, wd), 0
                 best_state = {k: t.detach().clone() for k, t in model.state_dict().items()}
+                chosen = check
             else:
                 stale += 1
             log(f"  h={horizon} fold {fold.index} epoch {epoch} step {step}: val loss {v:.4f}, within-day AUC {wd:.3f}")
             if stale >= patience:
                 break
+    if chosen is None:
+        raise ValueError("Training ended before any checkpoint was evaluated")
     model.load_state_dict(best_state)
-    chosen = max(history, key=lambda r: score(r["loss"], r["within_day_auc"]))
     loss_opt = min(history, key=lambda r: r["loss"])
 
     model.eval()
@@ -260,7 +314,7 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", UserWarning)  # undefined MCC is reported as NaN
-        val_mcc = classification_metrics(val["y_true"].to_numpy(), val["p_up"].to_numpy(), threshold=threshold)["mcc"]
+        val_metrics = classification_metrics(val["y_true"].to_numpy(), val["p_up"].to_numpy(), threshold=threshold)
     info = {
         "fold": fold.index, "horizon": horizon, "seconds": time.perf_counter() - start,
         "stop_metric": stop_metric, "epochs": epoch, "steps": step, "steps_per_epoch": steps_per_epoch,
@@ -269,11 +323,15 @@ def train_fold(panel, edges: pd.DataFrame, fold, horizon: int, cfg: dict, *, abl
         "best_val_loss": chosen["loss"],  # kept for older run records; same as val_loss_at_best
         "loss_optimal_step": loss_opt["step"], "val_within_day_auc_at_loss_optimum": loss_opt["within_day_auc"],
         "min_val_loss": loss_opt["loss"], "threshold": threshold, "val_base_rate": float(val["y_true"].mean()),
-        "val_mcc": val_mcc, "fit_days": len(fit_idx), "val_days": len(val_idx),
+        "val_mcc": val_metrics["mcc"], "fit_days": len(fit_idx), "val_days": len(val_idx),
         "features": len(features.names), "edges_per_day": len(graph["src"]),
     }
+    if probe_batches:
+        info["history"] = history
+        info["validation"] = val_metrics
     if not predict_test:
         return None, info
+    test_idx = days_with_rows(fold.test)
     name = model_name(ablate, cfg.get("model", MODEL))
     preds = predict(test_idx).assign(model=name, horizon=horizon, fold=fold.index)
     info["test_rows"] = len(preds)
@@ -313,13 +371,16 @@ def main() -> None:
     p.add_argument("--config", type=Path, default=Path("configs/gat_lstm.yaml"))
     p.add_argument("--horizon", type=int, choices=[1, 5], default=None, help="default: both")
     p.add_argument("--ablate", nargs="*", default=[], help="edge types, 'news' or 'deal_arb' to drop (#41)")
+    p.add_argument("--legacy-labels", action="store_true", help="verify and map legacy return columns in memory")
     p.add_argument("--folds", type=int, nargs="+", default=None,
                    help="train only these folds (smoke run): prints metrics, writes no predictions")
     args = p.parse_args()
 
     from src.core.config import load_config
     from src.core.io import read_table, write_predictions
-    from src.models.panel import load_panel
+    from src.core.paths import predictions_path
+    from src.models.panel import build_panel, lag_on_sessions, load_panel
+    from src.models.price_features import EXTENDED_PRICE
 
     cfg = load_config(args.config)
     bad = set(args.ablate) - set(cfg["gat"]["edge_types"]) - {NEWS, DEAL_ARB}
@@ -329,9 +390,33 @@ def main() -> None:
         p.error("--ablate: deal_arb drops some corr edges; with corr dropped too it changes nothing")
     t0 = time.perf_counter()
     name = model_name(args.ablate, cfg.get("model", MODEL))
+    strict = cfg["train"].get("preprocessing_scope") == "weight_fit"
+    output = predictions_path(name)
+    if strict and args.folds is None and (
+        name == MODEL or output.exists() or output.with_name(f"{name}_run.json").exists()
+    ):
+        p.error("weight_fit runs require a new model name and unused output paths")
     embeddings = bool(cfg["features"].get("embeddings", True)) and NEWS not in args.ablate
-    panel = load_panel(embeddings=embeddings)
-    edges = read_table("edges") if set(cfg["gat"]["edge_types"]) - set(args.ablate) else None
+    lag = cfg.get("news_lag_sessions", 1 if strict else 0)
+    extended = bool(set(cfg["features"]["price"]) & set(EXTENDED_PRICE))
+    if args.legacy_labels:
+        from src.eval.run_baselines import load_inputs
+
+        prices, labels, news = load_inputs(include_news=True, legacy_labels=True)
+        calendar = pd.DatetimeIndex(sorted(prices.date.unique()))
+        panel = build_panel(prices, labels, lag_on_sessions(news, calendar, lag),
+                            embeddings=embeddings, extended_price=extended)
+    else:
+        panel = load_panel(embeddings=embeddings, news_lag_sessions=lag, extended_price=extended)
+    kinds = set(cfg["gat"]["edge_types"]) - set(args.ablate)
+    if strict:
+        edges = GraphSources(
+            prices=read_table("prices") if "corr" in kinds else None,
+            article_tickers=lag_on_sessions(read_table("article_tickers"), panel.days, lag)
+            if "comention" in kinds else None,
+        )
+    else:
+        edges = read_table("edges") if kinds else None
     folds = folds_for(panel)
     chosen = folds if args.folds is None else [folds[i] for i in args.folds]
     print(f"Loaded inputs in {time.perf_counter() - t0:.0f}s: {len(panel.days)} days x {len(panel.tickers)} tickers, "

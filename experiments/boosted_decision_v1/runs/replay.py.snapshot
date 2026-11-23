@@ -1,0 +1,175 @@
+"""Replay saved outperformance estimators and evaluate frozen decision rules."""
+import json
+from pathlib import Path
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.isotonic import IsotonicRegression
+from sklearn.metrics import balanced_accuracy_score, brier_score_loss, log_loss
+from sklearn.metrics import f1_score, precision_score, recall_score
+from sklearn.metrics import matthews_corrcoef
+
+from experiments.cohort_outperformance_v1.study import LEVELS, dataset, features, finite, targets
+from src.models.ladder_report import within_day_auc
+from src.nlp.rebuild_timed_news import file_hash
+
+ROOT = Path(__file__).parent
+PRIOR = ROOT.parent / "cohort_outperformance_v1" / "runs"
+
+
+def threshold(y, p):
+    levels = np.linspace(.05, .95, 19)
+    options = np.quantile(p, levels)
+    quality = [balanced_accuracy_score(y, p >= t) for t in options]
+    return float(options[max(range(len(levels)), key=lambda i: (quality[i], -abs(levels[i] - .5)))])
+
+
+def count(n, share):
+    return int(np.floor(n * share + .5))
+
+
+def ranked(frame, prevalence):
+    f = frame.sort_values(["date", "score", "ticker"], ascending=[True, False, True]).copy()
+    grouped = f.groupby("date")
+    n = grouped.ticker.transform("size")
+    boundary = count_vector = np.floor(n * prevalence + .5)
+    slot = grouped.cumcount()
+    f["rank_score"] = 1 - (slot + .5) / n
+    f["rank_call"] = slot < count_vector
+    f["rank_margin"] = np.abs(slot + .5 - boundary) / n
+    return f.sort_index()
+
+
+def ranking_select(frame, share):
+    ranked_rows = frame.sort_values(["date", "rank_margin", "ticker"], ascending=[True, False, True])
+    groups = ranked_rows.groupby("date")
+    keep = groups.cumcount() < groups.ticker.transform("size").map(lambda n: count(n, share))
+    return ranked_rows[keep]
+
+
+def metrics(y, pred):
+    return {
+        "accuracy": float(np.mean(y == pred)), "majority": float(max(y.mean(), 1-y.mean())),
+        "mcc": float(matthews_corrcoef(y, pred)) if pred.nunique() > 1 else None,
+        "balanced": balanced_accuracy_score(y, pred), "precision": precision_score(y, pred, zero_division=0),
+        "recall": recall_score(y, pred, zero_division=0), "f1": f1_score(y, pred, zero_division=0),
+        "positive_calls": int(pred.sum()), "negative_calls": int((~pred).sum()),
+    }
+
+
+def confidence_result(frame, selected, call):
+    truth = selected.y_true
+    counts = selected.assign(hit=truth.eq(selected[call])).groupby("date").agg(
+        hits=("hit", "sum"), actual_positive=("y_true", "sum"), n=("y_true", "size"))
+    dates = frame.date.drop_duplicates()
+    draws = np.random.default_rng(42).integers(len(dates), size=(2500, (len(dates)+9)//10, 1))
+    draws = ((draws + np.arange(10)) % len(dates)).reshape(2500, -1)[:, :len(dates)]
+    hit, up, n = counts.reindex(dates, fill_value=0).to_numpy()[draws].sum(axis=1).T
+    valid = n > 0
+    result = {"rows": len(selected), "dates": selected.date.nunique(), "coverage": len(selected)/len(frame)}
+    if len(selected):
+        result.update(metrics(truth, selected[call]),
+                      accuracy_interval=np.quantile(hit[valid]/n[valid], [.025, .975]).tolist(),
+                      excess_interval=np.quantile((hit-np.maximum(up, n-up))[valid]/n[valid], [.025, .975]).tolist())
+    return result
+
+
+def distribution(f):
+    return {"rows": len(f), "dates": f.date.nunique(), "base_rate": float(f.y_true.mean()),
+            "raw_unique": f.score.nunique(), "p_unique": f.p_up.nunique(),
+            "score_quantiles": f.score.quantile([0,.05,.5,.95,1]).tolist(),
+            "p_quantiles": f.p_up.quantile([0,.05,.5,.95,1]).tolist(),
+            "raw_auc": within_day_auc(f.assign(p_up=f.score)),
+            "calibrated_auc": within_day_auc(f)}
+
+
+def reliability(f, p, prior):
+    y = f.y_true
+    bins = pd.cut(p, np.linspace(0, 1, 11), include_lowest=True)
+    return {"brier": brier_score_loss(y, p), "log_loss": log_loss(y, p, labels=[0, 1]),
+            "prior_brier": brier_score_loss(y, np.full(len(y), prior)),
+            "bins": f.assign(p=p).groupby(bins, observed=True).agg(
+                n=("y_true", "size"), predicted=("p", "mean"), actual=("y_true", "mean")).reset_index(drop=True)
+            .to_dict("records")}
+
+
+def main():
+    prices, calendar, _ = dataset()
+    features_frame, _ = features(prices)
+    raw_labels = targets(prices.pivot(index="date", columns="ticker", values="close"), calendar, 1)
+    records = [json.loads(s) for s in (PRIOR / "ledger.jsonl").read_text().splitlines()]
+    manifest = json.loads((PRIOR / "manifest.json").read_text())
+    model_fields = manifest["tabular_features"]
+    base = features_frame.merge(raw_labels, on=["date", "ticker"], validate="one_to_one").rename(columns={"y":"y_true"})
+    out = ROOT / "runs"
+    out.mkdir()
+    results = {}
+    inputs = [PRIOR / "manifest.json", PRIOR / "ledger.jsonl", Path(__file__), ROOT / "protocol.md"]
+    for year in (2024, 2025):
+        name = f"{year}_1d_boosted_binary"
+        files = [PRIOR / (name + ext) for ext in (".joblib", "_calibrator.joblib", ".parquet")]
+        inputs.extend(files)
+        model, platt = (joblib.load(p) for p in files[:2])
+        saved = pd.read_parquet(files[2])
+        assert np.array_equal(model.classes_, [0, 1]) and np.array_equal(platt.classes_, [0, 1])
+        row = next(r for r in records if r["id"] == name)
+        frames = {}
+        for phase in ("validation", "calibration", "assessment"):
+            first, last, n = row["dates"][phase]
+            f = base[base.date.between(first, last)].sort_values(["date", "ticker"]).reset_index(drop=True)
+            assert len(f) == n*30 and f.date.dt.year.max() <= 2025
+            s = model.decision_function(f[model_fields])
+            np.testing.assert_allclose(model.predict_proba(f[model_fields])[:, 1], 1/(1+np.exp(-s)))
+            frames[phase] = f[["date", "ticker", "y_true"]].assign(
+                score=s, p_up=platt.predict_proba(s[:, None])[:, 1])
+        v, c, a = (frames[p] for p in ("validation", "calibration", "assessment"))
+        pd.testing.assert_frame_equal(a[["date", "ticker", "y_true"]], saved[["date", "ticker", "y_true"]])
+        np.testing.assert_allclose(a[["score", "p_up"]], saved[["score", "p_up"]], atol=1e-12, rtol=0)
+        assert calendar.get_loc(c.date.min()) - calendar.get_loc(v.date.max()) == 6
+        assert calendar.get_loc(a.date.min()) - calendar.get_loc(c.date.max()) == 6
+
+        prior = float(c.y_true.mean())
+        cut = threshold(c.y_true, c.p_up)
+        precal = pd.concat([v, c])
+        iso = IsotonicRegression(increasing=True, out_of_bounds="clip").fit(precal.score, precal.y_true)
+        joblib.dump(iso, out / f"{year}_isotonic.joblib")
+        a = ranked(a, prior)
+        a["p_isotonic"] = iso.predict(a.score)
+        a["default"] = a.p_up >= .5
+        a["threshold"] = a.p_up >= cut
+        a["isotonic"] = a.p_isotonic >= .5
+        measures = {}
+        for rule, s in [("default","p_up"), ("threshold","p_up"),
+                        ("isotonic","p_isotonic"), ("rank_call","rank_score")]:
+            measures[rule] = metrics(a.y_true, a[rule])
+            measures[rule]["auc"] = within_day_auc(a.assign(p_up=a[s]))
+        probs = {"platt": reliability(a, a.p_up, prior), "isotonic": reliability(a, a.p_isotonic, prior)}
+        a["margin"] = abs(a.p_up - .5)
+        selective = {}
+        for level in LEVELS:
+            t = row["selective"][str(level)]["threshold"]
+            taken = a[a.margin.ge(t)]
+            assert len(taken) == row["selective"][str(level)]["rows"]
+            selective[str(level)] = {
+                "original": confidence_result(a, taken, "default"),
+                "rank": confidence_result(a, ranking_select(a, level), "rank_call"),
+                "threshold_ties": int(a.margin.eq(t).sum())}
+        per_date = []
+        for phase, f in frames.items():
+            daily = f.groupby("date").agg(actual_up=("y_true", "mean"), raw_min=("score", "min"),
+                                          raw_max=("score", "max"), raw_mean=("score", "mean"),
+                                          p_min=("p_up", "min"), p_max=("p_up", "max"), p_mean=("p_up", "mean"))
+            per_date.append(daily.assign(phase=phase))
+        pd.concat(per_date).to_csv(out / f"{year}_daily.csv")
+        a.to_parquet(out / f"{year}_decisions.parquet", index=False, compression="zstd")
+        results[str(year)] = {"cutoff": cut, "prior": prior, "platt_intercept": float(platt[-1].intercept_[0]),
+                              "platt_slope": float(platt[-1].coef_[0, 0]),
+                              "distribution": {k: distribution(f) for k, f in frames.items()},
+                              "metrics": measures, "probability": probs, "selective": selective}
+    (out / "results.json").write_text(json.dumps(finite(results), indent=2, allow_nan=False))
+    (out / "hashes.json").write_text(json.dumps({str(p): file_hash(p) for p in inputs}, indent=2))
+
+
+if __name__ == "__main__":
+    main()

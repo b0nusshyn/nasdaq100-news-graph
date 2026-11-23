@@ -1,0 +1,140 @@
+{
+  "seed": 42,
+  "cohort": [
+    "TSLA",
+    "NVDA",
+    "AAPL",
+    "MSFT",
+    "AMZN",
+    "AMD",
+    "META",
+    "GOOGL",
+    "GOOG",
+    "NFLX",
+    "AVGO",
+    "ADBE",
+    "INTC",
+    "PYPL",
+    "COST",
+    "MU",
+    "QCOM",
+    "CSCO",
+    "PANW",
+    "BKNG",
+    "PDD",
+    "PEP",
+    "TXN",
+    "AMAT",
+    "CMCSA",
+    "INTU",
+    "TMUS",
+    "LRCX",
+    "ABNB",
+    "ASML"
+  ],
+  "config": {
+    "model": "gat_lstm",
+    "seed": 42,
+    "horizons": [
+      1,
+      5
+    ],
+    "window_days": 20,
+    "features": {
+      "price": [
+        "ret_1d",
+        "volatility_20d",
+        "rsi_14",
+        "macd",
+        "macd_signal",
+        "volume_z_20d"
+      ],
+      "news": [],
+      "embeddings": false,
+      "embedding_dim": 64
+    },
+    "encoder": {
+      "hidden": 64,
+      "layers": 1,
+      "dropout": 0.1
+    },
+    "gat": {
+      "heads": 4,
+      "edge_types": [
+        "sector",
+        "comention",
+        "corr"
+      ]
+    },
+    "train": {
+      "epochs": 12,
+      "batch_days": 8,
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "grad_clip": 1.0,
+      "validation_fraction": 0.08865248226950355,
+      "validate_every_steps": null,
+      "early_stopping_metric": "within_day_auc",
+      "early_stopping_patience": 4,
+      "preprocessing_scope": "weight_fit",
+      "record_history": true
+    },
+    "embargo_days": 5
+  },
+  "boosting": {
+    "max_iter": 90,
+    "learning_rate": 0.05,
+    "max_leaf_nodes": 7,
+    "min_samples_leaf": 150,
+    "l2_regularization": 8,
+    "early_stopping": false,
+    "random_state": 42
+  },
+  "tabular_features": [
+    "stock_return",
+    "stock_5",
+    "risk_adj_momentum",
+    "relative_20",
+    "vol_20",
+    "beta_20",
+    "range_5",
+    "volume_relative",
+    "trend_distance",
+    "relative_reversal_5",
+    "rank_5",
+    "rank_vol",
+    "market_1",
+    "market_5",
+    "market_20",
+    "market_vol",
+    "breadth",
+    "dispersion"
+  ],
+  "levels": [
+    0.05,
+    0.1,
+    0.2,
+    0.5,
+    1.0
+  ],
+  "torch": "2.15.0",
+  "sha256": {
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/study.py": "c19c8458fb7718302c721cc42752e28cbb02aa624dc9842757da365e07271c2b",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/protocol.md": "83305876f5305eee76e4909475095bfa31abb609822f65f9292f2e41dbbd6bc6",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/external_raw_panel.parquet": "32c8178bee3d667dcca0a52b5dc89ddeb7c2d2d7f88237eb548ece3407cf26c6",
+    "configs/gat_lstm.yaml": "5a968a28739a4720ae1e8b19c6fcb52dae79eb50f4e378234a9ea93e48808984",
+    "/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/development_runs.jsonl": "12f011418af94917ea224e08f52f8e8b4859c8a5335e3887e2c34da7fc037329",
+    "/Users/nonladapream/nasdaq100-news-graph/data/membership.parquet": "a2655bd3878cb6bd53d76c6db22eadf2d936a77642fc47f278f9cb93de232678",
+    "experiments/market_direction_v1/study.py": "75e85c01f370e96ed2cc4a5dd63e09b4839c5714bddd992cc3c92ae6c56fe8d9",
+    "src/models/attention.py": "651860f5d7e25e5bb6b45a1d354a06c14c60d8d9c45bd8f7d57de04dfbc89eb3",
+    "src/models/ablations.py": "7ef74f391b77cf36f6251c0a92ea2dd80e41856754a43b710250672a6b7df252",
+    "src/models/ladder_report.py": "baf8a69df1b9ff92fbae3b74bca6ef425d84e4c8e541886b0e2539cb06c29836",
+    "src/models/price_features.py": "56c8d1e4d337b597a2647c730790219fdaea452fa696a113e84f27379a78011e",
+    "src/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/models/encoder.py": "03caa2e092b3de8b3992fc8722185738ab41534c21db5335e5400c6fc814bd2c",
+    "src/models/gat_lstm.py": "b35acaf9cbea71f02da53d7f7c2d8db9f4da2d7074ba32639177e2d55e03cce5",
+    "src/models/tune.py": "2dad4b5be28fa9fef580c8ecaca409694018e1b4e9970b55e0d0c7eae1e13765",
+    "src/models/train.py": "3d40bc1c77fb04cbb770612db882e1222789a467bf0275ffb0c46336f1c8592a",
+    "src/models/panel.py": "d16169d7dbf8e845396737cb78c1056224585fd69bcfdd429806fde1b04048c1"
+  }
+}

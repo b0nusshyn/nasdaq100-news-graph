@@ -1,0 +1,34 @@
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+start w0_p025_s42 208
+done w0_p025_s42 0.526740904771946
+start w0_p025_s43 208
+done w0_p025_s43 0.5276611185580989
+start w0_p050_s42 416
+done w0_p050_s42 0.5312047795851151
+start w0_p050_s43 416
+done w0_p050_s43 0.5432810456877907
+start w0_p075_s42 624
+done w0_p075_s42 0.4714995613353917
+start w0_p075_s43 624
+done w0_p075_s43 0.47460821403709963
+start w0_p100_s42 831
+done w0_p100_s42 0.48001993697718776
+start w0_p100_s43 831
+done w0_p100_s43 0.4902222418448988
+start w1_p025_s42 272
+done w1_p025_s42 0.5029830958862626
+start w1_p025_s43 272
+done w1_p025_s43 0.45149223753964185
+start w1_p050_s42 543
+done w1_p050_s42 0.47924102608693875
+start w1_p050_s43 543
+done w1_p050_s43 0.48214581640204457
+start w1_p075_s42 815
+done w1_p075_s42 0.4833036762519876
+start w1_p075_s43 815
+done w1_p075_s43 0.4880440048940355
+start w1_p100_s42 1086
+done w1_p100_s42 0.4878702270533349
+start w1_p100_s43 1086
+done w1_p100_s43 0.4622831621465941

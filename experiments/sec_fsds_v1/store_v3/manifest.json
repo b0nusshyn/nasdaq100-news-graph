@@ -1,0 +1,235 @@
+{
+  "policy": "SEC_LAGGED_PROXY",
+  "complete_sessions_lag": 2,
+  "max_fund_age": 130,
+  "identity_days": 400,
+  "strict_public_verified": false,
+  "extracts": [
+    {
+      "quarter": "2018q3",
+      "zip_sha256": "30030056223c456d5cb7a42722ffa990345fda12deb5cfff723b1ae47dc9bf8d",
+      "zip_bytes": 87202498,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2018q3.zip",
+      "sub_rows": 6183,
+      "num_rows": 50398,
+      "sub_sha256": "df4a44fc81436a749d2ca5d69dc5c23235d86ead0e74fba3fd23648b680b2601",
+      "num_sha256": "cead8fbc7b050c90fe785e3ffadcd0e90c4960bcbfeea2d55ee0da340e5e2493"
+    },
+    {
+      "quarter": "2018q4",
+      "zip_sha256": "ecc103d0979dacdf6cfcc7f0b2273f7b6046c41a3aa7f2e2aacfb8ccd45bc122",
+      "zip_bytes": 62895777,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2018q4.zip",
+      "sub_rows": 6187,
+      "num_rows": 52144,
+      "sub_sha256": "5b6c2f280c43360fe81f2b34f9086fb4f2a2606a031106be141eff6abafcf27b",
+      "num_sha256": "016b7f1df1933c97464e2ee39e601ecea8b7a53d086e5ff892d23ed8340329c0"
+    },
+    {
+      "quarter": "2019q1",
+      "zip_sha256": "49f6f0a00b6f1792d22893a3e261f7a329377048eb826079f1a16c7895b76d9d",
+      "zip_bytes": 95895180,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2019q1.zip",
+      "sub_rows": 5548,
+      "num_rows": 116789,
+      "sub_sha256": "ba6185a8734f811e76b160b0ae5632661f678a76612440c968aeac3f4991ae9b",
+      "num_sha256": "910cb191b9d21251cfd6663ebb4db1427e5eb750078c40a5d6117cd1acea05df"
+    },
+    {
+      "quarter": "2019q2",
+      "zip_sha256": "765e42efd43687b4ac4ea59c83213857a52dca0a4bd5c490034bd5bea2b6fac3",
+      "zip_bytes": 90155728,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2019q2.zip",
+      "sub_rows": 7034,
+      "num_rows": 62606,
+      "sub_sha256": "b23b18ccd19dde43b9f64a6d19c70709f2bd7d2d5c12d62fe3f492362cdc341f",
+      "num_sha256": "787e758e5424afafae9eab11d24614c133deb6df03a3b973c5c09b1d10e87087"
+    },
+    {
+      "quarter": "2019q3",
+      "zip_sha256": "4c57e36f04b54a2b9917537e12974cba68353f765affbf168bd506478780e13e",
+      "zip_bytes": 89829588,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2019q3.zip",
+      "sub_rows": 5991,
+      "num_rows": 53911,
+      "sub_sha256": "9214c3f21458a8f773fc9e184190abda83860f67378961c9a14f2931b15a7184",
+      "num_sha256": "bc87060f276628c3ea8737d673935869fc04acdf9bfbebb53d318c2aa40fd38d"
+    },
+    {
+      "quarter": "2019q4",
+      "zip_sha256": "1f997c123b6d2fe892eeca0a5f12687e718ab5ae031f148b4a5d82f2689daec3",
+      "zip_bytes": 98753299,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2019q4.zip",
+      "sub_rows": 6013,
+      "num_rows": 59150,
+      "sub_sha256": "5bb6b1000c535274f182ffe98457bc2d3cb91135312115f350ca561d3041fd97",
+      "num_sha256": "065718817c5022b84b4a1ca4dd1d180eeb94e2245f9e63f09e0b587434cd347b"
+    },
+    {
+      "quarter": "2020q1",
+      "zip_sha256": "48ed9834c66d565c21130d087eae941b25770e2d7cc8351d17652612289fcd67",
+      "zip_bytes": 96584608,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2020q1.zip",
+      "sub_rows": 5631,
+      "num_rows": 116129,
+      "sub_sha256": "3322aebd11706ce2db6119261decc4ecd3781af29ba231ab19d09f8298b689d6",
+      "num_sha256": "eec014ad401a0115f2aaa9d8a53837f300bed374cb69b66a7c2ff6e99b5ffef9"
+    },
+    {
+      "quarter": "2020q2",
+      "zip_sha256": "bd796ea10c88e21205da013f9c3f6a20b2b14d3de94f0075e9f529e0ef9a3543",
+      "zip_bytes": 82008710,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2020q2.zip",
+      "sub_rows": 6347,
+      "num_rows": 57396,
+      "sub_sha256": "43c790c254e0b28114d2f8c76ff69538287650d18bc3214bb6617683954a64f0",
+      "num_sha256": "263534bfd79dabff845493d71c6e3b5f06c9adac2c4fc5d9158b806141fdecbd"
+    },
+    {
+      "quarter": "2020q3",
+      "zip_sha256": "6a402070d4b1f12db0d2256533b38705735684ecb58bc12ce53a61dd12abe26e",
+      "zip_bytes": 87582976,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2020q3.zip",
+      "sub_rows": 5965,
+      "num_rows": 54458,
+      "sub_sha256": "2bd5768870cb1f9c2e1ce7ade058d98bb972dddc6e520b23e7a17e512e8033f9",
+      "num_sha256": "bb74b6c3f650203a68b8bb227e47ff1c2260d31464bb56a569fb50b3fe4bca5d"
+    },
+    {
+      "quarter": "2020q4",
+      "zip_sha256": "7cabec2c9b90511983623e6db3869b24c7a894466bd409f060a8da32790ae68e",
+      "zip_bytes": 89811373,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2020q4.zip",
+      "sub_rows": 5918,
+      "num_rows": 57147,
+      "sub_sha256": "a9a6e2c7972789e3da6ecf7c1a736b9e856a9e68db1a543a38c6fd7d67fa7b77",
+      "num_sha256": "2913dfef8407b8e06e6382fda85528a715e12f05919ce2615d48a4530663fc27"
+    },
+    {
+      "quarter": "2021q1",
+      "zip_sha256": "6a776a9fa3d974476101efa9a4bfc531b7cdc2763abd45a6f70dd240a223843b",
+      "zip_bytes": 97900752,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2021q1.zip",
+      "sub_rows": 5965,
+      "num_rows": 99325,
+      "sub_sha256": "a8bc46a9b5ad944ccbf992bd51398123c7c902a968a8c3e757fbfaafad8d7b94",
+      "num_sha256": "72b44083dd4491e5176afc51c8e39d5dc95511c2105c904283b6226eac3d11b9"
+    },
+    {
+      "quarter": "2021q2",
+      "zip_sha256": "528b91432896eba74661c20481edb327809f3a0bf00e01d81821fe8e6078bc33",
+      "zip_bytes": 90864175,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2021q2.zip",
+      "sub_rows": 7337,
+      "num_rows": 60540,
+      "sub_sha256": "28160849670e9e02d1a28c063c3179d4bdf629bda63eea63b0afc0197e5beb98",
+      "num_sha256": "b57137a0dd4c5000044b5779e9278983866898516aab3c814850ebf962ac36a9"
+    },
+    {
+      "quarter": "2021q3",
+      "zip_sha256": "0fae2ceb149c0fe7e83b35b19157f910c864dee7e25d5ecf8b93dc42ee261b99",
+      "zip_bytes": 97252395,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2021q3.zip",
+      "sub_rows": 6905,
+      "num_rows": 57118,
+      "sub_sha256": "c30259572340f8eefa78f698d39f3a16f55b0e2dc5c0ddb8134fc78ffab03311",
+      "num_sha256": "4e73dfec25fa470a6c05d3e92517c09a0359a99e6af371527c9f26dc302a608d"
+    },
+    {
+      "quarter": "2021q4",
+      "zip_sha256": "30d21449c0488e71dfb88ba8f85644a0e72194864e95111b3c1c120b3514c594",
+      "zip_bytes": 102642081,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2021q4.zip",
+      "sub_rows": 7025,
+      "num_rows": 61859,
+      "sub_sha256": "a8473acdb8dc69045bf95a05b4e4462ebc02206c87ea36345fffe92e6d03624f",
+      "num_sha256": "5ec0ac6ab4604521487cb312d6fb30a6b2a63ad21c1489fa9d5cf661a7b8a1a5"
+    },
+    {
+      "quarter": "2022q1",
+      "zip_sha256": "2ebeef77727a383f878bc28ff22498fd292a8dbab04216877b4b130ca00c1520",
+      "zip_bytes": 103669919,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2022q1.zip",
+      "sub_rows": 6793,
+      "num_rows": 74598,
+      "sub_sha256": "39921ad67bad3d5c8c4672f29e361c96e6acbf5a6d761cf825e8e1590ec5bff5",
+      "num_sha256": "e4b7818b9aecc9578ccee028e1768cae9acd25168d586b32b701e244d64ae31f"
+    },
+    {
+      "quarter": "2022q2",
+      "zip_sha256": "8939a4cafeabf7c94bde48be0e8c444f6332e4a9663698a89242eddd1036d27e",
+      "zip_bytes": 97089251,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2022q2.zip",
+      "sub_rows": 7896,
+      "num_rows": 62147,
+      "sub_sha256": "ed869f2e11eecc573d726cbc5a7c266858486437cdb367ffeeaaf61dde5b13f8",
+      "num_sha256": "23d1462f587ab07721619fc5d92f2e0d628e168622c203bdc594971a08aa5c42"
+    },
+    {
+      "quarter": "2022q3",
+      "zip_sha256": "4bbfdc953177acf1a430a9f0a624dd8244bc81292d42872107d0446d06167c26",
+      "zip_bytes": 97589396,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2022q3.zip",
+      "sub_rows": 6846,
+      "num_rows": 56074,
+      "sub_sha256": "7eb952846d545a5bf1db48073b7e64f020cd2ef5eb3bd33f106333ce6976adfb",
+      "num_sha256": "9ca792ae1f0491ac60be1e8379329fe643a55249c8285878fea122f8cb5b39bd"
+    },
+    {
+      "quarter": "2022q4",
+      "zip_sha256": "83bdc7a9545479eb64d118688c888ba8e7554ebc774f3ab8a8b0cc1decb87f28",
+      "zip_bytes": 111091525,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2022q4.zip",
+      "sub_rows": 6868,
+      "num_rows": 61322,
+      "sub_sha256": "55baf0356509f173a460ed7b2bf42c98c2abe0a39bbd5aa077ee5ca4b0435c90",
+      "num_sha256": "9da4afb1f022f47d52ff95a26783a906747cc1daa970d45dabe2785f40d69830"
+    },
+    {
+      "quarter": "2023q1",
+      "zip_sha256": "479638c1be4088fa2ae42d2947468913eaff5ad0f093c412ba4340af8a8f791e",
+      "zip_bytes": 113974946,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2023q1.zip",
+      "sub_rows": 6368,
+      "num_rows": 68876,
+      "sub_sha256": "c6735a3f81e9e8f4ca17598066e1e43a0eb58f002022f1a9cc2e24c03b03335a",
+      "num_sha256": "fb93cd3bdbb82ab28d52af0f99508c38368db91fa51d404903b638048bb46669"
+    },
+    {
+      "quarter": "2023q2",
+      "zip_sha256": "f028f1e8d24313e7619aa87c7c683a459452e7e81a8e5ba72d7ce39ddf62bda9",
+      "zip_bytes": 116914392,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2023q2.zip",
+      "sub_rows": 7488,
+      "num_rows": 60295,
+      "sub_sha256": "5da27b705a6a06f011bcb1e07abcd16f22093e68c1ef6bb4c778bdec0c6cbdbd",
+      "num_sha256": "e427bd0e469364d5a32829952ce2e40ea6ef83203e3e6a7abd72bfcaa62d85d9"
+    },
+    {
+      "quarter": "2023q3",
+      "zip_sha256": "f075d721dde4393dabd49c1746578294ada4665ec29c85c2b3184f44f6f09187",
+      "zip_bytes": 117776944,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2023q3.zip",
+      "sub_rows": 6383,
+      "num_rows": 53495,
+      "sub_sha256": "c962149b10b61cdf4303c4ee24e29b545a11eef76a661f506c8abcd30934604b",
+      "num_sha256": "763ab10587e97db9b3f7465cc8e9d07de04e8c7dbe1c2da758e8a62253c8e32a"
+    },
+    {
+      "quarter": "2023q4",
+      "zip_sha256": "ad23c5505e59b7305e16bfebb8bb839476689330b85a3e1ce216f809b18d1521",
+      "zip_bytes": 120272357,
+      "url": "https://www.sec.gov/files/dera/data/financial-statement-data-sets/2023q4.zip",
+      "sub_rows": 6360,
+      "num_rows": 57808,
+      "sub_sha256": "c85b6a7df6146b507ae74111db5deb80877d93792afd2c77cf083d89dc68e98b",
+      "num_sha256": "a936b2b644d25707e50b9cba1fa1c816bb37c0880c2c4fc01f948b752a63424c"
+    }
+  ],
+  "code_sha256": "e9f4f90308208633598b2869eb627416e9b6a766de1dc65167f4eb5a8354261e",
+  "identity_review_sha256": "d99dfd3e5dd5d0eaa1941bb84d6d2de2d2911cef2b9c8f5721259aeb0dd271b9",
+  "inputs_sha256": {
+    "data/prices.parquet": "fc6d3159a38f7904689c5e4362432e1a56baa2d93ac47a603158cf207af130d6",
+    "src/graph/gics.csv": "d0f35e2ccf74c9dd15dcba96b39f4991e4b6d6f28385ee6bf072014748acbe52"
+  }
+}

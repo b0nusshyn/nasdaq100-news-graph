@@ -1,0 +1,25 @@
+{
+  "rows": 199591,
+  "tickers": 172,
+  "sessions": 1258,
+  "member_rows": 128519,
+  "nonmember_rows": 71072,
+  "member_tickers": 148,
+  "historical_membership_join": {
+    "both": 128519,
+    "left_only": 5,
+    "right_only": 0
+  },
+  "1": {
+    "eligible": 128411,
+    "tickers": 148,
+    "sessions": 1257,
+    "member_rows_missing_label": 108
+  },
+  "5": {
+    "eligible": 127979,
+    "tickers": 148,
+    "sessions": 1253,
+    "member_rows_missing_label": 540
+  }
+}

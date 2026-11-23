@@ -1,0 +1,3 @@
+# Worst-half chronological checkpoint selection
+
+The prior 2023 five-day GAT seed 43 achieved 0.5452 validation AUC and 0.4363 assessment AUC. Test a prespecified robustness criterion: select the maximum of the weaker of two chronological validation-half mean AUCs. The original correlation GAT, BCE, all fit and validation dates, original labels, patience and optimizer match the existing five-day baselines. Both earlier and later windows and both seeds are fixed. The choice addresses within-validation temporal fragility. Report ordinary fit, validation and assessment AUC separately. Assessment labels are used only to audit the predeclared comparison. No notebook work.

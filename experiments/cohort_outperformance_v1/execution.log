@@ -1,0 +1,66 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/study.py", line 190, in <module>
+    main()
+    ~~~~^^
+  File "/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/study.py", line 96, in main
+    labels_panel = labels[5][["date", "ticker", "y"]].rename(columns={"y": "y_5d"})
+                   ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/pandas/core/frame.py", line 4336, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, "columns")[1]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/pandas/core/indexes/base.py", line 6557, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/pandas/core/indexes/base.py", line 6609, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['date'] not in index"
+start 2024_1d_logistic
+done 2024_1d_logistic 0.5013085300477986
+start 2024_1d_boosted_binary
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py:134: UserWarning: Could not find the number of physical cores for the following reason:
+invalid literal for int() with base 10: ''
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 264, in _count_physical_cores
+    cpu_count_physical = _count_physical_cores_darwin()
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 420, in _count_physical_cores_darwin
+    return int(cpu_info)
+/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/study.py:81: UserWarning: MCC is undefined: labels or predictions contain only one class
+  metrics = classification_metrics(y, pred)
+done 2024_1d_boosted_binary 0.5283834326459682
+start 2024_1d_boosted_relative
+done 2024_1d_boosted_relative 0.497605264938854
+start 2024_5d_logistic
+done 2024_5d_logistic 0.48724466779201153
+start 2024_5d_boosted_binary
+/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/study.py:81: UserWarning: MCC is undefined: labels or predictions contain only one class
+  metrics = classification_metrics(y, pred)
+done 2024_5d_boosted_binary 0.49431018146683303
+start 2024_5d_boosted_relative
+done 2024_5d_boosted_relative 0.4686375976017644
+start 2024_5d_price_lstm
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+done 2024_5d_price_lstm 0.50814351451797
+start 2024_5d_gat_corr
+done 2024_5d_gat_corr 0.5077547702798737
+start 2025_1d_logistic
+done 2025_1d_logistic 0.5022809215137001
+start 2025_1d_boosted_binary
+/Users/nonladapream/nasdaq100-news-graph/experiments/cohort_outperformance_v1/study.py:81: UserWarning: MCC is undefined: labels or predictions contain only one class
+  metrics = classification_metrics(y, pred)
+done 2025_1d_boosted_binary 0.5273210239858017
+start 2025_1d_boosted_relative
+done 2025_1d_boosted_relative 0.4941162031543949
+start 2025_5d_logistic
+done 2025_5d_logistic 0.44829894135991405
+start 2025_5d_boosted_binary
+done 2025_5d_boosted_binary 0.4699146093946514
+start 2025_5d_boosted_relative
+done 2025_5d_boosted_relative 0.4786230139023773
+start 2025_5d_price_lstm
+done 2025_5d_price_lstm 0.45544189161780935
+start 2025_5d_gat_corr
+done 2025_5d_gat_corr 0.4410610918177745

@@ -1,0 +1,7 @@
+year,form,rows,tickers,issuer_rows,event_rows,fundamental_rows,provenance_rows
+2022,10-K,99,2,99,99,0,99
+2022,10-Q,95,2,95,95,53,95
+2022,missing,11731,109,129,0,0,0
+2023,10-K,47,1,47,47,0,47
+2023,10-Q,205,4,205,205,86,205
+2023,missing,10449,108,671,0,0,0

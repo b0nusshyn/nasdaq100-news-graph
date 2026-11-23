@@ -1,0 +1,120 @@
+{
+  "last_completed_session": "2026-11-19",
+  "membership": [
+    {
+      "asof": "2023-12-29",
+      "fixed_cohort_outside_index": [],
+      "index_outside_fixed_cohort": []
+    },
+    {
+      "asof": "2024-12-31",
+      "fixed_cohort_outside_index": [
+        "DLTR",
+        "ILMN",
+        "MRNA",
+        "SIRI",
+        "SPLK",
+        "WBA"
+      ],
+      "index_outside_fixed_cohort": [
+        "APP",
+        "ARM",
+        "AXON",
+        "LIN",
+        "MSTR",
+        "PLTR"
+      ]
+    },
+    {
+      "asof": "2025-12-31",
+      "fixed_cohort_outside_index": [
+        "ANSS",
+        "BIIB",
+        "CDW",
+        "DLTR",
+        "GFS",
+        "ILMN",
+        "LULU",
+        "MDB",
+        "MRNA",
+        "ON",
+        "SIRI",
+        "SPLK",
+        "TTD",
+        "WBA"
+      ],
+      "index_outside_fixed_cohort": [
+        "ALNY",
+        "APP",
+        "ARM",
+        "AXON",
+        "FER",
+        "INSM",
+        "LIN",
+        "MPWR",
+        "MSTR",
+        "PLTR",
+        "SHOP",
+        "STX",
+        "TRI",
+        "WDC"
+      ]
+    },
+    {
+      "asof": "2026-11-19",
+      "fixed_cohort_outside_index": [
+        "ANSS",
+        "AZN",
+        "BIIB",
+        "CDW",
+        "CHTR",
+        "CSGP",
+        "CTSH",
+        "DLTR",
+        "EA",
+        "GFS",
+        "ILMN",
+        "KHC",
+        "LULU",
+        "MDB",
+        "ON",
+        "SIRI",
+        "SPLK",
+        "TEAM",
+        "TTD",
+        "VRSK",
+        "WBA",
+        "WBD",
+        "ZS"
+      ],
+      "index_outside_fixed_cohort": [
+        "ALAB",
+        "ALNY",
+        "APP",
+        "ARM",
+        "AXON",
+        "CRWV",
+        "FER",
+        "HONA",
+        "LIN",
+        "LITE",
+        "MPWR",
+        "MSTR",
+        "NBIS",
+        "PLTR",
+        "RKLB",
+        "SHOP",
+        "SNDK",
+        "SPCX",
+        "STX",
+        "TER",
+        "TRI",
+        "WDC",
+        "WMT"
+      ]
+    }
+  ],
+  "source_panel_rows": 94543,
+  "independent_scoring": false,
+  "training_fits": 0
+}

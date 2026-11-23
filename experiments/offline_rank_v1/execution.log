@@ -1,0 +1,149 @@
+start 2024_1d_logistic
+done 2024_1d_logistic 0.4986949556721318
+start 2024_1d_boosted
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py:134: UserWarning: Could not find the number of physical cores for the following reason:
+invalid literal for int() with base 10: ''
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 264, in _count_physical_cores
+    cpu_count_physical = _count_physical_cores_darwin()
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 420, in _count_physical_cores_darwin
+    return int(cpu_info)
+done 2024_1d_boosted 0.4900803117204962
+start 2024_1d_pairwise
+Traceback (most recent call last):
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/data.py", line 395, in pandas_feature_info
+    new_feature_types.append(_pandas_dtype_mapper[dtype.name])
+                             ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'object'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/nonladapream/nasdaq100-news-graph/experiments/offline_rank_v1/study.py", line 120, in <module>
+    main()
+    ~~~~^^
+  File "/Users/nonladapream/nasdaq100-news-graph/experiments/offline_rank_v1/study.py", line 99, in main
+    model.fit(f[used], f.y, **({"qid": qids(f)} if ranking else {}))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 569, in inner_f
+    return func(**kwargs)
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/sklearn.py", line 2339, in fit
+    train_dmatrix, evals = _wrap_evaluation_matrices(
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        missing=self.missing,
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<14 lines>...
+        feature_types=feature_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/sklearn.py", line 766, in _wrap_evaluation_matrices
+    train_dmatrix = create_dmatrix(
+        data=X,
+    ...<9 lines>...
+        ref=None,
+    )
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/sklearn.py", line 2213, in _create_ltr_dmatrix
+    return super()._create_dmatrix(ref=ref, data=data, qid=qid, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/sklearn.py", line 1319, in _create_dmatrix
+    return QuantileDMatrix(
+        **kwargs, ref=ref, nthread=self.n_jobs, max_bin=self.max_bin
+    )
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 569, in inner_f
+    return func(**kwargs)
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 1556, in __init__
+    self._init(
+    ~~~~~~~~~~^
+        data,
+        ^^^^^
+    ...<12 lines>...
+        max_quantile_blocks=max_quantile_batches,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 1615, in _init
+    it.reraise()
+    ~~~~~~~~~~^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 412, in reraise
+    raise exc  # pylint: disable=raising-bad-type
+    ^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 393, in _handle_exception
+    return fn()
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 480, in <lambda>
+    return self._handle_exception(lambda: int(self.next(input_data)), 0)
+                                              ~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 659, in next
+    input_data(**self.kwargs)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 569, in inner_f
+    return func(**kwargs)
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/core.py", line 460, in input_data
+    new, feature_names, feature_types = _proxy_transform(
+                                        ~~~~~~~~~~~~~~~~^
+        data,
+        ^^^^^
+    ...<2 lines>...
+        self._enable_categorical,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/data.py", line 1649, in _proxy_transform
+    df, feature_names, feature_types = _transform_pandas_df(
+                                       ~~~~~~~~~~~~~~~~~~~~^
+        data, enable_categorical, feature_names, feature_types
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/data.py", line 660, in _transform_pandas_df
+    feature_names, feature_types = pandas_feature_info(
+                                   ~~~~~~~~~~~~~~~~~~~^
+        data, meta, feature_names, feature_types, enable_categorical
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/data.py", line 397, in pandas_feature_info
+    _invalid_dataframe_dtype(data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/xgboost/data.py", line 360, in _invalid_dataframe_dtype
+    raise ValueError(msg)
+ValueError: DataFrame.dtypes for data must be int, float, bool or category. When categorical type is supplied, the experimental DMatrix parameter`enable_categorical` must be set to `True`.  Invalid columns:breadth: object
+start 2024_1d_pairwise
+done 2024_1d_pairwise 0.4923798550800622
+start 2024_1d_pairwise_residual
+done 2024_1d_pairwise_residual 0.49789986776343775
+start 2024_5d_logistic
+done 2024_5d_logistic 0.5148515858712593
+start 2024_5d_boosted
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py:134: UserWarning: Could not find the number of physical cores for the following reason:
+invalid literal for int() with base 10: ''
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 264, in _count_physical_cores
+    cpu_count_physical = _count_physical_cores_darwin()
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 420, in _count_physical_cores_darwin
+    return int(cpu_info)
+done 2024_5d_boosted 0.5038609187686602
+start 2024_5d_pairwise
+done 2024_5d_pairwise 0.503914539980405
+start 2024_5d_pairwise_residual
+done 2024_5d_pairwise_residual 0.5023968802905007
+start 2025_1d_logistic
+done 2025_1d_logistic 0.4915006620543736
+start 2025_1d_boosted
+done 2025_1d_boosted 0.49784106785645105
+start 2025_1d_pairwise
+done 2025_1d_pairwise 0.5223873514643285
+start 2025_1d_pairwise_residual
+done 2025_1d_pairwise_residual 0.5112059729976917
+start 2025_5d_logistic
+done 2025_5d_logistic 0.44970934547286784
+start 2025_5d_boosted
+done 2025_5d_boosted 0.4809932910678033
+start 2025_5d_pairwise
+done 2025_5d_pairwise 0.4827529439881192
+start 2025_5d_pairwise_residual
+done 2025_5d_pairwise_residual 0.48003012884315527

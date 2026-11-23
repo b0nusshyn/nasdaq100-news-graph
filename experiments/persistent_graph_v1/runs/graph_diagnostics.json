@@ -1,0 +1,76 @@
+{
+  "0": {
+    "fit_halves": {
+      "intersection": 588,
+      "jaccard": 0.25654450261780104,
+      "retained_fraction": 0.4218077474892396
+    },
+    "assessment_only_edges": 1512,
+    "systems": {
+      "original": {
+        "edges": 1492,
+        "nodes": 110,
+        "assessment_overlap": {
+          "intersection": 632,
+          "jaccard": 0.26644182124789206,
+          "retained_fraction": 0.42359249329758714
+        }
+      },
+      "persistent": {
+        "edges": 582,
+        "nodes": 99,
+        "assessment_overlap": {
+          "intersection": 346,
+          "jaccard": 0.19794050343249428,
+          "retained_fraction": 0.5945017182130584
+        }
+      },
+      "sparse": {
+        "edges": 582,
+        "nodes": 92,
+        "assessment_overlap": {
+          "intersection": 414,
+          "jaccard": 0.24642857142857144,
+          "retained_fraction": 0.711340206185567
+        }
+      }
+    }
+  },
+  "1": {
+    "fit_halves": {
+      "intersection": 634,
+      "jaccard": 0.2910927456382002,
+      "retained_fraction": 0.47313432835820896
+    },
+    "assessment_only_edges": 1398,
+    "systems": {
+      "original": {
+        "edges": 1478,
+        "nodes": 109,
+        "assessment_overlap": {
+          "intersection": 492,
+          "jaccard": 0.2063758389261745,
+          "retained_fraction": 0.33288227334235454
+        }
+      },
+      "persistent": {
+        "edges": 628,
+        "nodes": 101,
+        "assessment_overlap": {
+          "intersection": 304,
+          "jaccard": 0.1765389082462253,
+          "retained_fraction": 0.4840764331210191
+        }
+      },
+      "sparse": {
+        "edges": 628,
+        "nodes": 95,
+        "assessment_overlap": {
+          "intersection": 312,
+          "jaccard": 0.18203033838973162,
+          "retained_fraction": 0.4968152866242038
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "policy": "SEC_LAGGED_PROXY",
+  "complete_sessions_lag": 2,
+  "sparse_sample": true,
+  "training_ready": false,
+  "sha256": {
+    "experiments/sec_lagged_proxy/identities.csv": "cfe849a4cf0e91167c89eed9adce273b873a1d8cef92cdca5555502bfa640250",
+    "experiments/sec_lagged_proxy/filings.csv": "17a02f95eee2f2f2ee307c2631708998b436bb1a0086ba385e6fdf5b60aad365",
+    "experiments/sec_lagged_proxy/facts.csv": "8bf038037654d0e35dd693baffc38d829f07742410c6d2192d4a96a58fb13221",
+    "data/prices.parquet": "fc6d3159a38f7904689c5e4362432e1a56baa2d93ac47a603158cf207af130d6",
+    "data/labels.parquet": "e8655d14bbd22c1dd5faa8cca5eed690f41242fe4a3fb1f668e5a1788fe8b16a",
+    "experiments/gat_edge_weight_v1/runs/w0_h5_s42_original.parquet": "7c9f050dff9933e2210415105e132984d2901bb571c4c01ec8572645e5ca4b16",
+    "experiments/gat_edge_weight_v1/runs/w1_h5_s42_original.parquet": "9bfd65d4ee85d39500c85616e91656b6aa9863bff2b03466213ff73565c9df30",
+    "src/graph/gics.csv": "d0f35e2ccf74c9dd15dcba96b39f4991e4b6d6f28385ee6bf072014748acbe52",
+    "experiments/final_2026_reconciliation/corporate_actions.csv": "94a76637ff6e79cd3cc49c8ae490b3056d327fe5f8a0fbb427a19a9b9194a7cb",
+    "src/core/tickers.py": "3027c95d10cd17d572ee9d52072afce0048cb8301581a5d7980d8edfa1095529",
+    "experiments/sec_lagged_proxy/build.py": "4446358667d1f0b6f0b67bea7784348dd90574b235acd622d5bb77700a3fcafe"
+  }
+}

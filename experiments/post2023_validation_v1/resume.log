@@ -1,0 +1,35 @@
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/torch/jit/_script.py:1485: FutureWarning: `torch.jit.script` is not supported in Python 3.14+ and may break. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2024 1 price_lstm 0.5185053644339905
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2024 5 stock_logistic 0.4892709670880375
+/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py:134: UserWarning: Could not find the number of physical cores for the following reason:
+invalid literal for int() with base 10: ''
+Returning the number of logical cores instead. You can silence this warning by setting LOKY_MAX_CPU_COUNT to the number of cores you want to use.
+  warnings.warn(
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 264, in _count_physical_cores
+    cpu_count_physical = _count_physical_cores_darwin()
+  File "/Users/nonladapream/nasdaq100-news-graph/.venv/lib/python3.14/site-packages/joblib/externals/loky/backend/context.py", line 420, in _count_physical_cores_darwin
+    return int(cpu_info)
+2024 5 relative_regressor 0.489239213330438
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2024 5 price_lstm 0.4394283440854821
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2025 1 stock_logistic 0.5077681532237148
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2025 1 relative_regressor 0.5135536651165064
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2025 1 price_lstm 0.4894951672830218
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2025 5 stock_logistic 0.5410843645638855
+/Users/nonladapream/nasdaq100-news-graph/experiments/post2023_validation_v1/develop.py:124: UserWarning: MCC is undefined: labels or predictions contain only one class
+  "metrics": classification_metrics(out.y_true.to_numpy(), pa),
+2025 5 relative_regressor 0.5240961154755138

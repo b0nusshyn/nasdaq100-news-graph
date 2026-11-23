@@ -1,0 +1,14 @@
+{
+  "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_joint_v1/study.py": "931c53f52bcc066ae89de300a486850fbccf8958e80665883c7e5f82e39a1d07",
+  "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_joint_v1/trainer.py": "23eb13216e98eb7b8c0d3deb06159323087240b24668148cec07e910d21612d3",
+  "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_joint_v1/loss.py": "92e4d706fec3dcc62e1f3ab870e2b318ae1173159ebbc7d53dccf072d2f09f7d",
+  "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_joint_v1/protocol.md": "533d8dcbe684a89acc4762a6289b2be92a91244399c518de5a1bb8e07c3b33a3",
+  "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_edge_weight_v1/runs/ledger.jsonl": "b165fa70916b48632ec6afb820998042b54efecf0d56a4b1febd9da16b1b149f",
+  "/Users/nonladapream/nasdaq100-news-graph/experiments/gat_regularization_v1/runs/ledger.jsonl": "1984d42488b23d6415c209d3ce5a37c1213cf6fab5a3794ae2a4001df3c5a53f",
+  "data/prices.parquet": "fc6d3159a38f7904689c5e4362432e1a56baa2d93ac47a603158cf207af130d6",
+  "data/labels.parquet": "e8655d14bbd22c1dd5faa8cca5eed690f41242fe4a3fb1f668e5a1788fe8b16a",
+  "data/membership.parquet": "a2655bd3878cb6bd53d76c6db22eadf2d936a77642fc47f278f9cb93de232678",
+  "src/models/train.py": "3d40bc1c77fb04cbb770612db882e1222789a467bf0275ffb0c46336f1c8592a",
+  "src/models/gat_lstm.py": "b35acaf9cbea71f02da53d7f7c2d8db9f4da2d7074ba32639177e2d55e03cce5",
+  "src/graph/build_edges.py": "fb28f7bef9c0a0d176f850e070fa3ac18bf84a91725348b31f0d00f67f8f2f5f"
+}

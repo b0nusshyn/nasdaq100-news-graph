@@ -1,0 +1,7 @@
+year,coverage_reason,rows,tickers,issuer_rows,event_rows,fundamental_rows,provenance_rows
+2022,issuer_unresolved_for_date,11541,107,0,0,0,0
+2022,no_recent_verified_periodic_accession,126,4,126,0,0,0
+2022,sparse_proxy_snapshot,258,4,258,258,53,258
+2023,issuer_unresolved_for_date,9778,99,0,0,0,0
+2023,no_recent_verified_periodic_accession,613,10,613,0,0,0
+2023,sparse_proxy_snapshot,310,5,310,310,86,310

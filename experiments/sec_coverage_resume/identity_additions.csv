@@ -1,0 +1,5 @@
+ticker,cik,start,end,identity_basis
+COST,0000909832,2022-10-05,2023-12-31,https://www.sec.gov/Archives/edgar/data/909832/000090983222000021/cost-20220828.htm
+PEP,0000077476,2022-10-12,2023-12-31,https://www.sec.gov/Archives/edgar/data/77476/000007747622000052/pep-20220903.htm
+CMCSA,0001166691,2022-10-27,2023-12-31,https://www.sec.gov/Archives/edgar/data/1166691/000116669122000039/cmcsa-20220930.htm
+GILD,0000882095,2023-11-07,2023-12-31,https://www.sec.gov/Archives/edgar/data/882095/000088209523000031/gild-20230930.htm

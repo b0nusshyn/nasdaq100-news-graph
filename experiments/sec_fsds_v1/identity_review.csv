@@ -1,0 +1,9 @@
+ticker,cik,action,value,reason,evidence
+GEN,0001351051,block,,"Genesis Healthcare used NYSE symbol GEN and prefix 'gen' (filings 2018-08 to 2021-03); NASDAQ GEN is Gen Digital (CIK 0000849399, formerly Symantec/NortonLifeLock)",FSDS sub.txt names for prefix gen
+GEN,0000849399,alias,symc,"Symantec Corp (CIK 0000849399) filed with prefix 'symc' until 2019; renamed NortonLifeLock (2019-11) then Gen Digital (2022-11); src.core.tickers.RENAMES lacks SYMC",FSDS sub.txt names for prefix symc
+META,0001918884,block,,"Metaterra Corp files with prefix 'meta' from 2022-08; unrelated to Meta Platforms (CIK 0001326801)",FSDS sub.txt names for prefix meta
+WTW,0000105319,block,,"Weight Watchers International (old NYSE symbol WTW) filed with prefix 'wtw' until 2019; NASDAQ WTW is Willis Towers Watson (CIK 0001140536)",FSDS sub.txt names for prefix wtw
+FISV,0001575828,block,,"Frank's International N.V. filed with prefix 'fi'; the FI->FISV alias belongs to Fiserv (CIK 0000798354)",FSDS sub.txt names for prefix fi
+PCAR,0000731288,block,,"PACCAR Financial Corp is a debt-issuing subsidiary sharing prefix 'pcar'; equity is PACCAR Inc (CIK 0000075362)",FSDS sub.txt names for prefix pcar
+FOX,0001308161,block,,"Twenty-First Century Fox stopped being the FOX/FOXA issuer at the 2019-03-19 Fox Corp spin-off; all FOX/FOXA price rows start on or after that date",FSDS sub.txt names for prefix fox; Fox Corp first 10-Q 2019-05-10
+FOXA,0001308161,block,,"As FOX (share class)",As FOX

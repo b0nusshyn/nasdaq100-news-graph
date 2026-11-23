@@ -1,0 +1,61 @@
+{
+  "status": "candidate specifications recorded; no final execution manifest or fitted weights because gate failed",
+  "scoring_allowed": false,
+  "target": "strictly positive adjusted close-to-close on exact first/fifth NASDAQ session",
+  "candidate_models": {
+    "stock_market_logistic": {
+      "horizons": [
+        1,
+        5
+      ],
+      "C": 0.25,
+      "max_iter": 300,
+      "preprocessing": "fit-only median imputation and standardization"
+    },
+    "relative_return_hist_gradient_boosting": {
+      "horizons": [
+        1
+      ],
+      "parameters": {
+        "max_iter": 90,
+        "learning_rate": 0.05,
+        "max_leaf_nodes": 7,
+        "min_samples_leaf": 150,
+        "l2_regularization": 8,
+        "early_stopping": false,
+        "random_state": 42
+      },
+      "objective": "stock forward return minus equal-weight same-date cohort forward return"
+    },
+    "price_only_lstm": {
+      "status": "conditional matched reference; not fit",
+      "config": "configs/lstm_price.yaml"
+    }
+  },
+  "calibration": {
+    "fit": "separate chronological development partition, standardized single score, L2 logistic C=1",
+    "classification_threshold": 0.5,
+    "selective_nominal_coverages": [
+      5,
+      10,
+      20,
+      50
+    ],
+    "primary": 20
+  },
+  "minimum_embargo_sessions": 5,
+  "sha256": {
+    "experiments/market_direction_v1/protocol.md": "807786fc9a83a5db60c0797f17338e1597f0d8741739d748a6ebd5a262b3a8e8",
+    "experiments/market_direction_v1/study.py": "75e85c01f370e96ed2cc4a5dd63e09b4839c5714bddd992cc3c92ae6c56fe8d9",
+    "experiments/post2023_validation_v1/development_protocol.md": "4ca4b2ba8feaf3ff2a0465f6e272cc0c9d07dc2f0fc803e6027a5439266d0103",
+    "experiments/post2023_validation_v1/report.md": "e9d4188cb42114c22ab9b0fe75df3efa46e5de1bee40713a859b8c13818b4c05",
+    "experiments/post2023_validation_v1/development_runs.jsonl": "12f011418af94917ea224e08f52f8e8b4859c8a5335e3887e2c34da7fc037329",
+    "configs/lstm_price.yaml": "01a73af919321cb263e6bbf73691412bd357f7ec6e33db3bef1097c3b600a3a2",
+    "src/data/build_labels.py": "c1893805379db2a940b7631d34015f533e146ce1981cd5f3c5a04aec6cf15468",
+    "src/data/build_index_history.py": "651548494ccfd7c2a7a8e4c4d113bcba9c98f729661e004e72e3c46439a4184a",
+    "src/eval/metrics.py": "2d4f7647d6aa36b077681bffe956b0dcf47ee242ae5dac66f7e6b4de18d7113f",
+    "src/models/train.py": "7bbf996d6b97ba8916669435c0e952fad3bfc0d5dbbbc6b996e6c7a01a2f41fa",
+    "experiments/final_2026_reconciliation/reconcile.py": "f044aff54c292e04b8150d166a3dd595e686c5813f3830cb2f5f72318c892444",
+    "experiments/final_2026_reconciliation/readiness.json": "d5158e01f8a62ed88cf0c0cb149bec387b2da1245cd80405a5845299e6c6b6b7"
+  }
+}

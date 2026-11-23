@@ -1,0 +1,7 @@
+# Offline absolute-direction experiment status
+
+**Phase complete. Fit budget 16 of 16 consumed.** The first XGBoost attempt stopped during matrix construction because the inherited breadth column was object dtype. It did not fit trees. The runner converted feature frames to float and reused both completed controls. All planned runs completed. The strongest 1d AUC was 0.5224 and strongest 5d AUC was 0.5149. Best full-population accuracy was 53.81%, below the matching 54.46% majority. Neither aspirational target was met. The conditional stop applies because the bounded budget is exhausted and no robust gain emerged.
+
+The pinned 30-stock historical archive supplied exact matched 2024–2025 development windows. No alternate prices, public fundamentals or event data entered the experiment. No 2026 bars were requested by the study reader, and no 2026 labels or scores were constructed. Live workflow remains inactive and the frozen 101-security decision remains locked. See [report](report.md), [protocol](protocol.md), [all metrics](tables.md), and [run ledger](runs/ledger.jsonl). Forty-five tests passed and Ruff passed. Approximately 8.8 GiB remained free.
+
+A separate next cycle would need an accession-linked, point-in-time fundamentals or earnings event dataset, with historical issuer-to-share-class mapping and documented release times, plus genuinely untouched qualified evaluation data. Continue only after these inputs justify a new preregistered study.
