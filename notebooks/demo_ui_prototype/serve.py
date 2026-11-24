@@ -7,7 +7,8 @@ Three structurally different variants of one page, switchable with ?variant=A|B|
   C  Explorer     - pick a day and a company, trace its prediction through the graph
 
 Run from the repo root:  python notebooks/demo_ui_prototype/serve.py   (then open http://localhost:8765)
-Reads precomputed artifacts only (predictions, 3.10 attention files, results/), never trains.
+Reads precomputed artifacts (predictions, 3.10 attention files, results/) and never trains. The what-if
+reruns the saved 3.10 fold checkpoints (needs torch) on your edited inputs, in memory only.
 Uses $NDX_DATA_DIR, else data/, else falls back to tests/fixtures (marked SYNTHETIC in the UI).
 """
 
@@ -130,7 +131,7 @@ def meta() -> dict:
     return {
         "data_dir": str(DATA), "synthetic": SYNTHETIC, "main_model": MAIN,
         "models": list(PREDS), "ladder": {k: v for k, v in LADDER.items() if k in PREDS},
-        "has_attention": CONTRIB is not None,
+        "has_attention": CONTRIB is not None, "whatif": wi_ready(),
         "horizons": sorted(int(h) for h in f["horizon"].unique()),
         "dates": sorted(f["date"].dt.strftime("%Y-%m-%d").unique().tolist()),
         "tickers": sorted(f["ticker"].unique().tolist()),
@@ -226,6 +227,92 @@ def trace(t: str, date: str, h: int) -> dict:
     return base | {"available": True, "prediction": pred, "types": types, "neighbours": nb, "headlines": headlines}
 
 
+# ---------------------------------------------------------------- what-if: your own news, rerun the saved model
+# Loads the panel and the 3.10 fold checkpoints (torch) on first use, edits one company's news inputs in
+# memory, reruns the model on that day, then puts the original inputs back. Nothing is written to disk.
+WI_LOCK = threading.Lock()
+WI: dict = {}
+
+
+def wi_ready() -> bool:
+    return CONTRIB is not None and (ATT / "checkpoints" / "checkpoints.json").is_file()
+
+
+def wi_fitted(h: int, fold: int):
+    from src.models.attention import load_fitted
+    from src.models.panel import load_panel
+
+    if "panel" not in WI:
+        WI["panel"] = load_panel()
+    if (h, fold) not in WI:
+        WI[(h, fold)] = load_fitted(h, fold, panel=WI["panel"], edges=EDGES)
+    return WI["panel"], WI[(h, fold)]
+
+
+def whatif(t: str, date: str, h: int, has_news: bool, sentiment: float, confidence: float, days: int) -> dict:
+    import numpy as np
+
+    from src.models.attention import explain_days
+
+    if not wi_ready():
+        raise ValueError("needs the saved fold checkpoints in <data>/attention/checkpoints (real data only)")
+    f = frame()
+    on = f[(f["date"] == pd.Timestamp(date)) & (f["horizon"] == h)]
+    if on.empty or t not in set(on["ticker"]):
+        raise ValueError(f"no {h}d test prediction for {t} on {date}")
+    fold = int(on["fold"].iloc[0])
+    sentiment, confidence = min(1.0, max(-1.0, sentiment)), min(1.0, max(0.0, confidence))
+    with WI_LOCK:
+        panel, fitted = wi_fitted(h, fold)
+        feat, names = fitted.features, fitted.features.names
+        d, k = int(panel.day_index([date])[0]), int(panel.tickers.get_loc(t))
+        cells = list(range(max(0, d - min(days, feat.window) + 1), d + 1))
+        emb = [i for i, n in enumerate(names) if n.startswith("emb_pca_")]
+        had_text = bool((panel.news[cells, k, 0] > 0).any())
+        saved_x, saved_news = feat.x[cells, k].copy(), panel.news[cells, k].copy()
+        before, _ = explain_days(fitted, panel, np.array([d]))
+        try:
+            for c in cells:
+                if has_news:  # scaled exactly as fit_features does, with this fold's training statistics
+                    raw = {"has_news": 1.0, "sentiment": sentiment, "confidence": confidence}
+                    for name, v in raw.items():
+                        if name in names:
+                            st = feat.stats.get(name)
+                            feat.x[c, k, names.index(name)] = v if st is None else (v - st["mean"]) / (st["std"] or 1.0)
+                    panel.news[c, k] = [1.0, sentiment, confidence]
+                else:
+                    for name in ("has_news", "sentiment", "confidence"):
+                        if name in names:
+                            feat.x[c, k, names.index(name)] = 0.0
+                    feat.x[c, k, emb] = 0.0
+                    panel.news[c, k] = 0.0
+            after, edges = explain_days(fitted, panel, np.array([d]))
+        finally:
+            feat.x[cells, k], panel.news[cells, k] = saved_x, saved_news
+    rows = before[["ticker", "p_up", "y_true"]].merge(after[["ticker", "p_up"]], on="ticker",
+                                                      suffixes=("_before", "_after"))
+    rows["delta"] = rows["p_up_after"] - rows["p_up_before"]
+    out_edges = edges[edges["src"] == t].groupby("dst")["edge_type"].agg(lambda s: ", ".join(sorted(set(s))))
+    rows["link"] = rows["ticker"].map(out_edges).fillna("")
+    rows.loc[rows["ticker"] == t, "link"] = "edited"
+    official = on.set_index("ticker")["p_up"]
+    y, pb, pa = rows["y_true"].to_numpy(), rows["p_up_before"].to_numpy(), rows["p_up_after"].to_numpy()
+    return {
+        "ticker": t, "date": date, "horizon": h, "fold": fold,
+        "edited_days": [panel.days[c].strftime("%Y-%m-%d") for c in cells],
+        "input": {"has_news": has_news, "sentiment": sentiment, "confidence": confidence},
+        "note": ("article-text embeddings kept from the real articles on those days; only has_news, sentiment and "
+                 "confidence were changed" if has_news and had_text else
+                 "no article text on the added days, so the embedding features stay 0" if has_news else
+                 "all news features, including the text embeddings, set to 0 (no coverage)"),
+        "matches_official": float((rows.set_index("ticker")["p_up_before"] - official).abs().max()),
+        "within_day_auc_before": auc(y, pb), "within_day_auc_after": auc(y, pa),
+        "neighbours_changed": int((~rows["link"].isin(["", "edited"]) & (rows["delta"].abs() > 1e-6)).sum()),
+        "others_changed": int(((rows["link"] == "") & (rows["delta"].abs() > 1e-6)).sum()),
+        "rows": records(rows.reindex(rows["delta"].abs().sort_values(ascending=False).index)),
+    }
+
+
 # ---------------------------------------------------------------- HTTP
 ROUTES = {
     "/api/meta": lambda q: meta(),
@@ -233,6 +320,9 @@ ROUTES = {
     "/api/day": lambda q: day(q["date"], int(q.get("h", 1))),
     "/api/ticker": lambda q: ticker(q["ticker"], int(q.get("h", 1))),
     "/api/trace": lambda q: trace(q["ticker"], q["date"], int(q.get("h", 1))),
+    "/api/whatif": lambda q: whatif(q["ticker"], q["date"], int(q.get("h", 1)), q.get("has_news", "1") == "1",
+                                    float(q.get("sentiment", 0)), float(q.get("confidence", 0.9)),
+                                    int(q.get("days", 1))),
 }
 
 
@@ -267,7 +357,22 @@ def main() -> None:
     ap.add_argument("--port", type=int, default=8765)
     ap.add_argument("--no-browser", action="store_true")
     a = ap.parse_args()
-    threading.Thread(target=lambda: (meta(), results()), daemon=True).start()  # warm the caches
+    sys.stdout.reconfigure(line_buffering=True)
+    if wi_ready():
+        try:  # torch's first import must happen on the main thread (segfaults when imported from a worker)
+            import torch  # noqa: F401
+        except ImportError:
+            print("[prototype] torch not installed: the what-if is disabled")
+            globals()["wi_ready"] = lambda: False
+
+    def warm() -> None:  # one thread, in order: caches, then the fold-4 1d checkpoint for the first what-if
+        meta(), results()
+        if wi_ready():
+            with WI_LOCK:
+                wi_fitted(1, 4)
+            print("[prototype] what-if model ready")
+
+    threading.Thread(target=warm, daemon=True).start()
     srv = ThreadingHTTPServer(("127.0.0.1", a.port), Handler)
     url = f"http://localhost:{a.port}/?variant=A"
     print(f"[prototype] serving {url}  (variants A, B, C; Ctrl+C to stop)")

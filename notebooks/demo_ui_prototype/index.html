@@ -4,7 +4,8 @@
   Three structurally different variants on one page, switched with ?variant=A|B|C or the bottom bar:
     A Walkthrough (guided stepper through the notebook's 8 steps)
     B Dashboard   (results on one screen: ladder, ablations, verdict)
-    C Explorer    (pick a day and a company; trace the prediction through the graph)
+    C Explorer    (pick a day and a company; trace the prediction through the graph;
+                   "What if" lets you type your own news for a company and reruns the saved model)
   Served by serve.py; all data comes from its /api/* endpoints (precomputed artifacts, no training).
 -->
 <html lang="en">
@@ -95,6 +96,10 @@ svg .muted { fill: var(--muted); } svg .ink { fill: var(--ink); }
 .cells i { display: block; height: 12px; border-radius: 2px; }
 .heads { margin: 2px 0 6px 72px; font-size: 12px; color: var(--ink-2); }
 @media (max-width: 860px) { .wt, .dash, .ex { grid-template-columns: 1fr; } .rail { position: static; flex-direction: row; overflow-x: auto; } .rail button .lab { display: none; } .nb { grid-template-columns: 56px 1fr 60px; } .nb .cells { grid-column: 1 / -1; } .heads { margin-left: 0; } }
+.wiform { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px 16px; align-items: center; margin: 8px 0 12px; font-size: 13px; color: var(--ink-2); }
+.wiform label { display: flex; gap: 8px; align-items: center; } .wiform input[type=range] { flex: 1; min-width: 80px; padding: 0; }
+.wiform output { font-variant-numeric: tabular-nums; color: var(--ink); min-width: 42px; }
+button.btn.primary { background: var(--ink); color: var(--page); border-color: var(--ink); }
 /* prototype switcher: deliberately not part of the design under evaluation */
 #switcher { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 100; background: #111; color: #fff;
   border-radius: 999px; padding: 6px 8px; display: flex; align-items: center; gap: 6px; box-shadow: 0 6px 24px rgba(0,0,0,.35); font-size: 13px; max-width: calc(100vw - 32px); }
@@ -120,7 +125,8 @@ const VARIANTS = { A: "Walkthrough", B: "Dashboard", C: "Explorer" };
 const KEYS = Object.keys(VARIANTS);
 const qs = new URLSearchParams(location.search);
 const S = { variant: KEYS.includes(qs.get("variant")) ? qs.get("variant") : "A", h: 1, metric: "within_day_auc",
-            step: Math.max(0, Math.min(7, (+qs.get("step") || 1) - 1)), date: "2023-05-17", ticker: "SGEN", lastApi: null };
+            step: Math.max(0, Math.min(7, (+qs.get("step") || 1) - 1)), date: "2023-05-17", ticker: "SGEN", lastApi: null,
+            wi: { ticker: "", has_news: 1, sentiment: 0.8, confidence: 0.9, days: 1 }, wiRes: null, wiBusy: false };
 const cache = {};
 async function api(path) {
   S.lastApi = path;
@@ -424,9 +430,62 @@ async function variantC() {
       <span class="muted small">within-day AUC this day: ${f3(day.within_day_auc)}${day.within_day_auc_no_graph != null ? ` · without graph ${f3(day.within_day_auc_no_graph)}` : ""}</span></div>
     <div class="ex"><div class="grid">
         <div class="card"><h2>Every company on ${S.date}, ranked by P(up)</h2><p class="small">Click a bar to trace it. ${esc(S.ticker)} is rank ${rank} of ${day.rows.length}.</p>${stripChart(day)}</div>
-        <div class="card"><h2>${esc(S.ticker)} across the test windows</h2>${timeline(series, S.date)}</div></div>
+        <div class="card"><h2>${esc(S.ticker)} across the test windows</h2>${timeline(series, S.date)}</div>
+        ${whatifCard()}</div>
       <div class="card"><h2>${esc(S.ticker)} on ${S.date}, ${S.h}-day horizon</h2>${detail}</div></div>`;
 }
+
+// ------------------------------------------------------------------ what-if: your own news, rerun the saved model
+function deltaBars(rows) {
+  const W = 480, rowH = 22, L = 56, R = 190, H = rows.length * rowH + 6;
+  const m = Math.max(0.005, ...rows.map(r => Math.abs(r.delta))), x = v => L + (v + m) / (2 * m) * (W - L - R);
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="max-width:${W}px" role="img" aria-label="change in P(up)"><line x1="${x(0)}" x2="${x(0)}" y1="0" y2="${H}" stroke="var(--axis)"/>`;
+  rows.forEach((r, i) => {
+    const yy = i * rowH + 3, ed = r.link === "edited";
+    s += `<text x="${L - 8}" y="${yy + 13}" text-anchor="end" class="${ed ? "ink" : ""}">${esc(r.ticker)}</text>`;
+    s += `<rect x="${Math.min(x(0), x(r.delta))}" y="${yy + 3}" width="${Math.max(1, Math.abs(x(r.delta) - x(0)))}" height="12" rx="4" fill="${r.delta >= 0 ? "var(--up)" : "var(--down)"}"/>`;
+    s += `<text x="${W - R + 8}" y="${yy + 13}" class="ink">${sg(r.delta)}</text><text x="${W - R + 58}" y="${yy + 13}" class="muted">${esc(ed ? "your edit" : r.link || "no edge")}</text>`;
+    s += `<rect class="hit" x="0" y="${yy}" width="${W}" height="${rowH}" fill="transparent" data-tip="${esc(r.ticker)}: P(up) ${f3(r.p_up_before)} → ${f3(r.p_up_after)}\n${ed ? "the company you edited" : r.link ? "edge from the edited company: " + r.link : "no edge from the edited company"}"/>`;
+  });
+  return s + `</svg>`;
+}
+function whatifCard() {
+  if (!META.whatif) return `<div class="card"><h2>What if… your own news</h2><p class="small muted">Needs the saved fold checkpoints in data/attention/checkpoints and torch; not available for this data dir.</p></div>`;
+  const w = S.wi, r = S.wiRes, tk = w.ticker || S.ticker;
+  let s = `<div class="card"><h2>What if… your own news</h2>
+    <p class="small">Give a company your own news on ${S.date} (and the days before), then rerun the saved ${S.h}-day model on that day. Everything else stays real; your edit is undone after the run.</p>
+    <div class="row small"><button class="btn" data-wipreset="VRTX|0|0|0.9|20">Remove VRTX&#39;s news (SGEN example)</button><button class="btn" data-wipreset="VRTX|1|-0.9|0.95|5">Very negative VRTX news</button></div>
+    <div class="wiform">
+      <label>company <input data-wi="ticker" list="ticks" value="${esc(tk)}" size="7"></label>
+      <label>${segs("wi_has", [[1, "has news"], [0, "no news"]], w.has_news)}</label>
+      <label>sentiment <input type="range" min="-1" max="1" step="0.05" data-wi="sentiment" value="${w.sentiment}" ${w.has_news ? "" : "disabled"}><output id="o_sentiment">${sg(w.sentiment).slice(0, 5)}</output></label>
+      <label>confidence <input type="range" min="0.3" max="1" step="0.05" data-wi="confidence" value="${w.confidence}" ${w.has_news ? "" : "disabled"}><output id="o_confidence">${(+w.confidence).toFixed(2)}</output></label>
+      <label>for the last <select data-wi="days">${[1, 3, 5, 10, 20].map(d => `<option ${d === +w.days ? "selected" : ""}>${d}</option>`).join("")}</select> trading day(s)</label>
+      <button class="btn primary" data-run ${S.wiBusy ? "disabled" : ""}>${S.wiBusy ? "Running…" : "Run the model"}</button>
+    </div>`;
+  if (S.wiBusy) s += `<p class="small muted">The first run loads the data and that fold's checkpoint (about 15 s); later runs take well under a second.</p>`;
+  if (r && r.error) s += `<p class="err">${esc(r.error)}</p>`;
+  else if (r) {
+    const me = r.rows.find(x => x.link === "edited");
+    s += `<h3>Result: ${esc(r.ticker)} on ${r.date}, ${r.horizon}d, fold ${r.fold} · ${r.input.has_news ? `news sentiment ${sg(r.input.sentiment).slice(0, 5)}, confidence ${r.input.confidence.toFixed(2)}` : "no news"} on ${r.edited_days.length} day(s)</h3>
+      <div class="tiles">${tile(`${esc(r.ticker)} P(up)`, `${f3(me.p_up_before)} → ${f3(me.p_up_after)}`, `change ${sg(me.delta)}`)}${tile("neighbours that moved", r.neighbours_changed, "companies with an edge from it")}${tile("unlinked companies that moved", r.others_changed, "the graph is the only path")}${tile("day's within-day AUC", `${f3(r.within_day_auc_before)} → ${f3(r.within_day_auc_after)}`)}</div>
+      <h3>Biggest changes in P(up)</h3>${deltaBars(r.rows.filter(x => Math.abs(x.delta) > 1e-6).slice(0, 12))}
+      <p class="small muted" style="margin-top:6px">${esc(r.note)}. Before the edit the rerun matches the official predictions (max difference ${r.matches_official.toExponential(1)}).</p>`;
+  }
+  return s + `</div>`;
+}
+async function runWhatif() {
+  const w = S.wi, tk = (w.ticker || S.ticker).toUpperCase();
+  S.wiBusy = true; render();
+  try { S.wiRes = await api(`/api/whatif?ticker=${encodeURIComponent(tk)}&date=${S.date}&h=${S.h}&has_news=${w.has_news}&sentiment=${w.sentiment}&confidence=${w.confidence}&days=${w.days}`); }
+  catch (e) { S.wiRes = { error: e.message }; }
+  S.wiBusy = false; render();
+}
+document.addEventListener("input", e => {
+  const k = e.target.dataset && e.target.dataset.wi; if (!k) return;
+  S.wi[k] = k === "ticker" ? e.target.value.toUpperCase() : +e.target.value;
+  const o = document.getElementById("o_" + k); if (o) o.textContent = k === "sentiment" ? sg(S.wi[k]).slice(0, 5) : S.wi[k].toFixed(2);
+});
 
 // ------------------------------------------------------------------ render + switcher
 let seq = 0;
@@ -448,13 +507,17 @@ document.addEventListener("keydown", e => {
   if (e.key === "ArrowLeft") cyc(-1); if (e.key === "ArrowRight") cyc(1);
 });
 document.addEventListener("click", e => {
-  const el = e.target.closest("[data-step],[data-seg] button,[data-pick],[data-date],[data-day],[data-preset]"); if (!el) return;
+  const el = e.target.closest("[data-step],[data-seg] button,[data-pick],[data-date],[data-day],[data-preset],[data-run],[data-wipreset]"); if (!el) return;
+  if (el.dataset.run != null) return runWhatif();
+  if (el.dataset.wipreset) { const [t, hn, se, co, dy] = el.dataset.wipreset.split("|"); Object.assign(S.wi, { ticker: t, has_news: +hn, sentiment: +se, confidence: +co, days: +dy }); Object.assign(S, { date: "2023-05-17", h: 1, ticker: "SGEN" }); return runWhatif(); }
   if (el.dataset.step != null) return set({ step: +el.dataset.step });
   if (el.dataset.pick) return set({ ticker: el.dataset.pick });
   if (el.dataset.date) return set({ date: el.dataset.date });
   if (el.dataset.day != null) return set({ date: META.dates[+el.dataset.day] });
   if (el.dataset.preset) { const [t, d, h] = el.dataset.preset.split("|"); return set({ ticker: t, date: d, h: +h }); }
-  const seg = el.parentElement.dataset.seg; const v = el.dataset.v; set({ [seg]: isNaN(+v) ? v : +v });
+  const seg = el.parentElement.dataset.seg; const v = el.dataset.v;
+  if (seg === "wi_has") { S.wi.has_news = +v; return render(); }
+  set({ [seg]: isNaN(+v) ? v : +v });
 });
 document.addEventListener("change", e => {
   if (e.target.id === "datesel") set({ date: e.target.value });
@@ -466,6 +529,11 @@ document.addEventListener("change", e => {
   if (!META.dates.includes(S.date)) S.date = META.dates[META.dates.length - 1];
   if (!META.tickers.includes(S.ticker)) S.ticker = META.tickers[0];
   go(S.variant);
+  if (qs.get("wi") && S.variant === "C") {  // e.g. ?variant=C&wi=VRTX|0|0|0.9|20 runs that what-if on load
+    const [t, hn, se, co, dy] = qs.get("wi").split("|");
+    Object.assign(S.wi, { ticker: t, has_news: +hn, sentiment: +se, confidence: +co, days: +dy });
+    runWhatif();
+  }
 })();
 </script>
 </body>
