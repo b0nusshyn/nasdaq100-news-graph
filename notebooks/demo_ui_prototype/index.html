@@ -1,0 +1,472 @@
+<!doctype html>
+<!--
+  PROTOTYPE, throwaway (branch prototype/demo-ui). Question: what should a local demo UI look like?
+  Three structurally different variants on one page, switched with ?variant=A|B|C or the bottom bar:
+    A Walkthrough (guided stepper through the notebook's 8 steps)
+    B Dashboard   (results on one screen: ladder, ablations, verdict)
+    C Explorer    (pick a day and a company; trace the prediction through the graph)
+  Served by serve.py; all data comes from its /api/* endpoints (precomputed artifacts, no training).
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demo UI Prototype</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;          /* proposed, B6, B5 (fixed order) */
+  --up: #2a78d6; --down: #e34948; --mid: #f0efec;         /* diverging pair for realised direction */
+  --seq-0: #f0efec; --seq-1: #b7d3f6; --seq-2: #6da7ec; --seq-3: #2a78d6; --seq-4: #184f95;
+  --wash: rgba(42,120,214,0.08); --bar: #0b0b0b; --bar-ink: #f0efec;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --up: #3987e5; --down: #e66767; --mid: #383835;
+    --seq-0: #2c2c2a; --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #86b6ef;
+    --wash: rgba(57,135,229,0.14); --bar: #f0efec; --bar-ink: #0b0b0b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --up: #3987e5; --down: #e66767; --mid: #383835;
+  --seq-0: #2c2c2a; --seq-1: #184f95; --seq-2: #256abf; --seq-3: #3987e5; --seq-4: #86b6ef;
+  --wash: rgba(57,135,229,0.14); --bar: #f0efec; --bar-ink: #0b0b0b;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding-bottom: 96px; }
+h1 { font-size: 20px; margin: 0 0 4px; } h2 { font-size: 16px; margin: 0 0 8px; } h3 { font-size: 14px; margin: 12px 0 6px; }
+p { margin: 0 0 8px; color: var(--ink-2); max-width: 75ch; }
+code { font-size: 12px; background: var(--wash); padding: 1px 4px; border-radius: 4px; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-width: 0; }
+.row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.grid { display: grid; gap: 12px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+.tile .k { color: var(--ink-2); font-size: 12px; } .tile .v { font-size: 22px; font-weight: 600; } .tile .s { color: var(--muted); font-size: 12px; }
+.muted { color: var(--muted); } .small { font-size: 12px; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; background: transparent; color: var(--ink-2); padding: 6px 10px; cursor: pointer; font: inherit; }
+.seg button.on { background: var(--ink); color: var(--page); }
+button.btn, select, input { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
+button.btn { cursor: pointer; } button.btn:hover { background: var(--wash); }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 13px; }
+th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--grid); }
+th { color: var(--ink-2); font-weight: 600; } td.n, th.n { text-align: right; }
+.pos { color: var(--ink); } .neg { color: var(--ink); }
+.callout { border-left: 3px solid var(--ink); padding: 8px 12px; background: var(--wash); border-radius: 0 8px 8px 0; margin: 8px 0; }
+.verdict { font-family: ui-monospace, Consolas, monospace; font-size: 12px; white-space: pre-wrap; }
+.scroll { overflow-x: auto; }
+svg { display: block; width: 100%; height: auto; overflow: visible; }
+svg text { fill: var(--ink-2); font-size: 11px; font-family: system-ui, sans-serif; }
+svg .muted { fill: var(--muted); } svg .ink { fill: var(--ink); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--ink-2); margin: 4px 0 8px; }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.hit { cursor: pointer; }
+#tip { position: fixed; pointer-events: none; z-index: 50; background: var(--surface); color: var(--ink); border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px 9px; font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,.15); display: none; max-width: 280px; white-space: pre-line; }
+.err { color: var(--down); }
+/* A: walkthrough */
+.wt { display: grid; grid-template-columns: 240px 1fr; gap: 16px; }
+.rail { display: flex; flex-direction: column; gap: 4px; position: sticky; top: 16px; align-self: start; }
+.rail button { text-align: left; border: 0; background: transparent; color: var(--ink-2); padding: 8px 10px; border-radius: 8px; cursor: pointer; font: inherit; display: flex; gap: 10px; }
+.rail button .num { width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--axis); display: inline-grid; place-items: center; font-size: 12px; flex: none; }
+.rail button.on { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--border); }
+.rail button.on .num { background: var(--ink); color: var(--page); border-color: var(--ink); }
+.rail button.done .num { border-color: var(--ink-2); color: var(--ink); }
+/* B: dashboard */
+.dash { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; }
+/* C: explorer */
+.ex { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.ex > .grid { align-content: start; }
+.nb { display: grid; grid-template-columns: 64px 1fr 70px 150px; gap: 8px; align-items: center; padding: 4px 0; border-bottom: 1px solid var(--grid); font-size: 12px; }
+.nb .src { font-weight: 600; color: var(--ink); }
+.cells { display: grid; grid-template-columns: repeat(20, 1fr); gap: 1px; }
+.cells i { display: block; height: 12px; border-radius: 2px; }
+.heads { margin: 2px 0 6px 72px; font-size: 12px; color: var(--ink-2); }
+@media (max-width: 860px) { .wt, .dash, .ex { grid-template-columns: 1fr; } .rail { position: static; flex-direction: row; overflow-x: auto; } .rail button .lab { display: none; } .nb { grid-template-columns: 56px 1fr 60px; } .nb .cells { grid-column: 1 / -1; } .heads { margin-left: 0; } }
+/* prototype switcher: deliberately not part of the design under evaluation */
+#switcher { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); z-index: 100; background: #111; color: #fff;
+  border-radius: 999px; padding: 6px 8px; display: flex; align-items: center; gap: 6px; box-shadow: 0 6px 24px rgba(0,0,0,.35); font-size: 13px; max-width: calc(100vw - 32px); }
+#switcher button { background: #2a2a2a; color: #fff; border: 0; border-radius: 999px; width: 30px; height: 30px; cursor: pointer; font-size: 15px; }
+#switcher .lab { padding: 0 8px; white-space: nowrap; } #switcher .tag { background: #f5c518; color: #111; border-radius: 999px; padding: 1px 7px; font-size: 11px; font-weight: 700; }
+#switcher details { position: relative; } #switcher summary { cursor: pointer; list-style: none; padding: 4px 8px; border-radius: 999px; background: #2a2a2a; font-size: 12px; }
+#switcher pre { position: absolute; bottom: 40px; right: 0; width: min(420px, 90vw); max-height: 50vh; overflow: auto; background: #111; color: #ddd; padding: 10px; border-radius: 10px; font-size: 11px; margin: 0; }
+</style>
+</head>
+<body>
+<div id="app" class="wrap"><p>Loading…</p></div>
+<div id="tip"></div>
+<div id="switcher">
+  <span class="tag">PROTOTYPE</span>
+  <button id="prev" title="Previous variant (←)">‹</button>
+  <span class="lab" id="vlabel"></span>
+  <button id="next" title="Next variant (→)">›</button>
+  <details><summary>state</summary><pre id="state"></pre></details>
+</div>
+<script>
+// ------------------------------------------------------------------ state + data
+const VARIANTS = { A: "Walkthrough", B: "Dashboard", C: "Explorer" };
+const KEYS = Object.keys(VARIANTS);
+const qs = new URLSearchParams(location.search);
+const S = { variant: KEYS.includes(qs.get("variant")) ? qs.get("variant") : "A", h: 1, metric: "within_day_auc",
+            step: Math.max(0, Math.min(7, (+qs.get("step") || 1) - 1)), date: "2023-05-17", ticker: "SGEN", lastApi: null };
+const cache = {};
+async function api(path) {
+  S.lastApi = path;
+  if (!cache[path]) cache[path] = fetch(path).then(async r => { const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; });
+  try { return await cache[path]; } catch (e) { delete cache[path]; throw e; }
+}
+let META, RES;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const f3 = v => v == null ? "n/a" : (+v).toFixed(3);
+const sg = v => v == null ? "n/a" : (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(3);
+const pct = v => v == null ? "n/a" : (100 * v).toFixed(1) + "%";
+const MODEL_ORDER = ["lstm_price", "lstm_news", "gat_lstm"];
+const SERIES = { gat_lstm: "var(--s1)", lstm_news: "var(--s2)", lstm_price: "var(--s3)" };
+const NICE = m => META.ladder[m] || (m.startsWith("gat_lstm_no_")
+  ? "proposed − " + m.slice("gat_lstm_no_".length).split("_no_").join(" − ").replace(/_/g, " ") : m);
+const tile = (k, v, s = "") => `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
+const segs = (name, opts, cur) => `<span class="seg" data-seg="${name}">${opts.map(([v, l]) => `<button data-v="${v}" class="${String(v) === String(cur) ? "on" : ""}">${l}</button>`).join("")}</span>`;
+const dataBadge = () => META.synthetic ? `<span class="tile" style="padding:2px 8px;display:inline-block">SYNTHETIC fixtures</span>` : `<span class="muted small">real data · ${esc(META.data_dir)}</span>`;
+
+function set(patch) { Object.assign(S, patch); render(); }
+
+// ------------------------------------------------------------------ tooltip (any element with data-tip)
+const tip = $("#tip");
+document.addEventListener("mousemove", e => {
+  const t = e.target.closest && e.target.closest("[data-tip]");
+  if (!t) { tip.style.display = "none"; return; }
+  tip.textContent = t.getAttribute("data-tip"); tip.style.display = "block";
+  const x = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8), y = Math.min(e.clientY + 14, innerHeight - tip.offsetHeight - 8);
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+});
+
+// ------------------------------------------------------------------ results helpers
+function ladderRows(h, metric) {
+  const rows = RES.rows.filter(r => r.horizon === h);
+  const folds = [...new Set(rows.map(r => r.fold))].sort((a, b) => a - b);
+  const by = {}; rows.forEach(r => (by[r.model] ??= {})[r.fold] = r[metric]);
+  const mean = m => { const v = folds.map(f => by[m]?.[f]).filter(x => x != null); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  return { folds, by, mean };
+}
+
+// ------------------------------------------------------------------ charts (inline SVG)
+function ladderChart(h, metric) {
+  const { folds, by, mean } = ladderRows(h, metric);
+  const models = MODEL_ORDER.filter(m => by[m]);
+  if (!models.length) return `<p class="muted">The ladder needs lstm_price, lstm_news and gat_lstm predictions; found: ${esc(META.models.join(", "))}.</p>`;
+  const cols = [...folds.map(f => ({ key: f, label: `fold ${f}` })), { key: "mean", label: "mean" }];
+  const val = (m, c) => c.key === "mean" ? mean(m) : by[m][c.key];
+  const all = models.flatMap(m => cols.map(c => val(m, c))).filter(v => v != null).concat([0.5]);
+  let lo = Math.min(...all) - 0.004, hi = Math.max(...all) + 0.004;
+  const W = 720, H = 300, L = 48, R = 120, T = 12, B = 28;
+  const x = i => L + (i + 0.5) * (W - L - R) / cols.length, y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  const ticks = []; const step = (hi - lo) > 0.06 ? 0.02 : 0.01;
+  for (let t = Math.ceil(lo / step) * step; t <= hi; t += step) ticks.push(+t.toFixed(3));
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${metric} per fold">`;
+  ticks.forEach(t => s += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/><text x="${L - 6}" y="${y(t) + 4}" text-anchor="end">${t.toFixed(2)}</text>`);
+  s += `<line x1="${L}" x2="${W - R}" y1="${y(0.5)}" y2="${y(0.5)}" stroke="var(--axis)" stroke-dasharray="4 3"/><text x="${L + 4}" y="${y(0.5) - 4}" class="muted">chance 0.5</text>`;
+  const mx = x(cols.length - 1) - (W - L - R) / cols.length / 2;
+  s += `<line x1="${mx}" x2="${mx}" y1="${T}" y2="${H - B}" stroke="var(--grid)"/>`;
+  cols.forEach((c, i) => {
+    const vs = models.map(m => val(m, c)).filter(v => v != null);
+    s += `<line x1="${x(i)}" x2="${x(i)}" y1="${y(Math.min(...vs))}" y2="${y(Math.max(...vs))}" stroke="var(--axis)" stroke-width="2"/>`;
+    s += `<text x="${x(i)}" y="${H - 8}" text-anchor="middle" class="${c.key === "mean" ? "ink" : ""}">${c.label}</text>`;
+    models.forEach((m, j) => {
+      const v = val(m, c); if (v == null) return;
+      const ox = (j - 1) * 9;
+      s += `<circle cx="${x(i) + ox}" cy="${y(v)}" r="${c.key === "mean" ? 6 : 5}" fill="${SERIES[m]}" stroke="var(--surface)" stroke-width="2"/>`;
+      s += `<rect class="hit" x="${x(i) + ox - 9}" y="${y(v) - 9}" width="18" height="18" fill="transparent" data-tip="${esc(NICE(m))}\n${c.label}, ${h}d: ${f3(v)}"/>`;
+    });
+  });
+  // direct labels at the mean column, nudged apart
+  const lab = models.map(m => ({ m, yy: y(mean(m)) })).sort((a, b) => a.yy - b.yy);
+  for (let i = 1; i < lab.length; i++) if (lab[i].yy - lab[i - 1].yy < 13) lab[i].yy = lab[i - 1].yy + 13;
+  lab.forEach(l => s += `<text x="${x(cols.length - 1) + 22}" y="${l.yy + 4}" class="ink">${esc(NICE(l.m))} ${f3(mean(l.m))}</text>`);
+  s += `</svg>`;
+  const legend = `<div class="legend">${models.map(m => `<span><i class="sw" style="background:${SERIES[m]}"></i>${esc(NICE(m))}</span>`).join("")}</div>`;
+  return legend + s;
+}
+
+function ladderTable(h, metric) {
+  const { folds, by, mean } = ladderRows(h, metric);
+  if (!MODEL_ORDER.every(m => by[m])) return "";
+  const rows = [...folds, "mean"].map(f => {
+    const v = m => f === "mean" ? mean(m) : by[m][f];
+    const news = v("lstm_news") - v("lstm_price"), graph = v("gat_lstm") - v("lstm_news");
+    return `<tr><td>${f === "mean" ? "<b>mean</b>" : "fold " + f}</td>${MODEL_ORDER.map(m => `<td class="n">${f3(v(m))}</td>`).join("")}
+      <td class="n">${sg(news)} ${news > 0 ? "▲" : "▼"}</td><td class="n">${sg(graph)} ${graph > 0 ? "▲" : "▼"}</td><td>${news > 0 && graph > 0 ? "yes" : "no"}</td></tr>`;
+  }).join("");
+  return `<div class="scroll"><table><tr><th>fold</th>${MODEL_ORDER.map(m => `<th class="n">${esc(NICE(m))}</th>`).join("")}<th class="n">news step</th><th class="n">graph step</th><th>monotone</th></tr>${rows}</table></div>`;
+}
+
+function ablationChart(h, metric) {
+  const { folds, by, mean } = ladderRows(h, metric);
+  const ms = Object.keys(by).map(m => ({ m, v: mean(m) })).filter(d => d.v != null).sort((a, b) => b.v - a.v);
+  const W = 400, rowH = 26, L = 150, R = 50, H = ms.length * rowH + 24;
+  const vals = ms.map(d => d.v).concat([0.5]); const lo = Math.min(...vals) - 0.003, hi = Math.max(...vals) + 0.003;
+  const x = v => L + (v - lo) / (hi - lo) * (W - L - R);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="mean ${metric} by model">`;
+  s += `<line x1="${x(0.5)}" x2="${x(0.5)}" y1="0" y2="${H - 18}" stroke="var(--axis)" stroke-dasharray="4 3"/><text x="${x(0.5)}" y="${H - 4}" text-anchor="middle" class="muted">0.5</text>`;
+  ms.forEach((d, i) => {
+    const yy = i * rowH + 4, x0 = x(0.5), x1 = x(d.v), main = d.m === "gat_lstm";
+    const fill = main ? "var(--s1)" : "var(--muted)";
+    s += `<text x="${L - 8}" y="${yy + 15}" text-anchor="end" class="${main ? "ink" : ""}">${esc(NICE(d.m))}</text>`;
+    s += `<rect x="${Math.min(x0, x1)}" y="${yy + 5}" width="${Math.max(2, Math.abs(x1 - x0))}" height="14" rx="4" fill="${fill}"/>`;
+    s += `<text x="${Math.max(x0, x1) + 4}" y="${yy + 16}" class="ink">${f3(d.v)}</text>`;
+    s += `<rect class="hit" x="0" y="${yy}" width="${W}" height="${rowH}" fill="transparent" data-tip="${esc(d.m)}\nmean over ${folds.length} folds, ${h}d: ${f3(d.v)}\nper fold: ${folds.map(f => f3(by[d.m][f])).join(", ")}"/>`;
+  });
+  return s + `</svg>`;
+}
+
+function stripChart(day) {
+  const rows = day.rows; const n = rows.length;
+  if (!n) return `<p class="muted">No predictions on this day.</p>`;
+  const W = 760, H = 220, T = 14, B = 40, L = 34, R = 8;
+  const ps = rows.flatMap(r => [r.p_up, r.p_up_no_graph]).filter(v => v != null);
+  const ext = Math.max(0.02, ...ps.map(p => Math.abs(p - 0.5))) * 1.05;
+  const y = p => T + (0.5 + ext - p) / (2 * ext) * (H - T - B), bw = (W - L - R) / n;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="P(up) for every company that day">`;
+  [0.5 - ext * 0.8, 0.5, 0.5 + ext * 0.8].forEach(t => s += `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" stroke="${t === 0.5 ? "var(--axis)" : "var(--grid)"}"/><text x="${L - 4}" y="${y(t) + 4}" text-anchor="end">${t.toFixed(2)}</text>`);
+  rows.forEach((r, i) => {
+    const cx = L + i * bw, sel = r.ticker === S.ticker, col = r.y_true ? "var(--up)" : "var(--down)";
+    const y0 = y(0.5), y1 = y(r.p_up);
+    s += `<rect x="${cx + 1}" y="${Math.min(y0, y1)}" width="${Math.max(1, bw - 2)}" height="${Math.max(1, Math.abs(y1 - y0))}" rx="${Math.min(2, bw / 3)}" fill="${col}" opacity="${sel ? 1 : 0.75}"/>`;
+    if (r.p_up_no_graph != null) s += `<line x1="${cx}" x2="${cx + bw}" y1="${y(r.p_up_no_graph)}" y2="${y(r.p_up_no_graph)}" stroke="var(--ink)" stroke-width="1.5" opacity=".55"/>`;
+    if (r.has_news) s += `<circle cx="${cx + bw / 2}" cy="${H - B + 8}" r="2" fill="var(--ink-2)"/>`;
+    if (sel) s += `<rect x="${cx - 1}" y="${T - 4}" width="${bw + 2}" height="${H - T - B + 18}" fill="none" stroke="var(--ink)" stroke-width="1.5" rx="3"/><text x="${cx + bw / 2}" y="${H - 6}" text-anchor="middle" class="ink">${esc(r.ticker)}</text>`;
+    s += `<rect class="hit" data-pick="${esc(r.ticker)}" x="${cx}" y="0" width="${bw}" height="${H}" fill="transparent" data-tip="${esc(r.ticker)} (rank ${i + 1}/${n})\nP(up) ${f3(r.p_up)} · without graph ${f3(r.p_up_no_graph)}\nrealised: ${r.y_true ? "up" : "down"} · own news: ${r.has_news ? "yes" : "no"}"/>`;
+  });
+  s += `</svg>`;
+  return `<div class="legend"><span><i class="sw" style="background:var(--up)"></i>realised up</span><span><i class="sw" style="background:var(--down)"></i>realised down</span><span>▬ P(up) without graph</span><span>• own news that day</span><span class="muted">highest P(up) on the left</span></div>` + s;
+}
+
+function timeline(series, date) {
+  const rows = series.rows; if (!rows.length) return "";
+  const W = 760, H = 170, L = 34, R = 8, T = 10, B = 22;
+  const ps = rows.flatMap(r => [r.p_up, r.p_up_no_graph]).filter(v => v != null);
+  const lo = Math.min(0.5, ...ps) - 0.01, hi = Math.max(0.5, ...ps) + 0.01;
+  const x = i => L + i / Math.max(1, rows.length - 1) * (W - L - R), y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+  const path = k => rows.map((r, i) => r[k] == null ? "" : `${i && rows[i - 1][k] != null ? "L" : "M"}${x(i).toFixed(1)},${y(r[k]).toFixed(1)}`).join("");
+  let s = `<svg viewBox="0 0 ${W} ${H}" id="tl" role="img" aria-label="P(up) over the test windows">`;
+  let prev = null; rows.forEach((r, i) => { if (r.fold !== prev) { s += `<line x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H - B}" stroke="var(--grid)"/><text x="${x(i) + 3}" y="${H - 6}" class="muted">fold ${r.fold}</text>`; prev = r.fold; } });
+  s += `<line x1="${L}" x2="${W - R}" y1="${y(0.5)}" y2="${y(0.5)}" stroke="var(--axis)" stroke-dasharray="4 3"/><text x="${L - 4}" y="${y(0.5) + 4}" text-anchor="end">0.5</text>`;
+  if (rows[0].p_up_no_graph != null) s += `<path d="${path("p_up_no_graph")}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="3 2"/>`;
+  s += `<path d="${path("p_up")}" fill="none" stroke="var(--s1)" stroke-width="2"/>`;
+  const si = rows.findIndex(r => r.date === date);
+  if (si >= 0) s += `<line x1="${x(si)}" x2="${x(si)}" y1="${T}" y2="${H - B}" stroke="var(--ink)"/><circle cx="${x(si)}" cy="${y(rows[si].p_up)}" r="4" fill="var(--s1)" stroke="var(--surface)" stroke-width="2"/>`;
+  const bw = (W - L - R) / rows.length;
+  rows.forEach((r, i) => s += `<rect class="hit" data-date="${r.date}" x="${x(i) - bw / 2}" y="${T}" width="${bw}" height="${H - T - B}" fill="transparent" data-tip="${r.date} (fold ${r.fold})\nP(up) ${f3(r.p_up)} · without graph ${f3(r.p_up_no_graph)}\nrealised ${r.y_true ? "up" : "down"}${r.has_news ? " · own news" : ""}"/>`);
+  return `<div class="legend"><span><i class="sw" style="background:var(--s1)"></i>P(up)</span><span>┄ without graph</span><span class="muted">click to jump to a day</span></div>` + s + `</svg>`;
+}
+
+function cells(news) {
+  const lvl = c => c === 0 ? 0 : c < 2 ? 1 : c < 4 ? 2 : c < 8 ? 3 : 4;
+  return `<div class="cells">${news.map((c, i) => `<i style="background:var(--seq-${lvl(c)})" data-tip="${c} article${c === 1 ? "" : "s"} · window day ${i + 1}/20"></i>`).join("")}</div>`;
+}
+
+function logitBars(types, total, within) {
+  const items = [...types.map(t => ({ k: t.edge_type, v: t.graph_logit, note: `${t.in_degree} in-edges · uniform ${(1 / Math.max(1, t.in_degree)).toFixed(3)}` })),
+                 { k: "total graph", v: total, note: `within-day part ${sg(within)}`, bold: true }];
+  const W = 480, rowH = 26, L = 92, R = 220, H = items.length * rowH + 8;
+  const m = Math.max(0.05, ...items.map(d => Math.abs(d.v || 0))), x = v => L + (v + m) / (2 * m) * (W - L - R);
+  let s = `<svg viewBox="0 0 ${W} ${H}" style="max-width:${W}px" role="img" aria-label="graph logit by edge type"><line x1="${x(0)}" x2="${x(0)}" y1="0" y2="${H}" stroke="var(--axis)"/>`;
+  items.forEach((d, i) => {
+    const yy = i * rowH + 4, v = d.v || 0, col = v >= 0 ? "var(--up)" : "var(--down)";
+    s += `<text x="${L - 8}" y="${yy + 15}" text-anchor="end" class="${d.bold ? "ink" : ""}">${esc(d.k)}</text>`;
+    s += `<rect x="${Math.min(x(0), x(v))}" y="${yy + 4}" width="${Math.max(2, Math.abs(x(v) - x(0)))}" height="14" rx="4" fill="${col}" opacity="${d.bold ? 1 : .8}"/>`;
+    s += `<text x="${W - R + 8}" y="${yy + 15}" class="ink">${sg(v)}</text><text x="${W - R + 56}" y="${yy + 15}" class="muted">${esc(d.note)}</text>`;
+  });
+  return s + `</svg>`;
+}
+
+// ------------------------------------------------------------------ shared trace view (used by A step 6 and C)
+async function traceView(t, d, h, compact = false) {
+  let tr;
+  try { tr = await api(`/api/trace?ticker=${encodeURIComponent(t)}&date=${d}&h=${h}`); }
+  catch (e) { return `<p class="err">No trace for ${esc(t)} on ${esc(d)} (${esc(e.message)}).</p>`; }
+  if (!tr.available) return `<p class="muted">No 3.10 attention files in this data dir, so only the static sector neighbours are shown.</p>` +
+    tr.neighbours.map(n => `<div class="nb"><span class="src">${esc(n.src)}</span><span>${esc(n.edge_type)}</span><span></span>${cells(n.news)}</div>`).join("");
+  const p = tr.prediction;
+  let s = `<div class="tiles">${tile("P(up)", f3(p.p_up), `without graph ${f3(p.p_up_no_graph)}`)}${tile("realised", p.y_true ? "up" : "down", `${h}-day horizon · fold ${p.fold}`)}${tile("own news that day", p.has_news ? "yes" : "no", "has_news = 0 means no coverage")}${tile("graph logit", sg(p.graph_logit), `within-day ${sg(p.graph_logit_within_day)}`)}</div>`;
+  s += `<h3>How much the graph moved it, by edge type</h3>${logitBars(tr.types, p.graph_logit, p.graph_logit_within_day)}`;
+  s += `<h3>Who it listened to (top ${compact ? 3 : 5} per type by attention), with their news over the 20-day window</h3>
+        <div class="nb muted"><span>source</span><span>attention (▏= uniform 1/k)</span><span>edge weight</span><span>articles per day</span></div>`;
+  for (const ty of tr.types) {
+    s += `<div class="small" style="margin-top:8px"><b>${esc(ty.edge_type)}</b> <span class="muted">${ty.in_degree} incoming · graph logit ${sg(ty.graph_logit)}</span></div>`;
+    tr.neighbours.filter(n => n.edge_type === ty.edge_type).slice(0, compact ? 3 : 5).forEach(n => {
+      const u = 1 / Math.max(1, ty.in_degree);
+      s += `<div class="nb"><span class="src">${esc(n.src)}</span>
+        <span><svg viewBox="0 0 200 14" style="height:14px"><rect x="0" y="3" width="200" height="8" rx="4" fill="var(--seq-0)"/><rect x="0" y="3" width="${Math.max(2, 200 * n.alpha_mean)}" height="8" rx="4" fill="var(--s1)"/><line x1="${200 * u}" x2="${200 * u}" y1="0" y2="14" stroke="var(--ink)" stroke-width="1.5"/><rect class="hit" width="200" height="14" fill="transparent" data-tip="attention ${f3(n.alpha_mean)} (uniform ${f3(u)})\nper head: ${n.alpha_heads.map(f3).join(", ")}"/></svg></span>
+        <span>${f3(n.weight)}</span>${cells(n.news)}</div>`;
+      const hd = (tr.headlines || []).filter(x => x.edge_type === ty.edge_type && x.src === n.src);
+      if (hd.length) s += `<div class="heads">${hd.map(x => `${x.date} <b>[${sg(x.sentiment).slice(0, 5)}]</b> ${esc(x.title)}`).join("<br>")}</div>`;
+    });
+  }
+  s += `<div class="small muted" style="margin-top:6px">Own news (${esc(t)}): </div>${cells(tr.own_news)}`;
+  if (!(tr.headlines || []).length) s += `<p class="small muted" style="margin-top:6px">Headlines and FinBERT sentiment are shown only for the precomputed NLP examples (results/interpretability/); the raw article file isn't in this data dir.</p>`;
+  s += `<div class="callout small">Attention says <i>which</i> neighbour, not <i>how much</i>: it sums to one either way and is near-uniform in this model. The graph logit says how much.</div>`;
+  return s;
+}
+
+// ------------------------------------------------------------------ Variant A: walkthrough
+const STEPS = ["Load the data", "Walk-forward folds", "Features and graph", "Train the final model", "Predict and score", "Trace one prediction", "Headline result", "Development replay"];
+async function variantA() {
+  const i = S.step, M = META, c = M.config;
+  const nav = `<div class="row" style="justify-content:space-between;margin-top:16px"><button class="btn" data-step="${i - 1}" ${i === 0 ? "disabled style=\"visibility:hidden\"" : ""}>← ${i ? esc(STEPS[i - 1]) : ""}</button><span class="muted small">step ${i + 1} of ${STEPS.length}</span><button class="btn" data-step="${i + 1}" ${i === STEPS.length - 1 ? "disabled" : ""}>${i < STEPS.length - 1 ? esc(STEPS[i + 1]) : ""} →</button></div>`;
+  let body = "";
+  if (i === 0) {
+    const k = M.counts;
+    body = `<p>The model reads daily prices and technical indicators, the up/down labels, and per company-day FinBERT news features. Membership is rebuilt from Wikipedia history, so a company counts only on days it was in the index (no survivorship bias). Articles after 16:00 ET belong to the next trading day.</p>
+      <div class="tiles">${tile("companies ever in the index", k.companies_ever_in_index)}${tile("trading days", k.trading_days.toLocaleString())}${tile("articles linked to tickers", k.articles.toLocaleString(), `${k.article_links.toLocaleString()} article–ticker links`)}${tile("test predictions", k.test_rows.toLocaleString(), "(horizon, day, company)")}${tile("company-days with own news", pct(k.news_share), "in the test windows")}</div>`;
+  } else if (i === 1) {
+    body = `<p>Every model is scored on the same five folds: train on ${M.walk_forward.train_days} trading days, skip a ${M.walk_forward.embargo_days}-day embargo (the longer horizon), test on the next ${M.walk_forward.test_days}. Contiguous in time, never random.</p>` + foldTimeline();
+  } else if (i === 2) {
+    const e = M.edges, types = [...new Set(e.map(r => r.edge_type))], folds = [...new Set(e.map(r => r.fold))].sort((a, b) => a - b);
+    const n = (f, t) => e.find(r => r.fold === f && r.edge_type === t)?.n;
+    body = `<p>Scaling statistics, the PCA of the FinBERT embeddings, and the <code>comention</code> and <code>corr</code> edge weights are fitted on each fold's training window only. <code>sector</code> edges are static (fold −1).</p>
+      <div class="tiles">${tile("price indicators", c.features.price.length, c.features.price.join(", "))}${tile("news features", c.features.news.length, c.features.news.join(", "))}${tile("embedding dims", c.features.embeddings ? c.features.embedding_dim : 0, "FinBERT, PCA per fold")}${tile("look-back window", c.window_days + " days")}</div>
+      <h3>Edges per fold</h3><div class="scroll"><table><tr><th>edge type</th>${folds.map(f => `<th class="n">${f < 0 ? "static" : "fold " + f}</th>`).join("")}</tr>${types.map(t => `<tr><td>${esc(t)}</td>${folds.map(f => `<td class="n">${n(f, t) ?? "–"}</td>`).join("")}</tr>`).join("")}</table></div>`;
+  } else if (i === 3) {
+    const tr = M.training;
+    body = `<p>The tuned configuration T1 (task 3.12), seed 42. The last days of each training window are held out behind the embargo for early stopping on validation within-day AUC. <b>Precomputed:</b> these numbers come from <code>predictions/gat_lstm_run.json</code>; the notebook retrains fold 4 live.</p>
+      <div class="tiles">${tile("batch", c.train.batch_days + " days")}${tile("learning rate", c.train.lr)}${tile("hidden size", c.encoder.hidden)}${tile("attention heads", c.gat.heads)}${tile("dropout", c.encoder.dropout)}${tile("edge types", c.gat.edge_types.length, c.gat.edge_types.join(", "))}</div>
+      <h3>Training per fold</h3><div class="scroll"><table><tr><th>horizon</th><th>fold</th><th class="n">seconds</th><th class="n">best epoch</th><th class="n">val within-day AUC</th><th class="n">test within-day AUC</th></tr>
+      ${tr.map(r => `<tr><td>${r.horizon}d</td><td>${r.fold}</td><td class="n">${(r.seconds ?? 0).toFixed(0)}</td><td class="n">${r.best_epoch}</td><td class="n">${f3(r.best_val_within_day_auc)}</td><td class="n">${f3(r.test_within_day_auc)}</td></tr>`).join("")}</table></div>`;
+  } else if (i === 4) {
+    const r = M.training.find(t => t.fold === 4 && t.horizon === S.h) || {};
+    body = `<p><b>Within-day AUC</b> is the headline: on each test day, does the model rank that day's risers above its fallers? Averaged over days. Fold AUC also rewards calling whole days up or down, which the graph has nothing to do with.</p>
+      <div class="row" style="margin-bottom:8px">${segs("h", [[1, "1 day"], [5, "5 days"]], S.h)} <span class="muted small">fold 4 (Jan–Jul 2023)</span></div>
+      <div class="tiles">${tile("within-day AUC (headline)", f3(r.test_within_day_auc))}${tile("fold AUC", f3(r.test_auc), "diagnostic")}${tile("threshold", f3(r.threshold), "chosen on validation")}${tile("accuracy", f3(r.test_accuracy))}${tile("base rate (always up)", f3(r.test_base_rate))}</div>`;
+  } else if (i === 5) {
+    body = `<p>The worked example: <b>SGEN (Seagen) on 17 May 2023</b>. SGEN had no news of its own that day, so whatever the graph adds comes from its neighbours.</p>` + await traceView("SGEN", "2023-05-17", 1, true) +
+      `<p style="margin-top:8px">Almost all of the push comes through one <code>comention</code> edge from VRTX, SGEN's only edge of that type. Being the only one it gets attention 1.0 by construction, although its weight is close to the weakest in the graph.</p>`;
+  } else if (i === 6) {
+    body = `<p>Each step adds one component with everything else fixed: B5 is the LSTM on prices only, B6 adds news, the proposed model adds the graph.</p>
+      <div class="row" style="margin-bottom:8px">${segs("h", [[1, "1 day"], [5, "5 days"]], S.h)}</div>${ladderChart(S.h, "within_day_auc")}
+      <div class="callout">News adds a small amount of cross-sectional signal. Graph propagation does not add a detectable amount.</div>
+      ${(RES.verdict.within_day || []).length ? `<div class="verdict">${esc(RES.verdict.within_day.join("\n"))}</div>` : ""}`;
+  } else {
+    const rp = M.replay;
+    body = !rp ? `<p class="muted">No replay record found.</p>` : `<p>A <b>different, separately labelled</b> result: the strongest single retrospective window from the later development studies, replayed from its saved checkpoint (<code>${esc(rp.run)}</code>, ${rp.mode}). Not the official model or folds.</p>
+      <div class="tiles">${tile("within-day AUC", f3(rp.metrics.within_day_auc), "5-day horizon")}${tile("fold AUC", f3(rp.metrics.auc))}${tile("accuracy", f3(rp.metrics.accuracy), `base rate ${f3(rp.metrics.base_rate)}`)}${tile("MCC", f3(rp.metrics.mcc))}${tile("assessment window", rp.split.assessment[2] + " days", `${rp.split.assessment[0]} to ${rp.split.assessment[1]}`)}</div>
+      <div class="callout small">One retrospective development window, not the official result. Keep it in proportion.</div>`;
+  }
+  return `<div class="wt"><nav class="rail">${STEPS.map((t, j) => `<button data-step="${j}" class="${j === i ? "on" : j < i ? "done" : ""}"><span class="num">${j + 1}</span><span class="lab">${esc(t)}</span></button>`).join("")}</nav>
+    <main><div class="row" style="justify-content:space-between"><h1>${i + 1} · ${esc(STEPS[i])}</h1>${dataBadge()}</div><div class="card" style="margin-top:8px">${body}</div>${nav}</main></div>`;
+}
+
+function foldTimeline() {
+  const F = META.folds; if (!F.length) return `<p class="muted">Folds can't be derived from this data dir (too short for a full fold).</p>`;
+  const t = d => new Date(d + "T00:00:00Z").getTime();
+  const t0 = t(F[0].train_start), t1 = t(F[F.length - 1].test_end), W = 760, L = 50, R = 10, rowH = 28, H = F.length * rowH + 30;
+  const x = d => L + (t(d) - t0) / (t1 - t0) * (W - L - R);
+  let s = `<div class="legend"><span><i class="sw" style="background:var(--axis)"></i>train (504 days)</span><span><i class="sw" style="background:var(--s1)"></i>test (126 days)</span><span class="muted">gap = 5-day embargo</span></div><svg viewBox="0 0 ${W} ${H}">`;
+  for (let y = 2019; y <= 2023; y++) { const d = `${y}-01-01`; if (t(d) >= t0) s += `<line x1="${x(d)}" x2="${x(d)}" y1="0" y2="${H - 20}" stroke="var(--grid)"/><text x="${x(d)}" y="${H - 6}" text-anchor="middle">${y}</text>`; }
+  F.forEach((f, i) => {
+    const yy = i * rowH + 6;
+    s += `<text x="${L - 8}" y="${yy + 13}" text-anchor="end" class="ink">fold ${f.fold}</text>`;
+    s += `<rect x="${x(f.train_start)}" y="${yy + 2}" width="${x(f.train_end) - x(f.train_start)}" height="14" rx="4" fill="var(--axis)" data-tip="fold ${f.fold} train\n${f.train_start} to ${f.train_end} (${f.train_days} days)"/>`;
+    s += `<rect x="${x(f.test_start)}" y="${yy + 2}" width="${x(f.test_end) - x(f.test_start)}" height="14" rx="4" fill="var(--s1)" data-tip="fold ${f.fold} test\n${f.test_start} to ${f.test_end} (${f.test_days} days)"/>`;
+  });
+  return s + `</svg><div class="scroll"><table><tr><th>fold</th><th>train</th><th>test</th></tr>${F.map(f => `<tr><td>${f.fold}</td><td>${f.train_start} to ${f.train_end}</td><td>${f.test_start} to ${f.test_end}</td></tr>`).join("")}</table></div>`;
+}
+
+// ------------------------------------------------------------------ Variant B: dashboard
+async function variantB() {
+  const h = S.h, m = S.metric, { folds, by, mean } = ladderRows(h, m);
+  const have = MODEL_ORDER.every(x => by[x]);
+  let kpis = "";
+  if (have) {
+    const st = (a, b) => folds.map(f => by[a][f] - by[b][f]);
+    const news = st("lstm_news", "lstm_price"), graph = st("gat_lstm", "lstm_news"), avg = a => a.reduce((p, q) => p + q, 0) / a.length;
+    kpis = MODEL_ORDER.map(x => tile(esc(NICE(x)), f3(mean(x)), `above 0.5 in ${folds.filter(f => by[x][f] > 0.5).length}/${folds.length} folds`)).join("") +
+      tile("news step (B6 − B5)", sg(avg(news)), `positive in ${news.filter(v => v > 0).length}/${folds.length} folds`) +
+      tile("graph step (proposed − B6)", sg(avg(graph)), `positive in ${graph.filter(v => v > 0).length}/${folds.length} folds`);
+  }
+  const verdict = RES.verdict[m === "auc" ? "fold" : "within_day"] || [];
+  return `<div class="row" style="justify-content:space-between;margin-bottom:12px"><div><h1>Does the graph help?</h1><p>GAT + LSTM vs the same LSTM without the graph, on identical walk-forward folds. ${dataBadge()}</p></div>
+      <div class="row">${segs("h", [[1, "1 day"], [5, "5 days"]], h)}${segs("metric", [["within_day_auc", "within-day AUC (headline)"], ["auc", "fold AUC (diagnostic)"]], m)}</div></div>
+    <div class="tiles" style="margin-bottom:12px">${kpis}</div>
+    <div class="dash"><div class="card"><h2>The ladder, per fold</h2>${ladderChart(h, m)}</div>
+      <div class="card"><h2>Ablations</h2><p class="small">Mean over folds; each row drops one part of the proposed model.</p>${ablationChart(h, m)}</div></div>
+    <div class="card" style="margin-top:12px"><h2>Per fold</h2>${ladderTable(h, m)}
+      ${verdict.length ? `<h3>Pre-registered horizon pattern (task 3.8)</h3><div class="verdict">${esc(verdict.join("\n"))}</div>` : ""}</div>`;
+}
+
+// ------------------------------------------------------------------ Variant C: explorer
+async function variantC() {
+  const dates = META.dates; if (!dates.includes(S.date)) S.date = dates[dates.length - 1];
+  const di = dates.indexOf(S.date);
+  const [day, series] = await Promise.all([api(`/api/day?date=${S.date}&h=${S.h}`), api(`/api/ticker?ticker=${encodeURIComponent(S.ticker)}&h=${S.h}`)]);
+  if (!day.rows.some(r => r.ticker === S.ticker) && day.rows.length) S.ticker = day.rows[0].ticker;
+  const rank = day.rows.findIndex(r => r.ticker === S.ticker) + 1;
+  const presets = META.examples.map(e => `<button class="btn" data-preset="${e.ticker}|${e.date}|${e.horizon}">${e.ticker} · ${e.date}</button>`).join("");
+  const detail = await traceView(S.ticker, S.date, S.h);
+  return `<div class="row" style="justify-content:space-between;margin-bottom:8px"><div><h1>Explore a prediction</h1><p>Pick a test day, then a company. ${dataBadge()}</p></div><div class="row">${presets}</div></div>
+    <div class="card row" style="margin-bottom:12px">${segs("h", [[1, "1 day"], [5, "5 days"]], S.h)}
+      <button class="btn" data-day="${di - 1}" ${di <= 0 ? "disabled" : ""}>‹ day</button>
+      <select id="datesel">${dates.map(d => `<option ${d === S.date ? "selected" : ""}>${d}</option>`).join("")}</select>
+      <button class="btn" data-day="${di + 1}" ${di >= dates.length - 1 ? "disabled" : ""}>day ›</button>
+      <input id="tick" list="ticks" value="${esc(S.ticker)}" size="7" aria-label="ticker"><datalist id="ticks">${META.tickers.map(t => `<option>${t}</option>`).join("")}</datalist>
+      <span class="muted small">within-day AUC this day: ${f3(day.within_day_auc)}${day.within_day_auc_no_graph != null ? ` · without graph ${f3(day.within_day_auc_no_graph)}` : ""}</span></div>
+    <div class="ex"><div class="grid">
+        <div class="card"><h2>Every company on ${S.date}, ranked by P(up)</h2><p class="small">Click a bar to trace it. ${esc(S.ticker)} is rank ${rank} of ${day.rows.length}.</p>${stripChart(day)}</div>
+        <div class="card"><h2>${esc(S.ticker)} across the test windows</h2>${timeline(series, S.date)}</div></div>
+      <div class="card"><h2>${esc(S.ticker)} on ${S.date}, ${S.h}-day horizon</h2>${detail}</div></div>`;
+}
+
+// ------------------------------------------------------------------ render + switcher
+let seq = 0;
+async function render() {
+  const my = ++seq;
+  $("#vlabel").textContent = `${S.variant} (${VARIANTS[S.variant]})`;
+  try {
+    const html = await ({ A: variantA, B: variantB, C: variantC })[S.variant]();
+    if (my !== seq) return;
+    $("#app").innerHTML = html;
+  } catch (e) { $("#app").innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+  $("#state").textContent = JSON.stringify({ ...S, data_dir: META.data_dir, synthetic: META.synthetic, main_model: META.main_model, has_attention: META.has_attention }, null, 2);
+}
+function go(v) { S.variant = v; const u = new URL(location); u.searchParams.set("variant", v); history.replaceState(null, "", u); render(); }
+const cyc = d => go(KEYS[(KEYS.indexOf(S.variant) + d + KEYS.length) % KEYS.length]);
+$("#prev").onclick = () => cyc(-1); $("#next").onclick = () => cyc(1);
+document.addEventListener("keydown", e => {
+  if (e.target.closest("input, textarea, select, [contenteditable]")) return;
+  if (e.key === "ArrowLeft") cyc(-1); if (e.key === "ArrowRight") cyc(1);
+});
+document.addEventListener("click", e => {
+  const el = e.target.closest("[data-step],[data-seg] button,[data-pick],[data-date],[data-day],[data-preset]"); if (!el) return;
+  if (el.dataset.step != null) return set({ step: +el.dataset.step });
+  if (el.dataset.pick) return set({ ticker: el.dataset.pick });
+  if (el.dataset.date) return set({ date: el.dataset.date });
+  if (el.dataset.day != null) return set({ date: META.dates[+el.dataset.day] });
+  if (el.dataset.preset) { const [t, d, h] = el.dataset.preset.split("|"); return set({ ticker: t, date: d, h: +h }); }
+  const seg = el.parentElement.dataset.seg; const v = el.dataset.v; set({ [seg]: isNaN(+v) ? v : +v });
+});
+document.addEventListener("change", e => {
+  if (e.target.id === "datesel") set({ date: e.target.value });
+  if (e.target.id === "tick" && META.tickers.includes(e.target.value.toUpperCase())) set({ ticker: e.target.value.toUpperCase() });
+});
+(async () => {
+  try { [META, RES] = await Promise.all([api("/api/meta"), api("/api/results")]); }
+  catch (e) { $("#app").innerHTML = `<p class="err">Couldn't reach the server: ${esc(e.message)}. Start it with <code>python notebooks/demo_ui_prototype/serve.py</code>.</p>`; return; }
+  if (!META.dates.includes(S.date)) S.date = META.dates[META.dates.length - 1];
+  if (!META.tickers.includes(S.ticker)) S.ticker = META.tickers[0];
+  go(S.variant);
+})();
+</script>
+</body>
+</html>
